@@ -9,4 +9,5 @@ export default{
   uploadDocument: `${endPoint}/api/${version}/manageDocs/uploadDocument`,
   getDocument: `${endPoint}/api/${version}/manageDocs/getDocument`,
   getDocuments: `${endPoint}/api/${version}/manageDocs/getDocuments`,
+  DeleteUserByAdmin: `${endPoint}/api/${version}/manageUsers/deleteUserByAdmin`,
 }

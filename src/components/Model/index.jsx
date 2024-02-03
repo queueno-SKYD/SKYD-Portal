@@ -3,7 +3,7 @@ import { Modal, Button } from 'react-bootstrap';
 import "./style.css"
 import PortalComponent from '../Overlays';
 
-function MyModal({ children, openModal, closeModal, closeOnBackdropClick, title, customFooter, isCenter, onSave, isLoading }) {
+function MyModal({ children, openModal, closeModal, closeOnBackdropClick, title, customFooter, isCenter, onSave, isLoading, cancelButtonTitle, saveButtonTitle }) {
  const handleClose = (event) => {
     if (closeOnBackdropClick){
       closeModal()
@@ -12,7 +12,7 @@ function MyModal({ children, openModal, closeModal, closeOnBackdropClick, title,
 
  return (
     <PortalComponent>
-      <Modal show={!!openModal} onHide={handleClose} backdropClassName="custom-backdrop" dialogClassName={isCenter ? "modal-dialog-centered" : null}>
+      <Modal  show={openModal} onHide={handleClose} backdropClassName="custom-backdrop" dialogClassName={isCenter ? "modal-dialog-centered w-25" : null}>
           <Modal.Header>
             <Modal.Title>{title}</Modal.Title>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={closeModal}></button>
@@ -22,11 +22,11 @@ function MyModal({ children, openModal, closeModal, closeOnBackdropClick, title,
             {customFooter ? customFooter : (
             <>
               <Button variant="secondary" onClick={closeModal}>
-                Close
+               {cancelButtonTitle || "Cancel"}
               </Button>
               <Button variant="primary" onClick={onSave}>
                 {isLoading && <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
-                Save Changes
+               {saveButtonTitle || "Save Changes"} 
               </Button>
             </>
             )}

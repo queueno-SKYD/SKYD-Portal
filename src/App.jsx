@@ -8,7 +8,9 @@ import Logout from "./pages/logout";
 import LoginSuccessFully from "./pages/loginSuccessFully";
 import EditList from "./pages/editUser";
 import Welcome from "./pages/welcome";
+import { ToastContainer } from 'react-toastify';
 
+import 'react-toastify/dist/ReactToastify.css';
 import {
   Routes,
   Route,
@@ -21,8 +23,10 @@ import './theme/style.css'
 import { LoginProvider } from "./context/login.context";
 function App() {
   return (
+  
     <BrowserRouter>
       <LoginProvider>
+        
         <Routes>
           <Route element={<Navbar />}>
             <Route path={PathName.homePath} element={<ChatList />} />
@@ -31,7 +35,7 @@ function App() {
             <Route path={PathName.logoutPath} element={<Logout />} />
 
             {/* <Route index path={PathName.homePath} element={<Welcome />} /> */}
-            <Route path={PathName.loginPath} element={<Login /> } loader={<p>loading....</p>} />
+            <Route path={PathName.loginPath}  loader={()=> false} element={<Login />} />
             <Route path={PathName.registerPath} element={<Register  />} />
             <Route
               path={PathName.registerSuccessPath}
@@ -41,7 +45,9 @@ function App() {
             <Route path={PathName.notFoundPath} element={<NotFound />} />
           </Route>
         </Routes>
+        <ToastContainer />
       </LoginProvider>
+      
     </BrowserRouter>
   )
 }
