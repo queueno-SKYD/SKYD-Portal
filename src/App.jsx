@@ -31,7 +31,7 @@ function App() {
             <Route path={PathName.logoutPath} element={<Logout />} />
 
             {/* <Route index path={PathName.homePath} element={<Welcome />} /> */}
-            <Route path={PathName.loginPath} element={<Login />} />
+            <Route path={PathName.loginPath} element={<Login /> } loader={<p>loading....</p>} />
             <Route path={PathName.registerPath} element={<Register  />} />
             <Route
               path={PathName.registerSuccessPath}

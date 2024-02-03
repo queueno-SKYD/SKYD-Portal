@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
 import { POST, getHeaders } from "../../api/restClient.ts";
 import { useLogin } from "../../context/login.context";
@@ -7,6 +7,7 @@ import { PathName } from "../../helper/constants/pathNames.ts";
 import url from "../../api/url.ts";
 
 function Login() {
+  const [isLoading, setIsLoading] = useState(false);
   const loginStore = useLogin();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -27,6 +28,7 @@ function Login() {
     }
     console.debug(formData)
     try {
+      setIsLoading(true);
       const response = await POST(url.Login, getHeaders(null), formData);
       console.log("response --->", JSON.stringify(response));
       if(response.data.statusCode === 200){
@@ -42,6 +44,11 @@ function Login() {
         }
       }
     } catch (error) {
+      console.debug("🚀 ----------------------------------🚀")
+      console.debug("🚀 ~ handleSubmit ~ error:", error)
+      console.debug("🚀 ----------------------------------🚀")
+    } finally {
+      setIsLoading(false)
     }
 
   };
@@ -70,12 +77,16 @@ function Login() {
               onChange={handleInputChange}/>
           </div>
         </div>
+        <Link to={PathName.registerPath}>Register as new user</Link>
+        <br/>
         <button
           onClick={(e) => handleSubmit(e)}
           // href={PathName.registerSuccessPath}
           className="btn btn-primary align-middle"
+          disabled={isLoading}
         >
-          Login in
+          {isLoading && <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
+          Log in
         </button>
       </form>
     </div>

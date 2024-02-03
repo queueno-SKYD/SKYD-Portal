@@ -35,12 +35,8 @@ function RegisterViewModal() {
     }
     try {
       const response = await POST(URL.Register,getHeaders(null),formData);
-      console.log("response --->", JSON.stringify(response));
       if(response.data.statusCode===200){
         const output = response?.data?.data;
-        console.debug("🚀 ------------------------------------🚀")
-        console.debug("🚀 ~ handleSubmit ~ output:", output)
-        console.debug("🚀 ------------------------------------🚀")
         if(output){
           console.log("Error ----> ")
           loginStore.setToken(output?.token);
