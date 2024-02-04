@@ -18,9 +18,6 @@ export const LoginProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const jwtToken = localStorage.getItem(ACCESS_TOKEN);
-  console.debug("🚀 -----------------------------------------🚀")
-  console.debug("🚀 ~ LoginProvider ~ jwtToken:", jwtToken)
-  console.debug("🚀 -----------------------------------------🚀")
   const [token, setT] = useState(jwtToken || null)
   const setToken = (token) => {
     if (token) {
