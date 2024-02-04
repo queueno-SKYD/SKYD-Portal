@@ -29,7 +29,6 @@ function UserList() {
     try {
       const token = loginStore.token
       const response = await POST(url.AllUsers, getHeaders(token), {pIndex : 0});
-      console.log("response --->",response.data.data);
       if(response.data.statusCode === 200){
         let output = response.data.data;
         if(output){
@@ -67,7 +66,6 @@ function UserList() {
     Call to delete Api 
   */
   const CallToDeleteUserByAdmin = async () => {
-    console.log("Selected UId ===> ", SelectedID);
     try {
       const token = loginStore.token;
       const response = await POST(url.DeleteUserByAdmin, getHeaders(token), {
@@ -88,7 +86,6 @@ function UserList() {
         let message = response.data.message;
         alert(message);
       }
-      console.log("response --->", response.data);
     } catch (error) {
       alert(error.message)
       console.log("Error ---> ", error);

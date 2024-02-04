@@ -8,6 +8,7 @@ import Logout from "./pages/logout";
 import LoginSuccessFully from "./pages/loginSuccessFully";
 import EditList from "./pages/editUser";
 import Welcome from "./pages/welcome";
+import ShareDocument from "./pages/shareDocument";
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -21,6 +22,7 @@ import Navbar from "./navigation/navbar";
 import { PathName } from "./helper/constants/pathNames.ts";
 import './theme/style.css'
 import { LoginProvider } from "./context/login.context";
+import "./global.css"
 function App() {
   return (
   
@@ -42,6 +44,7 @@ function App() {
               element={<RegisterSuccessFully />}
             />
             <Route path={PathName.loginSuccessPath} element={<LoginSuccessFully />} />
+            <Route path={PathName.shareDoc} element={<ShareDocument />} />
             <Route path={PathName.notFoundPath} element={<NotFound />} />
           </Route>
         </Routes>

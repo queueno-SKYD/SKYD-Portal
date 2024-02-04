@@ -3,7 +3,7 @@ import { Modal, Button } from 'react-bootstrap';
 import "./style.css"
 import PortalComponent from '../Overlays';
 
-function MyModal({ children, openModal, closeModal, closeOnBackdropClick, title, customFooter, isCenter, onSave, isLoading, cancelButtonTitle, saveButtonTitle }) {
+function MyModal({ children, openModal, closeModal, closeOnBackdropClick, title, customFooter, isCenter, onSave, isLoading, cancelButtonTitle, saveButtonTitle, type="primary" }) {
  const handleClose = (event) => {
     if (closeOnBackdropClick){
       closeModal()
@@ -24,7 +24,7 @@ function MyModal({ children, openModal, closeModal, closeOnBackdropClick, title,
               <Button variant="secondary" onClick={closeModal}>
                {cancelButtonTitle || "Cancel"}
               </Button>
-              <Button variant="primary" onClick={onSave}>
+              <Button variant={type} onClick={onSave}>
                 {isLoading && <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
                {saveButtonTitle || "Save Changes"} 
               </Button>

@@ -6,7 +6,6 @@ export const POST = async (url: string, headers: object, body: object) => {
     axios
       .post(url, body, { headers })
       .then((res) => {
-        console.log("res ===> ",res)
         resolve(res);
       })
       .catch((err) => {

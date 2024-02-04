@@ -5,13 +5,27 @@ import { getHeaders, POST } from "../../api/restClient.ts";
 import url from "../../api/url.ts";
 import { useLogin } from "../../context/login.context";
 import Loader from "../../components/Loder/index.jsx";
+import MyModal from "../../components/Model/index.jsx";
+import { customToast } from "../../components/customToast/index.js";
+import { useNavigate } from 'react-router-dom';
 
 function DocumentList() {
+  const navigate = useNavigate();
+  const [openDeleteModel, setOpenDeleteModel] = useState(null);
+  const [deleting, setDeleting] = useState(false);
   const [documentList, setDocumentList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const {token} = useLogin();
   const [openModel, setOpenModel] = useState(false);
+  const [openEditModel, setOpenEditModel] = useState(null);
+  const [sharedDocumentList, setSharedDocumentList] = useState([]);
+  const [isSharedDocumentLoading, setSharedDocumentIsLoading] = useState(false);
+
   const openUploadModal = () => setOpenModel(true);
+
+  const goToShareDoc = (id) => {
+    navigate(`/documentManagement/share/${id}`);
+  };
   
   const uploadNewDocumentSection = (
     <div className="w-75 d-flex flex-column align-self-center mt-4">
@@ -25,6 +39,7 @@ function DocumentList() {
   )
   useEffect(() => {
     getDocumentList();
+    getSharedDocumentByOthers();
   }, [])
 
   const getDocumentList = async () => {
@@ -46,6 +61,48 @@ function DocumentList() {
       }, 1000)
     }
   }
+
+  const getSharedDocumentByOthers = async () => {
+    try {
+      setSharedDocumentIsLoading(true);
+      const response = await POST(url.getSharedDocumentByOthers, getHeaders(token), {
+        page: 1,
+        pageSize: 50,
+      })
+      if(response.data.statusCode === 200){
+        const output = response?.data?.data;
+        setSharedDocumentList(output.data ?? [])
+      }
+    } catch (error) {
+      console.debug(error)
+    } finally {
+      setTimeout(() => {
+        setSharedDocumentIsLoading(false)
+      }, 1000)
+    }
+  }
+
+  const onDelete = async (id) => {
+    try {
+      setDeleting(true);
+      const response = await POST(url.deleteDocument, getHeaders(token), {
+        fileId: id
+      });
+      console.log("response --->", JSON.stringify(response));
+      if(response.data.statusCode === 200){
+        const output = response?.data?.data;
+        if(output){
+          getDocumentList();
+          customToast("success", "Document successfully uploaded")
+          setOpenDeleteModel(false)
+        }
+      }
+    } catch (error) {
+      customToast("error", error.message)
+    } finally {
+      setDeleting(false)
+    }
+  }
   return (
     <div className="w-100 d-flex flex-column align-self-center">
       <Card title={"My Uploads"}>
@@ -58,7 +115,7 @@ function DocumentList() {
               <th scope="col" className="col-6">
                 File Name
               </th>
-              <th scope="col" className="col-3">
+              <th scope="col">
                 Action
               </th>
             </tr>
@@ -69,13 +126,34 @@ function DocumentList() {
                 <tr key={item?.fileId + item?.ownerId}>
                   <td>{item.label}</td>
                   <td>{item.fileURL}</td>
-                  <td>
-                    <a href="/">Edit</a>
+                  <td style={{minWidth: "276px"}}>
+                    <button className="btn btn-outline-primary btn-sm" onClick={() => setOpenEditModel(item?.fileId)}><i className="fa fa-pen icon-space"/>Edit</button>
                     <span> | </span>
-                    <a href="/">Delete</a>
+                    <button className="btn btn-outline-danger btn-sm" onClick={() => setOpenDeleteModel(item?.fileId)}><i className="fa fa-trash icon-space"/>Delete</button>
                     <span> | </span>
-                    <a href="/">Share</a>
+                    <button className="btn btn-info btn-sm" onClick={() => goToShareDoc(item?.fileId)}><i className="fa fa-share icon-space"/>Share</button>
                   </td>
+                  <MyModal
+                    openModal={openDeleteModel === item?.fileId}
+                    closeModal={() => setOpenDeleteModel(false)}
+                    title={"Confirm For Deletion!"}
+                    closeOnBackdropClick={true}
+                    isCenter={true}
+                    onSave={() => onDelete(item.fileId)}
+                    isLoading={deleting}
+                    saveButtonTitle={"Delete document"}
+                    cancelButtonTitle={"Cancel"}
+                    type="danger"
+                  >
+                    <p >Are you sure, you want delete <br/><span className="badge bg-danger text-wrap">{item?.label}</span> ?</p>
+                  </MyModal>
+                  <UploadDocument
+                    openModel={openEditModel === item?.fileId}
+                    closeModal={() => setOpenEditModel(false)}
+                    title={"Edit document"}
+                    callAfterUpload={getDocumentList}
+                    fileData={item}
+                  />
                 </tr>
               );
             })}
@@ -99,21 +177,15 @@ function DocumentList() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>abc@gmail.com</td>
-            </tr>
-            <tr>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>abc@gmail.com</td>
-            </tr>
-            <tr>
-              <td>Thornton</td>
-              <td>Thornton</td>
-              <td>abc@gmail.com</td>
-            </tr>
+            {sharedDocumentList.length > 0 && sharedDocumentList.map((item) => {
+              return (
+                <tr>
+                  <td>{item?.label}</td>
+                  <td>{item?.fileURL}</td>
+                  <td>{item?.senderEmail}</td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </Card>
@@ -121,9 +193,12 @@ function DocumentList() {
       
       <UploadDocument
         openModel={openModel}
-        closeModal={() => setOpenModel(false)} title={"Upload document"}
+        closeModal={() => setOpenModel(false)}
+        title={"Upload document"}
+        callAfterUpload={getDocumentList}
       />
-      <Loader isLoading={isLoading} />
+       <Loader isLoading={isLoading || isSharedDocumentLoading} />
+      
     </div>
   );
 }

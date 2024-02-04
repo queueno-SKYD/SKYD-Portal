@@ -12,4 +12,5 @@ export const PathName={
   documentListPath: "/documentListPath",
   userListPath: "/userListPath",
   logoutPath: "/logoutPath",
+  shareDoc: "/documentManagement/share/:id",
 }

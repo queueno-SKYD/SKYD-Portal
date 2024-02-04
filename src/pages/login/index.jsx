@@ -26,16 +26,11 @@ function Login() {
       console.log("error")
       return;
     }
-    console.debug(formData)
     try {
       setIsLoading(true);
       const response = await POST(url.Login, getHeaders(null), formData);
-      console.log("response --->", JSON.stringify(response));
       if(response.data.statusCode === 200){
         const output = response?.data?.data;
-        console.debug("🚀 ------------------------------------🚀")
-        console.debug("🚀 ~ handleSubmit ~ output:", output)
-        console.debug("🚀 ------------------------------------🚀")
         if(output){
           console.log("Error ----> ")
           loginStore.setToken(output?.token);
@@ -44,9 +39,6 @@ function Login() {
         }
       }
     } catch (error) {
-      console.debug("🚀 ----------------------------------🚀")
-      console.debug("🚀 ~ handleSubmit ~ error:", error)
-      console.debug("🚀 ----------------------------------🚀")
     } finally {
       setIsLoading(false)
     }
