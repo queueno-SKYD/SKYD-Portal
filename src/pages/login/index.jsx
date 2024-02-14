@@ -5,9 +5,11 @@ import { POST, getHeaders } from "../../api/restClient.ts";
 import { useLogin } from "../../context/login.context";
 import { PathName } from "../../helper/constants/pathNames.ts";
 import url from "../../api/url.ts";
+import { customToast } from "../../components/customToast";
 
 function Login() {
   const [isLoading, setIsLoading] = useState(false);
+
   const loginStore = useLogin();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -39,8 +41,11 @@ function Login() {
         }
       }
     } catch (error) {
+      customToast("error", error.message)
     } finally {
-      setIsLoading(false)
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 500)
     }
 
   };
@@ -77,7 +82,7 @@ function Login() {
           className="btn btn-primary align-middle"
           disabled={isLoading}
         >
-          {isLoading && <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
+          {isLoading && <span class="spinner-border spinner-border-sm mr-4" role="status" aria-hidden="true"></span>}
           Log in
         </button>
       </form>
