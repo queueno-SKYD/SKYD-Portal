@@ -14,8 +14,8 @@ function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
-  })
+    password: "",
+  });
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -24,69 +24,112 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(formData?.email && formData?.passwordConfirm){
-      console.log("error")
+    if (formData?.email && formData?.passwordConfirm) {
+      console.log("error");
       return;
     }
     try {
       setIsLoading(true);
       const response = await POST(url.Login, getHeaders(null), formData);
-      if(response.data.statusCode === 200){
+      if (response.data.statusCode === 200) {
         const output = response?.data?.data;
-        if(output){
-          console.log("Error ----> ")
+        const status = response?.data?.httpStatus;
+        if (output && status === "OK") {
+          console.log("Error ----> ");
           loginStore.setToken(output?.token);
           loginStore.login(output.userData);
           navigate(PathName.registerSuccessPath);
+        } else {
+          customToast("error", response?.data?.message);
         }
       }
     } catch (error) {
-      customToast("error", error.message)
+      customToast("error", error.message);
     } finally {
       setTimeout(() => {
-        setIsLoading(false)
-      }, 500)
+        setIsLoading(false);
+      }, 500);
     }
-
   };
   return (
-    <div className="login-container">
-      <h2>Login</h2>
-
-      <form>
-        <div className="row mb-3">
-          <label htmlFor="inputEmail3" className="col-sm-3 col-form-label" >
-            Email
-          </label>
-          <div className="col-sm-10">
-            <input type="email" className="form-control" id="inputEmail3" name="email"
-              value={formData?.email}
-              onChange={handleInputChange}/>
+    <section className="vh-100">
+      <div className="container h-100">
+        <div className="row d-flex justify-content-center align-items-center h-100">
+          <div className="col-md-6">
+            <div className="card shadow-lg border-0 rounded-lg mt-5">
+              <div className="card-header">
+                <h3 className="text-center font-weight-light">Login</h3>
+              </div>
+              <div className="card-body">
+                <form>
+                  <div className="form-group">
+                    <label className="small mb-1" htmlFor="inputEmailAddress">
+                      Email
+                    </label>
+                    <input
+                      className="form-control my-2"
+                      id="inputEmailAddress"
+                      type="email"
+                      placeholder="Enter email address"
+                      name="email"
+                      value={formData?.email}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="small mb-1" htmlFor="inputPassword">
+                      Password
+                    </label>
+                    <input
+                      className="form-control my-2"
+                      id="inputPassword"
+                      type="password"
+                      placeholder="Enter password"
+                      name="password"
+                      value={formData?.password}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  {/* <div className="form-group pt-3">
+                              <div className="custom-control custom-checkbox">
+                                  <input className="custom-control-input" id="rememberPasswordCheck" type="checkbox" />
+                                  <label className="custom-control-label" htmlFor="rememberPasswordCheck">Remember password</label>
+                              </div>
+                          </div> */}
+                  <div className="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                    <a className="small" href="#">
+                      Forgot Password?
+                    </a>
+                    <button
+                      onClick={(e) => handleSubmit(e)}
+                      // href={PathName.registerSuccessPath}
+                      className="btn btn-primary align-middle"
+                      disabled={isLoading}
+                    >
+                      {isLoading && (
+                        <span
+                          className="spinner-border spinner-border-sm mr-4"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                      )}
+                      Log in
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <div className="card-footer text-center">
+                <div className="small">
+                  <Link to={PathName.registerPath}>
+                    Need an account? Sign up!
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="row mb-3">
-          <label htmlFor="inputPassword3" className="col-sm-3 col-form-label">
-            Password
-          </label>
-          <div className="col-sm-10">
-            <input type="password" className="form-control" id="inputPassword3" name="password"
-              value={formData?.password}
-              onChange={handleInputChange}/>
-          </div>
-        </div>
-        <Link to={PathName.registerPath}>Register as new user</Link>
-        <br/>
-        <button
-          onClick={(e) => handleSubmit(e)}
-          // href={PathName.registerSuccessPath}
-          className="btn btn-primary align-middle"
-          disabled={isLoading}
-        >
-          {isLoading && <span class="spinner-border spinner-border-sm mr-4" role="status" aria-hidden="true"></span>}
-          Log in
-        </button>
-      </form>
-    </div>
+      </div>
+    </section>
   );
 }
 
