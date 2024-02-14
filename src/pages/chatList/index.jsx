@@ -1,8 +1,38 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ChatMessage from '../../components/chatMessage';
+import UseWs from '../../api/ws';
 
 function ChatList() {
   const imageurl = 'https://images.unsplash.com/photo-1533167649158-6d508895b680?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c3BsYXNofGVufDB8fDB8fHww'
+  // const socket = UseWs()
+  const socket2 = UseWs("ws/v1/personal")
+  const [msg, setMessage] = useState("");
+  useEffect(() => {
+
+    socket2.on("connect", (data) => {
+      console.debug("🚀 -----------------------------------🚀")
+      console.debug("🚀 ~ socket.on ~ console:", socket2.id)
+      console.debug("🚀 -----------------------------------🚀")
+    })
+  }, [])
+  
+  socket2.on("recieavePrivate", (data) => {
+    console.debug("🚀 -----------------------------------🚀")
+    console.debug("🚀 ~ socket.on ~ recieavePrivate:", data)
+    console.debug("🚀 -----------------------------------🚀")
+  })
+
+  const sendMessage = (msg) => {
+    const data = {
+      message: msg,
+      receiverId: 30,
+      sendAt: new Date()
+    }
+    console.debug("🚀 -------------------------------🚀")
+    console.debug("🚀 ~ sendMessage ~ data:", data)
+    console.debug("🚀 -------------------------------🚀")
+    socket2.emit("sendMessage", data)
+  }
   return (
     <div className="w-100 d-flex flex-column align-items-center mt-5">
       <div className="card w-75">
@@ -61,11 +91,14 @@ function ChatList() {
                 className="form-control"
                 id="inputPassword2"
                 placeholder="Message here ......"
+                value={msg}
+                onChange={(e) => setMessage(e.target.value)}
               />
             </div>
             <button
               type="button"
               className="col-1 btn btn-outline bg-secondary text-white"
+              onClick={() => sendMessage(msg)}
             >
               Send
             </button>
