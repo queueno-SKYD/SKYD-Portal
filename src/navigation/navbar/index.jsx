@@ -5,6 +5,7 @@ import { PathName } from "../../helper/constants/pathNames.ts";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../../context/login.context.jsx";
 import MyModal from "../../components/Model";
+import MobileNav from "./mobileNav";
 
 function Navbar() {
   const {
@@ -21,13 +22,13 @@ function Navbar() {
   }
   const [isOpneLogoutModel, setOpenLogoutModel] = useState(false)
   return (
-    <section className="vh-100">
-      {!!token && <nav className="nav nav-pills nav-justified bg-light">
-        <Link className={`nav-link mx-5 my-2 ${compare(PathName.homePath) ? "active" : ""}`} aria-current="page" to={PathName.homePath}>{TextMessage.GROUP_CHAT}</Link>
-        <Link className={`nav-link mx-5 my-2 ${compare(PathName.userListPath) ? "active" : ""}`} to={PathName.userListPath}>{TextMessage.MANAGE_USER}</Link>
-        <Link className={`nav-link mx-5 my-2 ${compare(PathName.documentListPath) ? "active" : ""}`} to={PathName.documentListPath}>{TextMessage.MANAGEMENT_DOCUMENTS}</Link>
+    <>
+      {!!token && <nav className="nav nav-pills nav-justified bg-light" id="desk-nav">
+        <Link className={`nav-link ${compare(PathName.homePath) ? "active" : ""}`} aria-current="page" to={PathName.homePath}>{TextMessage.GROUP_CHAT}</Link>
+        <Link className={`nav-link ${compare(PathName.userListPath) ? "active" : ""}`} to={PathName.userListPath}>{TextMessage.MANAGE_USER}</Link>
+        <Link className={`nav-link ${compare(PathName.documentListPath) ? "active" : ""}`} to={PathName.documentListPath}>{TextMessage.MANAGEMENT_DOCUMENTS}</Link>
         <Link
-          className={`nav-link mx-5 my-2 ${compare(PathName.logoutPath) ? "active" : ""}`}
+          className={`nav-link ${compare(PathName.logoutPath) ? "active" : ""}`}
           tabIndex="-1"
           aria-disabled="true"
           onClick={() => setOpenLogoutModel(true)}
@@ -48,8 +49,13 @@ function Navbar() {
       </nav>}
       
       {/* All outlets */}
-      <Outlet />
-    </section>
+      <div className="h-100 inner overflow-auto" id="main">
+        <div className="container container-fluid d-flex flex-column align-self-center mb-1">
+          <Outlet />
+        </div>
+      </div>
+      <MobileNav setOpenLogoutModel={setOpenLogoutModel} />
+    </>
   );
 }
 

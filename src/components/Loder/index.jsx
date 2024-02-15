@@ -7,7 +7,7 @@ function Loader({ isLoading }) {
 
  return (
     <PortalComponent>
-      <Modal show={!!isLoading} backdropClassName="custom-backdrop" className='w-100 d-flex flex-column align-self-center custom-modal' dialogClassName="modal-dialog-centered">
+      <Modal show={!!isLoading} backdropClassName="custom-backdrop" className='d-flex align-content-center justify-content-center custom-modal' dialogClassName="modal-dialog-centered">
         {<div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>}
