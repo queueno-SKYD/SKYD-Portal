@@ -4,7 +4,7 @@ import { POST, getHeaders } from "../../../api/restClient.ts";
 import { useLogin } from "../../../context/login.context";
 import url from "../../../api/url.ts";
 import MyModal from "../../Model/index.jsx";
-import { customToast } from "../../customToast/index.js";
+import {successToast } from "../../customToast/index.js";
 
 const DeleteDocument = ({openModel, closeModal, callAfterUpload, fileId}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,8 +30,8 @@ const DeleteDocument = ({openModel, closeModal, callAfterUpload, fileId}) => {
       if(response.data.statusCode === 200){
         const output = response?.data?.data;
         if(output){
-          callAfterUpload()
-          customToast("success", "Document successfully uploaded")
+          callAfterUpload();
+          successToast("Document successfully uploaded");
           closeModal()
         }
       }

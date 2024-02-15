@@ -4,7 +4,7 @@ import { POST, getHeaders } from "../../api/restClient.ts";
 import { useLogin } from "../../context/login.context";
 import url from "../../api/url.ts";
 import MyModal from "../Model/index.jsx";
-import { customToast } from "../customToast/index.js";
+import {successToast } from "../customToast/index.js";
 
 const UploadDocument = ({openModel, closeModal, callAfterUpload, fileData, title}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,9 +33,9 @@ const UploadDocument = ({openModel, closeModal, callAfterUpload, fileData, title
         if(response.data.statusCode === 200){
           const output = response?.data?.data;
           if(output){
-            callAfterUpload()
-            customToast("success", "Document successfully deleted")
-            closeModal()
+            callAfterUpload();
+            successToast("Document successfully deleted");
+            closeModal();
           }
         }
         return;
@@ -45,9 +45,9 @@ const UploadDocument = ({openModel, closeModal, callAfterUpload, fileData, title
       if(response.data.statusCode === 200){
         const output = response?.data?.data;
         if(output){
-          callAfterUpload()
-          customToast("success", "Document successfully uploaded")
-          closeModal()
+          callAfterUpload();
+          successToast("Document successfully uploaded");
+          closeModal();
         }
       }
     } catch (error) {

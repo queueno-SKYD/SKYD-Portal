@@ -5,7 +5,7 @@ import { POST, getHeaders } from '../api/restClient.ts';
 import URL from '../api/url.ts'
 import { PathName } from '../helper/constants/pathNames.ts';
 import { useNavigate } from "react-router-dom";
-import { customToast } from '../components/customToast/index.js';
+import {dangerToast, warningToast } from '../components/customToast/index.js';
 function RegisterViewModal() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -48,11 +48,11 @@ function RegisterViewModal() {
           loginStore.login(output.userData);
           navigate(PathName.registerSuccessPath);
         } else {
-          customToast("error", response?.data?.message)
+          dangerToast(response?.data?.message)
         }
       }
     } catch (error) {
-      customToast("error", error?.message)
+      dangerToast(error?.message)
     } finally {
       setLoading(false)
     }
@@ -65,13 +65,13 @@ function RegisterViewModal() {
   const validatePassword =(password , confirmPassword)=>{
     if(password != confirmPassword){
       setshowToastMessage("Password not matched!")
-      customToast("error", "Password not matched!")
+      warningToast("Password not matched!")
       setShowToast(true);
       return false;
     }
     if(!PASSWORD_REGEX.test(password)){
       setshowToastMessage("Missing a special character")
-      customToast("error", "Missing a special character")
+      warningToast("Missing a special character")
       setShowToast(true);
       return false;
     }

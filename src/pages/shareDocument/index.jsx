@@ -7,7 +7,7 @@ import Loader from '../../components/Loder';
 import { POST, getHeaders } from '../../api/restClient.ts';
 import api from "../../api/url.ts";
 import { useLogin } from '../../context/login.context';
-import { customToast } from '../../components/customToast';
+import {dangerToast, successToast } from '../../components/customToast';
 
 const ShareDocument = () => {
   const { id } = useParams();
@@ -34,7 +34,7 @@ const ShareDocument = () => {
         }
       }
     } catch (error) {
-      customToast("error", error.message)
+      dangerToast(error.message)
     } finally {
       setIsLoading(false)
     }
@@ -72,15 +72,15 @@ const ShareDocument = () => {
       if(response.data.statusCode === 200){
         const output = response?.data?.data;
         if (output) {
-          customToast("success", "Shared document successfully")
+          successToast("Shared document successfully")
           getShareDetailsList(fileId)
           setMultiSelections([])
         } else {
-          customToast("error", response.data.message)
+          dangerToast(response.data.message)
         }
       }
     } catch (error) {
-      customToast("error", error.message)
+      dangerToast(error.message)
     } finally {
       setIsShareLoading(false)
     }
@@ -107,12 +107,12 @@ const ShareDocument = () => {
         const output = response?.data?.data;
         if(output){
           getShareDetailsList(fileId);
-          customToast("success", "Removed access successsfully this user will not be able to access this file now")
+          successToast("Removed access successsfully this user will not be able to access this file now")
           setOpenDeleteModel(false)
         }
       }
     } catch (error) {
-      customToast("error", error.message)
+      dangerToast(error.message)
     } finally {
       setDeleting(false)
     }

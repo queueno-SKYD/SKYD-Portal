@@ -12,6 +12,7 @@ export default{
   getDocument: `${endPoint}/api/${version}/manageDocs/getDocument`,
   getDocuments: `${endPoint}/api/${version}/manageDocs/getDocuments`,
   DeleteUserByAdmin: `${endPoint}/api/${version}/manageUsers/deleteUserByAdmin`,
+  EditUserByAdmin: `${endPoint}/api/${version}/manageUsers/editUserByAdmin`,
   searchUsers: `${endPoint}/api/${version}/manageUsers/search`,
   shareDocument: `${endPoint}/api/${version}/manageDocs/share`,
   shareWithMultipleUsers: `${endPoint}/api/${version}/manageDocs/shareWithMultipleUsers`,
