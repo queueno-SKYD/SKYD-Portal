@@ -5,6 +5,7 @@ import { POST, getHeaders } from '../api/restClient.ts';
 import URL from '../api/url.ts'
 import { PathName } from '../helper/constants/pathNames.ts';
 import { useNavigate } from "react-router-dom";
+import { customToast } from '../components/customToast/index.js';
 function RegisterViewModal() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ function RegisterViewModal() {
   "passwordConfirm": "",
   });
   const [showToast, setShowToast] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [showToastMessage, setshowToastMessage] = useState('');
   const loginStore = useLogin();
    /** Function to handle form field changes */
@@ -25,26 +27,34 @@ function RegisterViewModal() {
 
   /** Click on Register button to registration */
   const handleSubmit = async (e) => {
+    setLoading(true)
     e.preventDefault();
 
     if(!validatePassword(formData.password, formData.passwordConfirm)){
       setTimeout(() => {
         setShowToast(false);
+        setLoading(false)
       }, 700);
       return;
     }
     try {
-      const response = await POST(URL.Register,getHeaders(null),formData);
+      const response = await POST(URL.Register,getHeaders(null), formData);
       if(response.data.statusCode===200){
         const output = response?.data?.data;
-        if(output){
-          console.log("Error ----> ")
+        const status = response?.data?.httpStatus;
+        if(output && status === "OK"){
+          console.log("Success ----> ")
           loginStore.setToken(output?.token);
           loginStore.login(output.userData);
           navigate(PathName.registerSuccessPath);
+        } else {
+          customToast("error", response?.data?.message)
         }
       }
     } catch (error) {
+      customToast("error", error?.message)
+    } finally {
+      setLoading(false)
     }
 
   };
@@ -55,11 +65,13 @@ function RegisterViewModal() {
   const validatePassword =(password , confirmPassword)=>{
     if(password != confirmPassword){
       setshowToastMessage("Password not matched!")
+      customToast("error", "Password not matched!")
       setShowToast(true);
       return false;
     }
     if(!PASSWORD_REGEX.test(password)){
       setshowToastMessage("Missing a special character")
+      customToast("error", "Missing a special character")
       setShowToast(true);
       return false;
     }
@@ -74,7 +86,7 @@ function RegisterViewModal() {
     setFormData,
     showToast, setShowToast,
     showToastMessage,
-
+    loading,
   }
 }
 
