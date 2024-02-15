@@ -1,3 +1,24 @@
+body {
+  height: 100vh;
+  overflow: hidden;
+}
+#main {
+  height: calc(100vh - 56px) !important ;
+}
+#desk-nav {
+  @media (max-width: 576px) {
+    display: none;
+  }
+}
+#mobile-nav {
+  @media (min-width: 576px) {
+    display: none;
+  }
+}
+.nav-link-1 {
+  text-decoration: none;
+  color: unset;
+}
 .icon-space {
   margin-right: 8px; /* Adjust the spacing as needed */
  }

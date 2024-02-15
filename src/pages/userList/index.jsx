@@ -6,6 +6,7 @@ import { POST, getHeaders } from "../../api/restClient.ts";
 import { useState } from "react";
 import MyModal from "../../components/Model/index.jsx";
 import {customToast} from '../../components/customToast/index.js'
+import Card from "../../components/Card";
 
 function UserList() {
   const [AllUserData, setAllUserData] = useState([]);
@@ -94,60 +95,55 @@ function UserList() {
    
 
   return (
-    <div className="w-100 d-flex flex-column align-items-center mt-3">
-      <div className="card w-75">
-        <div className="card-body">
-          <div className="w-100 d-flex flex-column align-self-center">
-            <h3>Users</h3>
-            <table className="w-100 table table-striped">
-              <TableHeader />
-              <tbody>
-                {AllUserData.map((item) => {
-                  return (
-                    <tr>
-                      <td>{item.firstName + " " + item.lastName}</td>
-                      <td>{item.email}</td>
-                      <td>
-                        <a href="">Edit</a>
-                        <span> | </span>
-                        <button
-                          type="button"
-                          class="btn btn-primary"
-                          onClick={() => {
-                            setSelectedID([item.userId]);
-                            setOpenModel(true);
-                          }}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+    <>
+      <Card title={"Users"}>
+        <table className="w-100 table table-striped">
+          <TableHeader />
+          <tbody>
+            {AllUserData.map((item) => {
+              return (
+                <tr>
+                  <td>{item.firstName + " " + item.lastName}</td>
+                  <td>{item.email}</td>
+                  <td>
+                    <a href="">Edit</a>
+                    <span> | </span>
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      onClick={() => {
+                        setSelectedID([item.userId]);
+                        setOpenModel(true);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
 
-            {/* <!-- Modal --> */}
-            <MyModal
-              openModal={openModel}
-              closeModal={() => setOpenModel(false)}
-              title={"Confirm For Deletion!"}
-              closeOnBackdropClick={true}
-              isCenter={true}
-              onSave={(e) => {
-                CallToDeleteUserByAdmin();
-                setOpenModel(false);
-              }}
-              isLoading={false}
-              saveButtonTitle={"Delete"}
-              cancelButtonTitle={"Cancel"}
-            >
-              <p className="text-center">Are you sure, you want delete this user?</p>
-            </MyModal>
-          </div>
-        </div>
-      </div>
-    </div>
+        {/* <!-- Modal --> */}
+        <MyModal
+          openModal={openModel}
+          closeModal={() => setOpenModel(false)}
+          title={"Confirm For Deletion!"}
+          closeOnBackdropClick={true}
+          isCenter={true}
+          onSave={(e) => {
+            CallToDeleteUserByAdmin();
+            setOpenModel(false);
+          }}
+          isLoading={false}
+          saveButtonTitle={"Delete"}
+          cancelButtonTitle={"Cancel"}
+        >
+          <p className="text-center">Are you sure, you want delete this user?</p>
+        </MyModal>
+      </Card>
+    </>
   );
 }
 

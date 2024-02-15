@@ -162,6 +162,7 @@ const ShareDocument = () => {
       </table>
     </Card>
     <Card
+      overFlow={true}
       title={"Add users"}
       bottomComponent={
         <div className="w-75 mt-4">
@@ -173,7 +174,7 @@ const ShareDocument = () => {
         </div>
       }
     >
-      <div className='d-flex justify-content-between align-items-start'>
+      <div className='w-100 d-flex justify-content-between align-items-start'>
         <UserSearch multiSelections={multiSelections} setMultiSelections={setMultiSelections} placeHolder='Search user, email to add'/>
         <button className="btn btn-primary btn m-2 mt-0" style={{minWidth: "100px"}} onClick={handleSharePress}><i className="fa fa-share icon-space"/>Share</button>
       </div>

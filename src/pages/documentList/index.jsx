@@ -8,6 +8,7 @@ import Loader from "../../components/Loder/index.jsx";
 import MyModal from "../../components/Model/index.jsx";
 import { customToast } from "../../components/customToast/index.js";
 import { useNavigate } from 'react-router-dom';
+import "./index.css"
 
 function DocumentList() {
   const navigate = useNavigate();
@@ -28,9 +29,9 @@ function DocumentList() {
   };
   
   const uploadNewDocumentSection = (
-    <div className="w-75 d-flex flex-column align-self-center mt-4">
+    <div className="col-12 mt-2 mb-2">
       <button
-        className="w-25 text-decoration-none btn btn-primary"
+        className="text-decoration-none btn btn-primary"
         onClick={openUploadModal}
       >
         + Add Uploads
@@ -104,9 +105,9 @@ function DocumentList() {
     }
   }
   return (
-    <div className="w-100 d-flex flex-column align-self-center">
+    <>
       <Card title={"My Uploads"}>
-        <table className="w-100 table table-striped">
+        <table className="table table-striped">
           <thead>
             <tr>
               <th scope="col" className="col-3">
@@ -199,7 +200,7 @@ function DocumentList() {
       />
        <Loader isLoading={isLoading || isSharedDocumentLoading} />
       
-    </div>
+    </>
   );
 }
 
