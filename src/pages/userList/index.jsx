@@ -149,7 +149,6 @@ function UserList() {
   };
 
   return (
-    <>
       <Card title={"Users"}>
         <table className="w-100 table table-striped">
           <TableHeader />
@@ -159,17 +158,28 @@ function UserList() {
                 <tr>
                   <td>{item.firstName + " " + item.lastName}</td>
                   <td>{item.email}</td>
-                  <td>
-                    <a href="">Edit</a>
+                  <td style={{ minWidth: "200px" }}>
+                        <button
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => {
+                            setSelectedID([item.userId]);
+                            setEditData(item);
+                            setOpenEditModal(true);
+                          }}
+                        >
+                          <i className="fa fa-pen icon-space" />
+                          Edit
+                        </button>
                     <span> | </span>
                     <button
                       type="button"
-                      class="btn btn-primary"
+                      className="btn btn-outline-danger btn-sm"
                       onClick={() => {
                         setSelectedID([item.userId]);
                         setOpenModel(true);
                       }}
                     >
+                      <i className="fa fa-trash icon-space" />
                       Delete
                     </button>
                   </td>
@@ -179,101 +189,99 @@ function UserList() {
           </tbody>
         </table>
 
-            {/* <!-- Modal --> */}
-            <MyModal
-              openModal={openModel}
-              closeModal={() => setOpenModel(false)}
-              title={"Confirm For Deletion!"}
-              closeOnBackdropClick={true}
-              isCenter={true}
-              onSave={(e) => {
-                CallToDeleteUserByAdmin();
-                setOpenModel(false);
-              }}
-              isLoading={false}
-              saveButtonTitle={"Delete"}
-              cancelButtonTitle={"Cancel"}
-            >
-              <p className="text-center">Are you sure, you want delete this user?</p>
-            </MyModal>
+        {/* <!-- Modal --> */}
+        <MyModal
+          openModal={openModel}
+          closeModal={() => setOpenModel(false)}
+          title={"Confirm For Deletion!"}
+          closeOnBackdropClick={true}
+          isCenter={true}
+          onSave={(e) => {
+            CallToDeleteUserByAdmin();
+            setOpenModel(false);
+          }}
+          isLoading={false}
+          saveButtonTitle={"Delete"}
+          cancelButtonTitle={"Cancel"}
+        >
+          <p className="text-center">Are you sure, you want delete this user?</p>
+        </MyModal>
 
-            {/* <!-- Modal --> */}
-            <MyModal
-              openModal={OpenEditModal}
-              closeModal={() => setOpenEditModal(false)}
-              title={"Edit"}
-              closeOnBackdropClick={true}
-              isCenter={true}
-              onSave={(e) => {
-                CallToEditUserByAdmin();
-                setOpenEditModal(false);
-              }}
-              isLoading={false}
-              saveButtonTitle={"Edit"}
-              cancelButtonTitle={"Cancel"}
-            >
-              <form>
-                <div className="row mb-3">
-                  <label
-                    htmlFor="inputEmail13"
-                    className="col-sm-12 col-form-label"
-                  >
-                    Full Name
-                  </label>
-                  <div className="col-sm-12">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="inputEmail13"
-                      name="firstName"
-                      value={EditData.firstName}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <label
-                    htmlFor="inputEmail113"
-                    className="col-sm-12 col-form-label"
-                  >
-                    Last Name
-                  </label>
-                  <div className="col-sm-12">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="inputEmail113"
-                      name="lastName"
-                      value={EditData.lastName}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
+        {/* <!-- Modal --> */}
+        <MyModal
+          openModal={OpenEditModal}
+          closeModal={() => setOpenEditModal(false)}
+          title={"Edit"}
+          closeOnBackdropClick={true}
+          isCenter={true}
+          onSave={(e) => {
+            CallToEditUserByAdmin();
+            setOpenEditModal(false);
+          }}
+          isLoading={false}
+          saveButtonTitle={"Edit"}
+          cancelButtonTitle={"Cancel"}
+        >
+          <form>
+            <div className="row mb-3">
+              <label
+                htmlFor="inputEmail13"
+                className="col-sm-12 col-form-label"
+              >
+                Full Name
+              </label>
+              <div className="col-sm-12">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="inputEmail13"
+                  name="firstName"
+                  value={EditData.firstName}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+            <div className="row mb-3">
+              <label
+                htmlFor="inputEmail113"
+                className="col-sm-12 col-form-label"
+              >
+                Last Name
+              </label>
+              <div className="col-sm-12">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="inputEmail113"
+                  name="lastName"
+                  value={EditData.lastName}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
 
-                <div className="row mb-3">
-                  <label
-                    htmlFor="inputEmail123"
-                    className="col-sm-12 col-form-label"
-                  >
-                    Image Url
-                  </label>
-                  <div className="col-sm-12">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="inputEmail123"
-                      name="imageURL"
-                      value={EditData.imageURL}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-              </form>
-            </MyModal>
-          </div>
-        </div>
-      </div>
-    </div>
+            <div className="row mb-3">
+              <label
+                htmlFor="inputEmail123"
+                className="col-sm-12 col-form-label"
+              >
+                Image Url
+              </label>
+              <div className="col-sm-12">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="inputEmail123"
+                  name="imageURL"
+                  value={EditData.imageURL}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+          </form>
+        </MyModal>
+        <Loader isLoading={IsLoading} />
+      </Card>
   );
 }
 
