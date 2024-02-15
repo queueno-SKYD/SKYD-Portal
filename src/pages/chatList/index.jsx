@@ -289,7 +289,7 @@ function ChatList() {
               className=" btn btn-outline bg-secondary text-white"
               onClick={(e) => sendMessage(e)}
             >
-              Send
+              <i class="fas fa-paper-plane"></i>
             </button>
           </form>
         </di>

@@ -5,7 +5,7 @@ import { POST, getHeaders } from "../../api/restClient.ts";
 import { useLogin } from "../../context/login.context";
 import { PathName } from "../../helper/constants/pathNames.ts";
 import url from "../../api/url.ts";
-import { customToast } from "../../components/customToast";
+import { dangerToast } from "../../components/customToast";
 
 function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -40,11 +40,11 @@ function Login() {
           loginStore.login(output.userData);
           navigate(PathName.registerSuccessPath);
         } else {
-          customToast("error", response?.data?.message);
+          dangerToast(response?.data?.message)
         }
       }
     } catch (error) {
-      customToast("error", error.message);
+      dangerToast(error.message)
     } finally {
       setTimeout(() => {
         setIsLoading(false);
