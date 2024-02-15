@@ -1,0 +1,48 @@
+.arrorPointer {
+  position: relative;
+  min-width: 200px;
+}
+.arrorPointerRight::after {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border: 10px  solid transparent;
+  border-top-color: #93baf8;
+  border-radius: 5px;
+  top: 0;
+  right: -10px;
+  background-color: transparent;
+  border-radius: 0 50px -50px 0px;
+}
+
+.arrorPointerRight {
+  border-radius: 4px 0 4px 4px !important;
+}
+
+.arrorPointerLeft::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 0;
+  left: -8px;
+  background-color: transparent;
+  border-radius: 0 50px 50px 50px;
+  border: 10px  solid transparent;
+  border-top-color: #faa3a3;
+  border-radius: 5px;
+}
+
+.arrorPointerLeft {
+  border-radius: 0px 4px 4px 4px !important;
+}
+
+.small {
+  font-size:small;
+}
+.small-right {
+  display: flex;
+  justify-content: end;
+  width: 100% !important;
+}
