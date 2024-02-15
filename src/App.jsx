@@ -9,7 +9,8 @@ import { LoginProvider } from "./context/login.context";
 import "./global.css"
 function App() {
   return (
-    <div
+    <section
+    className='vh-100'
     style={{
       backgroundImage: `url("./wall.svg")`,
       backgroundRepeat: 'no-repeat',
@@ -22,7 +23,7 @@ function App() {
         </LoginProvider>
         
       </BrowserRouter>
-    </div>
+    </section>
   )
 }
 
