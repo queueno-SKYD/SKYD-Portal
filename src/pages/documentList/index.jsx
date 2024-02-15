@@ -6,7 +6,7 @@ import url from "../../api/url.ts";
 import { useLogin } from "../../context/login.context";
 import Loader from "../../components/Loder/index.jsx";
 import MyModal from "../../components/Model/index.jsx";
-import { customToast } from "../../components/customToast/index.js";
+import {dangerToast, successToast } from "../../components/customToast/index.js";
 import { useNavigate } from 'react-router-dom';
 import "./index.css"
 
@@ -94,12 +94,12 @@ function DocumentList() {
         const output = response?.data?.data;
         if(output){
           getDocumentList();
-          customToast("success", "Document successfully uploaded")
+          successToast("Document successfully uploaded")
           setOpenDeleteModel(false)
         }
       }
     } catch (error) {
-      customToast("error", error.message)
+      dangerToast(error.message);
     } finally {
       setDeleting(false)
     }

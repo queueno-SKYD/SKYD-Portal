@@ -5,45 +5,61 @@ import { useEffect } from "react";
 import { POST, getHeaders } from "../../api/restClient.ts";
 import { useState } from "react";
 import MyModal from "../../components/Model/index.jsx";
-import {customToast} from '../../components/customToast/index.js'
+import {
+  dangerToast,
+  infoToast,
+  successToast,
+} from "../../components/customToast/index.js";
+import Loader from "../../components/Loder/index.jsx";
 import Card from "../../components/Card";
 
 function UserList() {
   const [AllUserData, setAllUserData] = useState([]);
-  const [ErrorMessage, setErrorMessage] = useState('');
-  const [notFound, setnotFound] = useState(false);
   const [IsLoading, setIsLoading] = useState(false);
   const [SelectedID, setSelectedID] = useState([]);
   const [openModel, setOpenModel] = useState(false);
+  const [OpenEditModal, setOpenEditModal] = useState(false);
+  const [EditData, setEditData] = useState({
+    firstName: "",
+    lastName: "",
+    imageURL: "",
+    userId: SelectedID[0],
+  });
 
   const loginStore = useLogin();
 
-  useEffect(()=>{
-    setIsLoading(true);
+  useEffect(() => {
     CallToAllUsers();
-  },[SelectedID]);
+  }, []);
 
   /*
     get all Users List by  Api 
   */
-  const CallToAllUsers = async ()=>{
+  const CallToAllUsers = async () => {
     try {
-      const token = loginStore.token
-      const response = await POST(url.AllUsers, getHeaders(token), {pIndex : 0});
-      if(response.data.statusCode === 200){
+      setIsLoading(true);
+      const token = loginStore.token;
+      const response = await POST(url.AllUsers, getHeaders(token), {
+        pIndex: 0,
+      });
+      if (response.data.statusCode === 200) {
         let output = response.data.data;
-        if(output){
+        if (output) {
           setAllUserData(output);
-        }else{
-          setErrorMessage("Users not Found !")
+        } else {
+          infoToast("Users not Found !");
         }
-      }else{
-
+      } else {
+        dangerToast(response.data.message);
       }
     } catch (error) {
-      console.log("error -->",error)
+      dangerToast(error.message);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 500)
     }
-  }
+  };
   /*
     Table Header List 
   */
@@ -68,6 +84,7 @@ function UserList() {
   */
   const CallToDeleteUserByAdmin = async () => {
     try {
+      setIsLoading(true);
       const token = loginStore.token;
       const response = await POST(url.DeleteUserByAdmin, getHeaders(token), {
         userIds: SelectedID,
@@ -75,27 +92,63 @@ function UserList() {
       if (response.data.statusCode === 200) {
         let output = response.data;
         let message = output.message;
-        if(output.data){
+        if (output.data) {
           setSelectedID([]);
-          customToast("success",message, 2000);
-
-        }else{
+          successToast(message);
+          CallToAllUsers();
+        } else {
           setSelectedID([]);
-          alert(message);
+          dangerToast(message);
         }
-      }else{
+      } else {
         let message = response.data.message;
-        alert(message);
+        dangerToast(message);
       }
     } catch (error) {
-      alert(error.message)
-      console.log("Error ---> ", error);
+      dangerToast(error.message);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 500)
     }
   };
-   
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditData({ ...EditData, [name]: value });
+  };
+
+  const CallToEditUserByAdmin = async () => {
+    try {
+      const token = loginStore.token;
+      const response = await POST(url.EditUserByAdmin, getHeaders(token), {
+        ...EditData,
+        userId: SelectedID[0],
+      });
+      if (response.data.statusCode === 200) {
+        let output = response.data;
+        let message = output.message;
+        if (output.data) {
+          setSelectedID([]);
+          successToast(message);
+          CallToAllUsers();
+        } else {
+          setSelectedID([]);
+          dangerToast(message);
+        }
+      } else {
+        let message = response.data.message;
+        dangerToast(message);
+      }
+    } catch (error) {
+      dangerToast(error.message);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 500)
+    }
+  };
 
   return (
-    <>
       <Card title={"Users"}>
         <table className="w-100 table table-striped">
           <TableHeader />
@@ -105,17 +158,28 @@ function UserList() {
                 <tr>
                   <td>{item.firstName + " " + item.lastName}</td>
                   <td>{item.email}</td>
-                  <td>
-                    <a href="">Edit</a>
+                  <td style={{ minWidth: "200px" }}>
+                        <button
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => {
+                            setSelectedID([item.userId]);
+                            setEditData(item);
+                            setOpenEditModal(true);
+                          }}
+                        >
+                          <i className="fa fa-pen icon-space" />
+                          Edit
+                        </button>
                     <span> | </span>
                     <button
                       type="button"
-                      class="btn btn-primary"
+                      className="btn btn-outline-danger btn-sm"
                       onClick={() => {
                         setSelectedID([item.userId]);
                         setOpenModel(true);
                       }}
                     >
+                      <i className="fa fa-trash icon-space" />
                       Delete
                     </button>
                   </td>
@@ -142,8 +206,82 @@ function UserList() {
         >
           <p className="text-center">Are you sure, you want delete this user?</p>
         </MyModal>
+
+        {/* <!-- Modal --> */}
+        <MyModal
+          openModal={OpenEditModal}
+          closeModal={() => setOpenEditModal(false)}
+          title={"Edit"}
+          closeOnBackdropClick={true}
+          isCenter={true}
+          onSave={(e) => {
+            CallToEditUserByAdmin();
+            setOpenEditModal(false);
+          }}
+          isLoading={false}
+          saveButtonTitle={"Edit"}
+          cancelButtonTitle={"Cancel"}
+        >
+          <form>
+            <div className="row mb-3">
+              <label
+                htmlFor="inputEmail13"
+                className="col-sm-12 col-form-label"
+              >
+                Full Name
+              </label>
+              <div className="col-sm-12">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="inputEmail13"
+                  name="firstName"
+                  value={EditData.firstName}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+            <div className="row mb-3">
+              <label
+                htmlFor="inputEmail113"
+                className="col-sm-12 col-form-label"
+              >
+                Last Name
+              </label>
+              <div className="col-sm-12">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="inputEmail113"
+                  name="lastName"
+                  value={EditData.lastName}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+
+            <div className="row mb-3">
+              <label
+                htmlFor="inputEmail123"
+                className="col-sm-12 col-form-label"
+              >
+                Image Url
+              </label>
+              <div className="col-sm-12">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="inputEmail123"
+                  name="imageURL"
+                  value={EditData.imageURL}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+          </form>
+        </MyModal>
+        <Loader isLoading={IsLoading} />
       </Card>
-    </>
   );
 }
 
