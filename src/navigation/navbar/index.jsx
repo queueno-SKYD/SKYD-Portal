@@ -23,7 +23,7 @@ function Navbar() {
   const [isOpneLogoutModel, setOpenLogoutModel] = useState(false)
   return (
     <>
-      {!!token && <nav className="nav nav-pills nav-justified bg-light" id="desk-nav">
+      {!!token && <nav className="nav nav-tabs nav-justified bg-light" id="desk-nav">
         <Link className={`nav-link ${compare(PathName.homePath) ? "active" : ""}`} aria-current="page" to={PathName.homePath}>{TextMessage.GROUP_CHAT}</Link>
         <Link className={`nav-link ${compare(PathName.userListPath) ? "active" : ""}`} to={PathName.userListPath}>{TextMessage.MANAGE_USER}</Link>
         <Link className={`nav-link ${compare(PathName.documentListPath) ? "active" : ""}`} to={PathName.documentListPath}>{TextMessage.MANAGEMENT_DOCUMENTS}</Link>
@@ -50,7 +50,7 @@ function Navbar() {
       
       {/* All outlets */}
       <div className="h-100 inner overflow-auto" id="main">
-        <div className="container container-fluid d-flex flex-column align-self-center mb-1">
+        <div className="container container-fluid d-flex flex-column align-self-center mb-1 p-0">
           <Outlet />
         </div>
       </div>
