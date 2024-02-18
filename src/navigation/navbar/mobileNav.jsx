@@ -2,53 +2,56 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { TextMessage } from "../../helper/constants/textMessage.ts";
 import { PathName } from "../../helper/constants/pathNames.ts";
-import LogoutIcon from '@mui/icons-material/Logout';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
+import DifferenceRoundedIcon from '@mui/icons-material/DifferenceRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import "./index.css"
-const MobileNav = ({ setOpenLogoutModel }) => {
+const MobileNav = ({ setOpenLogoutModel, isOpneLogoutModel }) => {
   const currentPath = window.location.pathname;
   const compare = (path) => {
     return currentPath.split("/")?.[1] === path.split("/")?.[1];
   };
   return (
     <nav className="nav nav-tabs nav-justified bg-light" id="mobile-nav">
-      <div className={`nav-item nav-link ${compare(PathName.homePath) ? "active" : ""}`}>
+      <div className={`sidebar-item nav-item nav-link ${!isOpneLogoutModel && compare(PathName.homePath) ? "active" : ""}`}>
         <Link
-          className="nav-link-1 link_text"
+          className={`sidebar-icon-container link_text ${!isOpneLogoutModel && compare(PathName.homePath) ? "active-color" : ""}`}
           aria-current="page"
           to={PathName.homePath}
         >
-          <i class="fa fa-home"></i>
+          <HomeRoundedIcon />
 
         </Link>
       </div>
-      <div className={`nav-item nav-link ${
-            compare(PathName.userListPath) ? "active" : ""
+      <div className={`sidebar-item nav-item nav-link ${
+            !isOpneLogoutModel && compare(PathName.userListPath) ? "active" : ""
           }`}>
         <Link
-          className="nav-link-1 link_text"
+          className={`sidebar-icon-container link_text ${!isOpneLogoutModel && compare(PathName.userListPath) ? "active-color" : ""}`}
           to={PathName.userListPath}
         >
-        <i class="fa fa-users"></i>
+        <GroupsRoundedIcon />
         </Link>
       </div>
-      <div className={`nav-item nav-link ${
-            compare(PathName.documentListPath) ? "active" : ""
+      <div className={`sidebar-item nav-item nav-link ${
+            !isOpneLogoutModel && compare(PathName.documentListPath) ? "active" : ""
           }`}>
         <Link
-          className="nav-link-1 link_text"
+          className={`sidebar-icon-container link_text ${!isOpneLogoutModel && compare(PathName.documentListPath) ? "active-color" : ""}`}
           to={PathName.documentListPath}
         >
-          <i class="fa fa-file"></i>
+          <DifferenceRoundedIcon />
         </Link>
       </div>
-      <div className={`nav-item nav-link ${compare(PathName.logoutPath) ? "active" : ""}`}>
+      <div className={`sidebar-item nav-item nav-link ${isOpneLogoutModel ? "active" : ""}`}>
         <Link
-          className="nav-link-1 link_text"
+          className={`sidebar-icon-container link_text ${isOpneLogoutModel ? "active-color" : ""}`}
           tabIndex="-1"
           aria-disabled="true"
           onClick={() => setOpenLogoutModel(true)}
         >
-          <LogoutIcon  />
+          <LogoutRoundedIcon />
         </Link>
       </div>
     </nav>
