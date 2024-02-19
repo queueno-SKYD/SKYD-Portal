@@ -1,0 +1,8 @@
+.search-input{
+    padding-left: 20px;
+    
+}
+.search-input:focus {
+    outline: none;
+    border: none;
+  }

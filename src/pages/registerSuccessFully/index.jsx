@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { PathName } from "../../helper/constants/pathNames.ts";
-import { imageUrl } from "../../assets/index.ts";
 import { useNavigate } from "react-router-dom";
+import { imageUrl } from "../../assets/index.ts";
 
 function RegisterSuccessFully() {
   const navigate = useNavigate();

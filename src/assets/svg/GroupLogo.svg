@@ -1,0 +1,44 @@
+<svg
+   width="50"
+   height="50"
+   viewBox="0 0 50 50"
+   fill="none"
+   version="1.1"
+   id="svg10"
+   sodipodi:docname="GroupLogo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview12"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
+  <rect
+     x="0.5"
+     y="0.5"
+     width="49"
+     height="49"
+     rx="24.5"
+     fill="url(#pattern0)"
+     stroke="#FFFAFA"
+     id="rect2" />
+  <defs
+     id="defs8">
+    <pattern
+       id="pattern0"
+       patternContentUnits="objectBoundingBox"
+       width="1"
+       height="1">
+      <use
+         xlink:href="#image0_49_559"
+         transform="matrix(0.00412967 0 0 0.00460617 -0.551724 -0.146937)"
+         id="use4" />
+    </pattern>
+</svg>

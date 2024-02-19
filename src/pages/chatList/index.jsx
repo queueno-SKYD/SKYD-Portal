@@ -4,6 +4,10 @@ import Card from "../../components/Card";
 import moment from "moment";
 import { useLogin } from "../../context/login.context";
 import "./index.css";
+import GroupList from "../groupList";
+import ChatHeader from "../../components/chatHeader";
+import ChatSearch from "../../components/chatSearch";
+import GroupChatUser from "../../components/groupChatUser";
 
 const messages = [
   {
@@ -22,7 +26,8 @@ const messages = [
     lastName: "Smith",
     sendAt: "Fri, 12 Jan 2024 08:20:42 GMT",
     senderId: 45,
-    message: "I'm doing well, thank you! how about you? do you want to have some dinner with bob? he is smart guy",
+    message:
+      "I'm doing well, thank you! how about you? do you want to have some dinner with bob? he is smart guy",
   },
   {
     imageUrl:
@@ -40,7 +45,8 @@ const messages = [
     lastName: "Shrivastva",
     sendAt: "Sun, 14 Jan 2024 10:45:30 GMT",
     senderId: 25,
-    message: "Hello everyone! Please let me know if you have any issue on chat app",
+    message:
+      "Hello everyone! Please let me know if you have any issue on chat app",
   },
   {
     imageUrl:
@@ -222,6 +228,27 @@ function ChatList() {
   const messagesEndRef = useRef(null);
   console.debug(user?.userId, user);
   const [messagesList, setMessagesList] = useState(messages);
+  const [msg, setMsg] = useState("");
+  const sendMessage = (e) => {
+    e.preventDefault();
+    if (msg) {
+      setMessagesList((item) => {
+        return [
+          ...item,
+          {
+            imageUrl:
+              "https://images.unsplash.com/photo-1519363814881-9f4b382ca005?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3BsYXNofGVufDB8fDB8fHww",
+            firstName: "Dheeraj",
+            lastName: "Shrivastva",
+            sendAt: new Date().toUTCString(),
+            senderId: 25,
+            message: msg,
+          },
+        ];
+      });
+      scrollToBottom();
+      setMsg("");
+=======
   const inputDivRef = useRef(null);
 
   // Function to read the content of the div
@@ -268,10 +295,13 @@ function ChatList() {
       })
       scrollToBottom()
     }
-  }
+  };
   const scrollToBottom = () => {
     if (messagesEndRef?.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      messagesEndRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
     }
   };
   const clearPlaceholder = () => {
@@ -287,6 +317,13 @@ function ChatList() {
   }, [messagesList]);
   return (
     <>
+      <div
+        className="d-flex col-12 bg-secondary"
+        style={{ height: 500, width: "100%", marginTop: 10 }}
+      >
+        <div className="col-5">
+        </div>
+        <div className="col-6"></div>
       <div className="inner overflow-auto" id="messages" ref={messagesEndRef}>
         {messagesList?.length > 0 &&
           messagesList?.map((item, index) => {
