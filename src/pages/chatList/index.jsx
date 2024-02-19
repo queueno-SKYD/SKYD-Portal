@@ -4,6 +4,10 @@ import Card from "../../components/Card";
 import moment from "moment";
 import { useLogin } from "../../context/login.context";
 import "./index.css";
+import GroupList from "../groupList";
+import ChatHeader from "../../components/chatHeader";
+import ChatSearch from "../../components/chatSearch";
+import GroupChatUser from "../../components/groupChatUser";
 
 const messages = [
   {
@@ -22,7 +26,8 @@ const messages = [
     lastName: "Smith",
     sendAt: "Fri, 12 Jan 2024 08:20:42 GMT",
     senderId: 45,
-    message: "I'm doing well, thank you! how about you? do you want to have some dinner with bob? he is smart guy",
+    message:
+      "I'm doing well, thank you! how about you? do you want to have some dinner with bob? he is smart guy",
   },
   {
     imageUrl:
@@ -40,7 +45,8 @@ const messages = [
     lastName: "Shrivastva",
     sendAt: "Sun, 14 Jan 2024 10:45:30 GMT",
     senderId: 25,
-    message: "Hello everyone! Please let me know if you have any issue on chat app",
+    message:
+      "Hello everyone! Please let me know if you have any issue on chat app",
   },
   {
     imageUrl:
@@ -222,28 +228,34 @@ function ChatList() {
   const messagesEndRef = useRef(null);
   console.debug(user?.userId, user);
   const [messagesList, setMessagesList] = useState(messages);
-  const [msg, setMsg] = useState('');
+  const [msg, setMsg] = useState("");
   const sendMessage = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (msg) {
-      setMessagesList(item => {
-        return [...item, {
-          imageUrl:
-      "https://images.unsplash.com/photo-1519363814881-9f4b382ca005?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3BsYXNofGVufDB8fDB8fHww",
-          firstName: "Dheeraj",
-          lastName: "Shrivastva",
-          sendAt: (new Date()).toUTCString(),
-          senderId: 25,
-          message: msg,
-        }]
-      })
-      scrollToBottom()
-      setMsg('')
+      setMessagesList((item) => {
+        return [
+          ...item,
+          {
+            imageUrl:
+              "https://images.unsplash.com/photo-1519363814881-9f4b382ca005?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3BsYXNofGVufDB8fDB8fHww",
+            firstName: "Dheeraj",
+            lastName: "Shrivastva",
+            sendAt: new Date().toUTCString(),
+            senderId: 25,
+            message: msg,
+          },
+        ];
+      });
+      scrollToBottom();
+      setMsg("");
     }
-  }
+  };
   const scrollToBottom = () => {
     if (messagesEndRef?.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      messagesEndRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
     }
   };
   useEffect(() => {
@@ -251,48 +263,13 @@ function ChatList() {
   }, [messagesList]);
   return (
     <>
-      <div className="inner overflow-auto" id="messages" ref={messagesEndRef}>
-        {messagesList?.length > 0 &&
-          messagesList?.map((item, index) => {
-            return (
-              <ChatMessage
-                key={index}
-                message={item?.message}
-                isMine={25 === item?.senderId}
-                time={getTimeDifferenceForChat(item?.sendAt)}
-                senderName={`${item?.firstName} ${item?.lastName}`}
-                senderImage={item?.imageUrl}
-                firstName={item?.firstName}
-                lastName={item?.lastName}
-              />
-            );
-          })}
-      </div>
-      <div id="inputBox">
-        <di className="container container-fluid d-flex flex-column align-self-center inputArea mb-1">
-          <form
-            className="form w-100 d-flex justify-space-between justify-content-between gap-2"
-            
-          >
-            <div className="w-100">
-              <textarea
-                type="text"
-                className="form-control"
-                id="inputPassword2"
-                placeholder="Message here ......"
-                value={msg}
-                onChange={(e) => setMsg(e?.target?.value)}
-              />
-            </div>
-            <button
-              type="button"
-              className=" btn btn-outline bg-secondary text-white"
-              onClick={(e) => sendMessage(e)}
-            >
-              <i class="fas fa-paper-plane"></i>
-            </button>
-          </form>
-        </di>
+      <div
+        className="d-flex col-12 bg-secondary"
+        style={{ height: 500, width: "100%", marginTop: 10 }}
+      >
+        <div className="col-5">
+        </div>
+        <div className="col-6"></div>
       </div>
     </>
   );
