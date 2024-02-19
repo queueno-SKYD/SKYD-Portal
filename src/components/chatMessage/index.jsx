@@ -20,17 +20,11 @@ function ImageWithFallback({ src, firstName, lastName, alt }) {
     for (let i = 0; i < hash.length; i++) {
       color += hash.charCodeAt(i).toString(16);
     }
-    console.debug("🚀 ------------------------------------🚀")
-    console.debug("🚀 ~ getAccentColor ~ color:", color, color.slice(color.length - 6, color.length))
-    console.debug("🚀 ------------------------------------🚀")
     return '#' + color.slice(color.length - 6, color.length); // Limit to 6 characters to ensure a valid color code
   };
 
   const initials = (firstName.charAt(0)).toUpperCase();
   const accentColor = getAccentColor(firstName, lastName);
-  console.debug("🚀 ---------------------------------------------------🚀")
-  console.debug("🚀 ~ ImageWithFallback ~ accentColor:", accentColor)
-  console.debug("🚀 ---------------------------------------------------🚀")
 
   return (
     <div>
@@ -89,7 +83,7 @@ const ChatMessage = ({ message, isMine, time, senderName, senderImage, firstName
           <small className="text-white small">
             {!isMine && senderName && <strong>{senderName}</strong>}
           </small>
-          <p className={`mb-0 ${isMine ? "mt-2" : ""}`}>{message}</p>
+          <div className={`mb-0 ${isMine ? "mt-2" : ""}`}>{message}</div>
           <div className="small-right">
           <small className="text-white small">{time}</small>
           </div>
