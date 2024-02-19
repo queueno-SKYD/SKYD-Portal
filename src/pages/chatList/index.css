@@ -4,10 +4,24 @@
   left:0;
   width: 100%;
   box-sizing: content-box;
+  overflow-x: hidden;
+  background-color: var(--light-mode-bg-color);
 }
 .inputArea {
   background-color: #ffffff00;
 
+}
+#inputMessage {
+  height: auto;
+  max-height: 400px;
+  min-height: 40px;
+  padding: 8px;
+  border: none;
+  outline: none;
+}
+.send {
+  width: 50px;
+  height: 40px;
 }
 #messages {
   height: calc(100vh - 78px);

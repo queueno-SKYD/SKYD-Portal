@@ -17,6 +17,7 @@ import LoginSuccessFully from "../pages/loginSuccessFully";
 import ShareDocument from "../pages/shareDocument";
 import NotFound from "../pages/notFound";
 import Navbar from "../navigation/navbar";
+import { Logo } from '../components/Icons';
 
 function UnauthenticatedRoutes() {
   return (
@@ -108,6 +109,10 @@ export const LoginProvider = ({ children }) => {
 
   return (
     <LoginContext.Provider value={contextValue}>
+      <div id='headroom' className='center'>
+        <hr />
+        <Logo />
+      </div>
       {token ? <AuthenticatedRoutes /> : <UnauthenticatedRoutes />}
       {children}
     </LoginContext.Provider>
