@@ -1,6 +1,9 @@
 import React from "react";
 import "./index.css";
 import { imageUrl } from "../../assets/index.ts";
+import GroupAddRoundedIcon from '@mui/icons-material/GroupAddRounded';
+import MessageRoundedIcon from '@mui/icons-material/MessageRounded';
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 function ChatHeader({
   onClickComment,
   onClickAddGroup,
@@ -20,13 +23,13 @@ function ChatHeader({
           <p className={`title-header padding-left-10 ${iconColor}`}>{headerTitle}</p>
         </div>
         <div className="width-10  text-center">
-          <span class={`material-symbols-outlined fs-5 ${iconColor}`} onClick={onClickComment}>chat</span>
+          <MessageRoundedIcon onClick={onClickComment} />
         </div>
         <div className="width-10  text-center">
-          <i class={`material-symbols-outlined ${iconColor}`} onClick={onClickAddGroup}>group_add</i>
+        <GroupAddRoundedIcon onClick={onClickAddGroup} />
         </div>
         <div className="width-10  text-center">
-          <i class={`material-symbols-outlined ${iconColor}`} onClick={onClickMore}>more_vert</i>
+          <MoreVertRoundedIcon onClick={onClickMore} />
         </div>
       </div>
     </>

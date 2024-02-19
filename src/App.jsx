@@ -10,11 +10,6 @@ function App() {
   return (
     <section
       className="vh-100"
-      style={{
-        backgroundImage: `url("./wall.svg")`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-      }}
     >
       <BrowserRouter>
         <LoginProvider>

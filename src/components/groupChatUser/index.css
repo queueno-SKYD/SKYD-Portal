@@ -1,6 +1,6 @@
 .text-message{
     width: '80%';
-    font-size: 10px;
+    font-size: 12px;
    
 }
 .text-message-wrapper{
@@ -9,7 +9,8 @@
     text-overflow: ellipsis;
 }
 .text-name{
-    font-size: 12px
+    font-size: 12px;
+    font-weight: bold;
 }
 .text-time{
     font-size: 10px;

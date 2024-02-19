@@ -4,7 +4,7 @@ import Card from "../../components/Card";
 import moment from "moment";
 import { useLogin } from "../../context/login.context";
 import "./index.css";
-import GroupList from "../groupList";
+import GroupList from "../home";
 import ChatHeader from "../../components/chatHeader";
 import ChatSearch from "../../components/chatSearch";
 import GroupChatUser from "../../components/groupChatUser";
