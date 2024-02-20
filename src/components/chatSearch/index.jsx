@@ -1,5 +1,6 @@
 import React from "react";
 import "./index.css";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 function ChatSearch({
   onHandleChange,
   searchValue,
@@ -10,26 +11,23 @@ function ChatSearch({
   return (
     <>
       <div
-        className={`d-flex flex-row w-100 ${headerColor} col-12 align-item-center p-1 rounded`}
+        className={`d-flex flex-row w-100 col-12 align-item-center p-1 mt-2 px-2`}
+        style={{
+          backgroundColor: headerColor,
+        }}
       >
-        <div className="col-11">
-          <input
-            className={`col-12 border-0 ${headerColor} search-input outline-none ${iconColor}`}
-            type="text"
-            onChange={onHandleChange}
-            value={searchValue}
-            placeholder="Search....."
-          />
-        </div>
+        <input
+          className={`col-11 border-0  search-input outline-none ${iconColor}`}
+          type="text"
+          onChange={onHandleChange}
+          style={{ backgroundColor: headerColor }}
+          value={searchValue}
+          placeholder="Search....."
+        />
         <div
           className={`col-1 ${headerColor} d-flex justify-content-center align-item-center`}
         >
-          <span
-            class={`material-symbols-outlined ${iconColor}`}
-            onClick={onClickSearch}
-          >
-            search
-          </span>
+          <SearchRoundedIcon />
         </div>
       </div>
     </>

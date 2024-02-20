@@ -18,6 +18,7 @@ import ShareDocument from "../pages/shareDocument";
 import NotFound from "../pages/notFound";
 import Navbar from "../navigation/navbar";
 import { Logo } from '../components/Icons';
+import Home from '../pages/home';
 
 function UnauthenticatedRoutes() {
   return (
@@ -38,7 +39,7 @@ function AuthenticatedRoutes() {
   return (
     <Routes>
       <Route element={<Navbar />}>
-        <Route path={PathName.homePath} element={<ChatList />} />
+        <Route path={PathName.homePath} element={<Home />} />
         <Route path={PathName.documentListPath} element={<DocumentList />} />
         <Route path={PathName.userListPath} element={<UserList />} />
         <Route path={PathName.registerPath} element={<Register  />} />
