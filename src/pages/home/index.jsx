@@ -13,6 +13,7 @@ const userImg = "https://media.istockphoto.com/id/1212800014/photo/young-man-in-
 
 function Home() {
   const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
+  const [createGroupLoading, setCreateGroupLoading] = useState(false);
   const [groupData, setGroupData] = useState({
     name: "",
     image: "",
@@ -27,8 +28,8 @@ function Home() {
   }
   return (
     <>
-      <div className="col-12 d-flex flex-row">
-        <div className="col-5 inner-shadow ">
+      <div className='w-100 h-100 col-12 d-flex flex-row'>
+        <div className='col-4 inner-shadow '>
           <ChatHeader onClickAddGroup={() => setShowCreateGroupModal(true)} />
 
           <ChatSearch headerColor={"#E8E8E8E"} />
@@ -45,7 +46,7 @@ function Home() {
             />
           </div>
         </div>
-        <div className="col-7 position-relative">
+        <div className="col-8 position-relative">
           <ChatList />
         </div>
       </div>

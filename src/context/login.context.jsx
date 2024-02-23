@@ -19,6 +19,7 @@ import NotFound from "../pages/notFound";
 import Navbar from "../navigation/navbar";
 import { Logo } from '../components/Icons';
 import Home from '../pages/home';
+import { AxiosProvider } from '../api/restClient.jsx';
 
 function UnauthenticatedRoutes() {
   return (
@@ -110,12 +111,14 @@ export const LoginProvider = ({ children }) => {
 
   return (
     <LoginContext.Provider value={contextValue}>
-      <div id='headroom' className='center'>
-        <hr />
-        <Logo />
-      </div>
-      {token ? <AuthenticatedRoutes /> : <UnauthenticatedRoutes />}
-      {children}
+      <AxiosProvider>
+        <div id='headroom' className='center'>
+          <hr />
+          <Logo />
+        </div>
+        {token ? <AuthenticatedRoutes /> : <UnauthenticatedRoutes />}
+        {children}
+      </AxiosProvider>
     </LoginContext.Provider>
   );
 };

@@ -2,22 +2,37 @@
   position: absolute;
   bottom: 0;
   left:0;
-  width: 100%;
+  width: 99%;
   box-sizing: content-box;
   overflow-x: hidden;
   background-color: var(--light-mode-bg-color);
+  padding: 2px;
 }
 .inputArea {
   background-color: #ffffff00;
-
+  outline: 1px solid var(--light-mode-user-text-bg-color);
+  border-radius: 2px;
 }
 #inputMessage {
   height: auto;
   max-height: 400px;
+  font-size: 16px;
   min-height: 40px;
+  max-width: calc(100% - 54px);
   padding: 8px;
   border: none;
+  margin: 2px 0 0 2px;
+  border-radius: 2px;
   outline: none;
+}
+#msg-send {
+  min-width: auto;
+}
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 3px 3px 0;
 }
 .send {
   width: 50px;
@@ -38,4 +53,12 @@
 #messages {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
+}
+
+.c-placeholder::before {
+  color: #0009;
+  content: attr(data-placeholder);
+  pointer-events: none;
+  font-style: italic;
+  position: absolute;
 }

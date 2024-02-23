@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import UploadDocument from "../../components/UploadDocument";
-import { getHeaders, POST } from "../../api/restClient.ts";
+
 import url from "../../api/url.ts";
-import { useLogin } from "../../context/login.context";
 import Loader from "../../components/Loder/index.jsx";
 import MyModal from "../../components/Model/index.jsx";
 import {dangerToast, successToast } from "../../components/customToast/index.js";
 import { useNavigate } from 'react-router-dom';
 import "./index.css"
+import useAxios from "../../api/restClient.jsx";
 
 function DocumentList() {
+  const axios = useAxios();
   const navigate = useNavigate();
   const [openDeleteModel, setOpenDeleteModel] = useState(null);
   const [deleting, setDeleting] = useState(false);
   const [documentList, setDocumentList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const {token} = useLogin();
   const [openModel, setOpenModel] = useState(false);
   const [openEditModel, setOpenEditModel] = useState(null);
   const [sharedDocumentList, setSharedDocumentList] = useState([]);
@@ -46,16 +46,17 @@ function DocumentList() {
   const getDocumentList = async () => {
     try {
       setIsLoading(true);
-      const response = await POST(url.getDocuments, getHeaders(token), {
+      const response = await axios.post(url.getDocuments, {
         page: 1,
         pageSize: 50,
       })
-      if(response.data.statusCode === 200){
-        const output = response?.data?.data;
+      if(response.statusCode === 200){
+        const output = response?.data;
         setDocumentList(output.data ?? [])
       }
     } catch (error) {
       console.debug(error)
+      dangerToast(error.message)
     } finally {
       setTimeout(() => {
         setIsLoading(false)
@@ -66,16 +67,17 @@ function DocumentList() {
   const getSharedDocumentByOthers = async () => {
     try {
       setSharedDocumentIsLoading(true);
-      const response = await POST(url.getSharedDocumentByOthers, getHeaders(token), {
+      const response = await axios.post(url.getSharedDocumentByOthers, {
         page: 1,
         pageSize: 50,
       })
-      if(response.data.statusCode === 200){
-        const output = response?.data?.data;
+      if(response.statusCode === 200){
+        const output = response?.data;
         setSharedDocumentList(output.data ?? [])
       }
     } catch (error) {
       console.debug(error)
+      dangerToast(error.message)
     } finally {
       setTimeout(() => {
         setSharedDocumentIsLoading(false)
@@ -86,12 +88,12 @@ function DocumentList() {
   const onDelete = async (id) => {
     try {
       setDeleting(true);
-      const response = await POST(url.deleteDocument, getHeaders(token), {
+      const response = await axios.post(url.deleteDocument, {
         fileId: id
       });
       console.log("response --->", JSON.stringify(response));
-      if(response.data.statusCode === 200){
-        const output = response?.data?.data;
+      if(response.statusCode === 200){
+        const output = response?.data;
         if(output){
           getDocumentList();
           successToast("Document successfully uploaded")
@@ -100,6 +102,7 @@ function DocumentList() {
       }
     } catch (error) {
       dangerToast(error.message);
+      dangerToast(error.message)
     } finally {
       setDeleting(false)
     }

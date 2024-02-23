@@ -1,27 +1,28 @@
 import React, { useState } from 'react';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import { POST, getHeaders } from '../../api/restClient.ts';
 import url from "../../api/url.ts"
-import { useLogin } from "../../context/login.context";
+import useAxios from '../../api/restClient';
+import { dangerToast } from '../customToast/index.js';
 
 const UserSearch = ({multiSelections, setMultiSelections, placeHolder="Search for a user..."}) => {
  const [isLoading, setIsLoading] = useState(false);
  const [options, setOptions] = useState([]);
- const {token} = useLogin();
+ const axios = useAxios()
 
  const handleSearch = async (query) => {
     setIsLoading(true);
     // Your function to search users
     try {
       setIsLoading(true);
-      const response = await POST(url.searchUsers, getHeaders(token), {
+      const response = await axios.post(url.searchUsers, {
         query
       });
-      if(response.data.statusCode === 200){
-        const output = response?.data?.data;
+      if(response.statusCode === 200){
+        const output = response?.data;
         setOptions(output)
       }
     } catch (error) {
+      dangerToast(error.message)
     } finally {
       setIsLoading(false)
     }

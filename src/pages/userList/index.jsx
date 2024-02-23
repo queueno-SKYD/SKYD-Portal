@@ -1,8 +1,7 @@
 import React from "react";
 import url from "../../api/url.ts";
-import { useLogin } from "../../context/login.context";
 import { useEffect } from "react";
-import { POST, getHeaders } from "../../api/restClient.ts";
+
 import { useState } from "react";
 import MyModal from "../../components/Model/index.jsx";
 import {
@@ -12,8 +11,10 @@ import {
 } from "../../components/customToast/index.js";
 import Loader from "../../components/Loder/index.jsx";
 import Card from "../../components/Card";
+import useAxios from "../../api/restClient.jsx";
 
 function UserList() {
+  const axios = useAxios();
   const [AllUserData, setAllUserData] = useState([]);
   const [IsLoading, setIsLoading] = useState(false);
   const [SelectedID, setSelectedID] = useState([]);
@@ -26,8 +27,6 @@ function UserList() {
     userId: SelectedID[0],
   });
 
-  const loginStore = useLogin();
-
   useEffect(() => {
     CallToAllUsers();
   }, []);
@@ -38,11 +37,10 @@ function UserList() {
   const CallToAllUsers = async () => {
     try {
       setIsLoading(true);
-      const token = loginStore.token;
-      const response = await POST(url.AllUsers, getHeaders(token), {
+      const response = await axios.post(url.AllUsers, {
         pIndex: 0,
       });
-      if (response.data.statusCode === 200) {
+      if (response.statusCode === 200) {
         let output = response.data.data;
         if (output) {
           setAllUserData(output);
@@ -85,11 +83,10 @@ function UserList() {
   const CallToDeleteUserByAdmin = async () => {
     try {
       setIsLoading(true);
-      const token = loginStore.token;
-      const response = await POST(url.DeleteUserByAdmin, getHeaders(token), {
+      const response = await axios.post(url.DeleteUserByAdmin, {
         userIds: SelectedID,
       });
-      if (response.data.statusCode === 200) {
+      if (response.statusCode === 200) {
         let output = response.data;
         let message = output.message;
         if (output.data) {
@@ -119,12 +116,11 @@ function UserList() {
 
   const CallToEditUserByAdmin = async () => {
     try {
-      const token = loginStore.token;
-      const response = await POST(url.EditUserByAdmin, getHeaders(token), {
+      const response = await axios.post(url.EditUserByAdmin, {
         ...EditData,
         userId: SelectedID[0],
       });
-      if (response.data.statusCode === 200) {
+      if (response.statusCode === 200) {
         let output = response.data;
         let message = output.message;
         if (output.data) {

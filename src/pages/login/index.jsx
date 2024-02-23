@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
-import { POST, getHeaders } from "../../api/restClient.ts";
 import { useLogin } from "../../context/login.context";
 import { PathName } from "../../helper/constants/pathNames.ts";
 import url from "../../api/url.ts";
 import { dangerToast } from "../../components/customToast";
+import useAxios from "../../api/restClient";
 
 function Login() {
+  const axios = useAxios();
   const [isLoading, setIsLoading] = useState(false);
 
   const loginStore = useLogin();
@@ -30,17 +31,17 @@ function Login() {
     }
     try {
       setIsLoading(true);
-      const response = await POST(url.Login, getHeaders(null), formData);
-      if (response.data.statusCode === 200) {
-        const output = response?.data?.data;
-        const status = response?.data?.httpStatus;
+      const response = await axios.post(url.Login, formData);
+      if (response.statusCode === 200) {
+        const output = response?.data;
+        const status = response?.httpStatus;
         if (output && status === "OK") {
           console.log("Error ----> ");
           loginStore.setToken(output?.token);
           loginStore.login(output.userData);
           navigate(PathName.registerSuccessPath);
         } else {
-          dangerToast(response?.data?.message)
+          dangerToast(response?.message)
         }
       }
     } catch (error) {

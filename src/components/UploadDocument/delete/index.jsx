@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import "../style.css";
-import { POST, getHeaders } from "../../../api/restClient.ts";
-import { useLogin } from "../../../context/login.context";
+import useAxios from "../../../api/restClient";
 import url from "../../../api/url.ts";
 import MyModal from "../../Model/index.jsx";
-import {successToast } from "../../customToast/index.js";
+import {dangerToast, successToast } from "../../customToast/index.js";
 
 const DeleteDocument = ({openModel, closeModal, callAfterUpload, fileId}) => {
+  const axios = useAxios();
   const [isLoading, setIsLoading] = useState(false);
-  const {token} = useLogin();
   const [formData, setFormData] = useState({
     label: "",
     fileURL: ""
@@ -26,9 +25,9 @@ const DeleteDocument = ({openModel, closeModal, callAfterUpload, fileId}) => {
     console.debug(formData)
     try {
       setIsLoading(true);
-      const response = await POST(url.deleteDocument, getHeaders(token), formData);
-      if(response.data.statusCode === 200){
-        const output = response?.data?.data;
+      const response = await axios.post(url.deleteDocument, formData);
+      if(response.statusCode === 200){
+        const output = response?.data;
         if(output){
           callAfterUpload();
           successToast("Document successfully uploaded");
@@ -36,6 +35,7 @@ const DeleteDocument = ({openModel, closeModal, callAfterUpload, fileId}) => {
         }
       }
     } catch (error) {
+      dangerToast(error.message)
     } finally {
       setIsLoading(false)
     }
