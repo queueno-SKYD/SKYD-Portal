@@ -3,7 +3,7 @@ import { Modal, Button } from 'react-bootstrap';
 import "./style.css"
 import PortalComponent from '../Overlays';
 
-function MyModal({ children, openModal, closeModal, closeOnBackdropClick, title, customFooter, isCenter, onSave, isLoading, cancelButtonTitle, saveButtonTitle, type="primary" }) {
+function MyModal({ modalWidth = 450,children, openModal, closeModal, closeOnBackdropClick, title, customFooter, isCenter, onSave, isLoading, cancelButtonTitle, saveButtonTitle, type="primary" }) {
  const handleClose = (event) => {
     if (closeOnBackdropClick){
       closeModal()
@@ -12,7 +12,7 @@ function MyModal({ children, openModal, closeModal, closeOnBackdropClick, title,
 
  return (
     <PortalComponent>
-      <Modal  show={openModal} onHide={handleClose} backdropClassName="custom-backdrop" dialogClassName={isCenter ? "modal-dialog-centered" : null}>
+      <Modal  show={openModal} onHide={handleClose} backdropClassName="custom-backdrop" dialogClassName={isCenter ? "modal-dialog-centered" : null }>
           <Modal.Header>
             <Modal.Title>{title}</Modal.Title>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={closeModal}></button>
