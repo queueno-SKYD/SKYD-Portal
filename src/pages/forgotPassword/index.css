@@ -1,0 +1,42 @@
+/* Countdown text styles */
+.countdown-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 24px 0px;
+  }
+  
+  /* Countdown text paragraph styles */
+  .countdown-text > p {
+    font-size: 13px;
+    font-weight: 400;
+    color: #2d1d35;
+  }
+  
+  /* Countdown text button styles */
+  .countdown-text > button {
+    background-color: #fff;
+    border: none;
+    font-weight: 500;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  /* Submit button styles */
+  .submit-btn {
+    width: 100%;
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 10px;
+    background: linear-gradient(91deg, #9076fc 0%, #6950ff 100%);
+    transition: all ease 0.6s;
+  }
+  
+  /* Submit button hover styles */
+  .submit-btn:hover {
+    color: #6950ff;
+    background: #e6e0ffbf;
+  }

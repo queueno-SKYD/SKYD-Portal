@@ -78,9 +78,16 @@ body {
  }
 
 #headroom {
-  background-color: var(--light-mode-bg-color);
+  background-color: var(--light-mode-headroom-bg-color);
   /* border-bottom: 0.2px solid #dddddd; */
+  padding: 5px 0;
   padding-left: 60px;
+  @media (max-width: 576px) {
+    padding-left: 12px;
+    
+  }
+  
+
 }
 
 .center {
@@ -106,9 +113,10 @@ body {
 }
 
 :root {
-  --headroom-size: 45px;
+  --headroom-size: 55px;
   --bottom-nav-size: 50px;
   --side-nav-size: 60px;
   --light-mode-primary-color: #85B4B1;
   --light-mode-bg-color: #ffffff;
+  --light-mode-headroom-bg-color: #F2F2F2;
 }
