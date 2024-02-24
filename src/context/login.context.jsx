@@ -19,14 +19,17 @@ import NotFound from "../pages/notFound";
 import Navbar from "../navigation/navbar";
 import { Logo } from '../components/Icons';
 import Home from '../pages/home';
+import ForgotPassword from '../pages/forgotPassword';
+import Welcome from '../pages/welcome/index.jsx';
 
 function UnauthenticatedRoutes() {
   return (
     <Routes>
       <Route path={PathName.loginPath} element={<Login />} />
       <Route path={PathName.registerPath} element={<Register />} />
+      <Route path={PathName.forgotPassword} element={<ForgotPassword />} />
       <Route path={PathName.notFoundPath} element={<NotFound />} />
-      {/* <Route path={PathName.loginSuccessPath} element={<LoginSuccessFully />} /> */}
+      <Route path={PathName.homePath} element={<Welcome />} />
       {/* <Route
         path={PathName.registerSuccessPath}
         element={<RegisterSuccessFully />}
@@ -77,14 +80,18 @@ export const LoginProvider = ({ children }) => {
       localStorage.setItem(ACCESS_TOKEN, token);
     }
   }
+  const publicPath = [PathName.loginPath, PathName.registerPath, PathName.forgotPassword];
 
   useEffect( ()=> {
     console.log("token change2", token)
     // or check for valid token
-    // if (!token) {
-    //   navigate(PathName.loginPath)
-    // }
-  }, [token, navigate]);
+    if (!token) {
+      // navigate(PathName.loginPath)
+      if(!publicPath.includes(window.location.pathname)){
+        navigate(PathName.loginPath)
+      }
+    }
+  }, [token]);
   const login = (user) => {
     // Perform login logic (validate credentials, etc.)
     // For simplicity, let's just set a user when login is successful

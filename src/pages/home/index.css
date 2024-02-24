@@ -2,7 +2,6 @@
     background-color: #fff; /* Set your desired background color */
     border-radius: 1px; /* Set your desired border radius */
     box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5); /* Inner shadow effect */
-
   }
   #messages {
     height: calc(100vh - 78px);
@@ -19,5 +18,4 @@
   #messages {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
-
   }

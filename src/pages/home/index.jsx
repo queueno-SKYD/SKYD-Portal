@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import ChatList from "../chatList";
 import ChatHeader from "../../components/chatHeader";
@@ -126,4 +125,4 @@ function Home() {
   );
 }
 
-export default Home
+export default Home;

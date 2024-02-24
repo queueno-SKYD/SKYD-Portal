@@ -19,4 +19,7 @@ export default{
   getShareDetails: `${endPoint}/api/${version}/manageDocs/getShareDetails`,
   revokeShare: `${endPoint}/api/${version}/manageDocs/revokeShare`,
   getSharedDocumentByOthers: `${endPoint}/api/${version}/manageDocs/getSharedDocumentByOthers`,
+
+  forgotPassword: `${endPoint}/api/${version}/users/forgotPassword`,
+  verifyOtp: `${endPoint}/api/${version}/users/verifyOtp`,
 }

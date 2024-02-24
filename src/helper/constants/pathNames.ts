@@ -13,4 +13,5 @@ export const PathName={
   userListPath: "/userListPath",
   logoutPath: "/logoutPath",
   shareDoc: "/documentManagement/share/:id",
+  forgotPassword :'/forgotPassword'
 }
