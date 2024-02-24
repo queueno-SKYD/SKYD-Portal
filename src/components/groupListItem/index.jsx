@@ -1,6 +1,8 @@
 import React from "react";
 import { Badge, Image } from "react-bootstrap";
 import "./index.css";
+import { CustomAvatar } from "../Avatar";
+import { ButtonBase } from "@mui/material";
 function GroupChatUser({
   userImage,
   seenStatus,
@@ -9,16 +11,20 @@ function GroupChatUser({
   lastMessageTime,
   onClick,
   messageCount,
+  selected,
 }) {
   return (
     <>
-      <div className="d-flex flex-row w-100 col-12 bg-light  bg-active mt-2 py-2" >
-        <div className="col-1  d-flex align-items-center justify-content-center">
-          <Image width={40} height={40} src={userImage} roundedCircle style={{objectFit:'cover'}} />
-        </div>
-        <div className="col-9  d-flex flex-column justify-content-center ph-10">
+      <ButtonBase className={`d-flex flex-row w-100 justify-content-between pointer py-2 px-3 group-container-list ${selected ? "selected" : ""}`
+        }
+        onClick={onClick}
+      >
+        <div className="d-flex align-items-center justify-content-center">
+          {/* <Image width={40} height={40} src={userImage} roundedCircle style={{objectFit:'cover'}} /> */}
+          <CustomAvatar src={userImage} alt="User Avatar" firstName={userName} lastName={"lastName"} size={50} />
+        <div className="d-flex flex-column justify-content-center ph-10">
           <div>
-            <p className="text-name text-bold">{userName}</p>
+            <p className="text-bold text-start">{userName}</p>
           </div>
           <div className="d-flex flex-row mt-2" >
             <div>
@@ -33,7 +39,8 @@ function GroupChatUser({
             </div>
           </div>
         </div>
-        <div className="col-2  d-flex flex-column align-items-end justify-content-center ph-10">
+        </div>
+        <div className="d-flex flex-column align-items-end justify-content-end">
           <div>
             <p className="text-time">{lastMessageTime}</p>
           </div>
@@ -45,7 +52,7 @@ function GroupChatUser({
             ) : null}
           </div>
         </div>
-      </div>
+      </ButtonBase>
     </>
   );
 }

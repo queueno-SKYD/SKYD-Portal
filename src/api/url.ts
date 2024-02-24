@@ -19,4 +19,8 @@ export default{
   getShareDetails: `/api/${version}/manageDocs/getShareDetails`,
   revokeShare: `/api/${version}/manageDocs/revokeShare`,
   getSharedDocumentByOthers: `/api/${version}/manageDocs/getSharedDocumentByOthers`,
+  createGroup: `/api/${version}/chatService/createGroup`,
+  getAllUserGroups: `/api/${version}/chatService/getAllUserGroups`,
+  addMembers: `/api/${version}/chatService/group/addMembers`,
+  makeAdmin: `/api/${version}/chatService/group/makeAdmin`,
 }

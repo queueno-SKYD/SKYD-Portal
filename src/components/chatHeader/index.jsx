@@ -4,6 +4,7 @@ import { imageUrl } from "../../assets/index.ts";
 import GroupAddRoundedIcon from '@mui/icons-material/GroupAddRounded';
 import MessageRoundedIcon from '@mui/icons-material/MessageRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import { ButtonBase, IconButton } from "@mui/material";
 function ChatHeader({
   onClickComment,
   onClickAddGroup,
@@ -14,25 +15,25 @@ function ChatHeader({
   iconColor = "",
 }) {
   return (
-    <>
-      <div className={`d-flex flex-row ${headerColor} w-100 align-items-center p-2`}>
-        <div className="width-10 ">
-          <img src={headerImage} alt="" />
-        </div>
-        <div className="width-60 align-middle">
-          <p className={`title-header padding-left-10 ${iconColor}`}>{headerTitle}</p>
-        </div>
-        <div className="width-10  text-center">
-          <MessageRoundedIcon onClick={onClickComment} />
-        </div>
-        <div className="width-10  text-center">
-        <GroupAddRoundedIcon onClick={onClickAddGroup} />
-        </div>
-        <div className="width-10  text-center">
-          <MoreVertRoundedIcon onClick={onClickMore} />
-        </div>
+    <div className="d-flex align-items-center  profile-chat-head">
+      <ButtonBase className="mx-2 rounded-circle">
+        <img src={headerImage} alt="" />
+      </ButtonBase>
+      <div className="w-100 align-middle">
+        <p className={`title-header ${iconColor}`}>{headerTitle}</p>
       </div>
-    </>
+      <div className="text-center last">
+        <IconButton>
+          <MessageRoundedIcon onClick={onClickComment} />
+        </IconButton >
+        <IconButton>
+          <GroupAddRoundedIcon onClick={onClickAddGroup} />
+        </IconButton>
+        <IconButton>
+          <MoreVertRoundedIcon onClick={onClickMore} />
+        </IconButton>
+      </div>
+    </div>
   );
 }
 

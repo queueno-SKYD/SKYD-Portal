@@ -35,3 +35,18 @@
 .bg-inactive{
     background: 'linear-gradient(to right, rgba(50, 50, 50, 0.3), rgba(245, 245, 245, .8))';
 }
+
+.pointer {
+    cursor: pointer;
+}
+
+.group-container-list {
+    border-top: 0.2px solid #7774 !important;
+    &:hover {
+        transition: background-color 200ms ease-in;
+        background-color: #eaeaea !important;
+    }
+}
+.selected {
+    background-color: #dededeaa !important;
+}
