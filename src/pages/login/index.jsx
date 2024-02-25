@@ -6,11 +6,11 @@ import { PathName } from "../../helper/constants/pathNames.ts";
 import url from "../../api/url.ts";
 import { dangerToast } from "../../components/customToast";
 import useAxios from "../../api/restClient";
+import { TextField } from "@mui/material";
 
 function Login() {
   const axios = useAxios();
   const [isLoading, setIsLoading] = useState(false);
-
   const loginStore = useLogin();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -45,7 +45,7 @@ function Login() {
         }
       }
     } catch (error) {
-      dangerToast(error.message)
+      dangerToast(error.message);
     } finally {
       setTimeout(() => {
         setIsLoading(false);
@@ -56,41 +56,37 @@ function Login() {
     <section className="vh-100">
       <div className="container h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
-          <div className="col-md-6">
+          <div className="col-md-5">
             <div className="card shadow-lg border-0 rounded-lg mt-5">
               <div className="card-header">
                 <h3 className="text-center font-weight-light">Login</h3>
               </div>
-              <div className="card-body">
+              <div className="card-body mt-2">
                 <form>
-                  <div className="form-group">
-                    <label className="small mb-1" htmlFor="inputEmailAddress">
-                      Email
-                    </label>
-                    <input
-                      className="form-control my-2"
-                      id="inputEmailAddress"
-                      type="email"
-                      placeholder="Enter email address"
-                      name="email"
-                      value={formData?.email}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="small mb-1" htmlFor="inputPassword">
-                      Password
-                    </label>
-                    <input
-                      className="form-control my-2"
-                      id="inputPassword"
-                      type="password"
-                      placeholder="Enter password"
-                      name="password"
-                      value={formData?.password}
-                      onChange={handleInputChange}
-                    />
-                  </div>
+                  <TextField
+                    fullWidth
+                    label="Email"
+                    id="outlined-size-small"
+                    size="small"
+                    name="email"
+                    placeholder="Enter email address"
+                    value={formData?.email}
+                    onChange={handleInputChange}
+                  />
+                  <TextField
+                    type="password"
+                    style={{
+                      marginTop: 25,
+                    }}
+                    fullWidth
+                    label="Password"
+                    placeholder="Enter password"
+                    id="outlined-size-small"
+                    size="small"
+                    name="password"
+                    value={formData?.password}
+                    onChange={handleInputChange}
+                  />
                   {/* <div className="form-group pt-3">
                               <div className="custom-control custom-checkbox">
                                   <input className="custom-control-input" id="rememberPasswordCheck" type="checkbox" />
@@ -98,9 +94,9 @@ function Login() {
                               </div>
                           </div> */}
                   <div className="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                    <a className="small" href="#">
+                    <Link className="small" to={PathName.forgotPassword}>
                       Forgot Password?
-                    </a>
+                    </Link>
                     <button
                       onClick={(e) => handleSubmit(e)}
                       // href={PathName.registerSuccessPath}

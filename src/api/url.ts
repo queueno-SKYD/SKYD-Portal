@@ -24,4 +24,6 @@ export default{
   addMembers: `/api/${version}/chatService/group/addMembers`,
   makeAdmin: `/api/${version}/chatService/group/makeAdmin`,
   UploadFile: `/api/${version}/uploadFile`,
+  forgotPassword: `/api/${version}/users/forgotPassword`,
+  verifyOtp: `/api/${version}/users/verifyOtp`,
 }
