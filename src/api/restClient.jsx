@@ -3,8 +3,21 @@ import axios from "axios"
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useLogin } from "../context/login.context";
 import { dangerToast } from "../components/customToast";
+import url from "./url.ts";
 
-export const getHeaders = (token)=>{
+export const getHeaders = (token, file=false)=>{
+  if (file) {
+    if(token){
+      return {
+        'Authorization': token,
+        'Content-Type': 'multipart/form-data'
+      }
+    }else{
+      return {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+  }
   if(token){
     return {
       'Authorization': token,
@@ -18,7 +31,7 @@ export const getHeaders = (token)=>{
 }
 
 // Create the context
-const AxiosContext = createContext({get: async (url="", showGlobalMsg = true) => {}, post: async (url="", body={}, showGlobalMsg = true) => {}});
+const AxiosContext = createContext({get: async (url="", showGlobalMsg = true) => {}, post: async (url="", body={}, showGlobalMsg = true) => {}, uploadFile: (selectedFile, fileType) => {}});
 const endPoint = 'http://localhost:3001';
 
 // Provider component
@@ -49,8 +62,8 @@ export const AxiosProvider = ({ children }) => {
   }, [axiosInstance]);
 
   // Axios functions
-  const post = async (url, body, showGlobalMsg = true) => {
-    const headers = getHeaders(token)
+  const post = async (url, body, showGlobalMsg = true, file=false) => {
+    const headers = getHeaders(token, file)
     try {
       const response = await axiosInstance.post(url, body, {headers});
       return response.data;
@@ -76,9 +89,25 @@ export const AxiosProvider = ({ children }) => {
     }
   };
 
+  const uploadFile = async (selectedFile, fileType='image', showGlobalMsg=true) => {
+    const formData = new FormData();
+    formData.append(fileType, selectedFile);
+
+    const headers = getHeaders(token, true)
+    try {
+      const response = await axiosInstance.post(url.UploadFile, formData, {headers});
+      return response.data;
+    } catch (error) {
+      if (showGlobalMsg) {
+        handleError(error);
+      }
+      return error.response.data;
+    }
+  };
+
   // Provide the functions and error state
   return (
-    <AxiosContext.Provider value={{ post, get, error }}>
+    <AxiosContext.Provider value={{ post, get, uploadFile, error }}>
       {children}
     </AxiosContext.Provider>
   );

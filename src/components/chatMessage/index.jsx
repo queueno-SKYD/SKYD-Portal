@@ -10,7 +10,7 @@ const ChatMessage = ({ message, isMine, time, senderName, senderImage, firstName
       } mb-2 mt-2 gap-2`}
     >
       {!isMine && senderImage && (
-          <CustomAvatar src={senderImage} alt="User Avatar" firstName={firstName} lastName={lastName} />
+          <CustomAvatar src={senderImage} alt="User Avatar" firstName={firstName} lastName={lastName} size={30} />
         )}
       <div
         className={`px-2 py-0 d-flex arrorPointer ${isMine ? "arrorPointerRight" : "arrorPointerLeft"}`}

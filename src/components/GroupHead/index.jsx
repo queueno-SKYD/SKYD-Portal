@@ -1,8 +1,5 @@
 import React, { Children, useState } from "react";
 import "./index.css";
-import { imageUrl } from "../../assets/index.ts";
-import GroupAddRoundedIcon from '@mui/icons-material/GroupAddRounded';
-import MessageRoundedIcon from '@mui/icons-material/MessageRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import { ArrowBack, CloseRounded } from "@mui/icons-material";
 import { ButtonBase, IconButton } from '@mui/material';
@@ -11,8 +8,8 @@ import { CustomAvatar } from "../Avatar/index.jsx";
 const GroupHeaderItem = ({selectedGroup, children, openInfo, setOpenInfo}) => {
   const isMobile = false;
   return (
-    <div className={`h-100 d-flex flex-column pointer group-chat-info ${openInfo ? "close-small-width" : "open"}`} onClick={() => setOpenInfo(true)}>
-      <div className="d-flex align-items-center group-chat-head">
+    <div className={`h-100 d-flex flex-column group-chat-info ${openInfo ? "close-small-width" : "open"}`}>
+      <div className="d-flex align-items-center pointer group-chat-head" onClick={() => setOpenInfo(true)}>
         {isMobile && <IconButton>
           <ArrowBack fontSize="medium" />
         </IconButton>}
@@ -56,7 +53,8 @@ const GroupHeaderInfo = ({selectedGroup, children, openInfo, setOpenInfo}) => {
 
 const GroupHeader = ({
   selectedGroup,
-  chat
+  chat,
+  info
 }) => {
   const [openInfo, setOpenInfo] = useState(false);
 
@@ -66,7 +64,7 @@ const GroupHeader = ({
         {chat}
       </GroupHeaderItem>
       <GroupHeaderInfo selectedGroup={selectedGroup} openInfo={openInfo} setOpenInfo={setOpenInfo}>
-        <p>dsfdsfsdfsfsf</p>
+        {info}
       </GroupHeaderInfo>
     </div>
   );

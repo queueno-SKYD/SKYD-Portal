@@ -1,0 +1,36 @@
+.image-picker-label:hover {
+  .image-picker-label-hover {
+    display: flex;
+  }
+}
+.image-picker-label-hover {
+  display: none;
+  margin-bottom: 70%;
+  width: 100%;
+  height: 30%;
+  overflow: hidden;
+}
+.left {
+  background-color: #1113;
+  border-radius: 100% 0 0 0;
+  padding: 20px 0 0 40px;
+  color: #fff;
+}
+
+.left:hover {
+  background-color: #6e4141aa;
+  color: #e48c8c;
+}
+
+.right {
+  background-color: #1113;
+  border-radius: 0 100% 0 0;
+  padding: 20px 40px 0px 0px;
+  background-color: #5c8dbbaa;
+  color: #fff;
+}
+
+.right:hover {
+  background-color: #397450aa;
+  color: #91f199;
+}

@@ -23,4 +23,5 @@ export default{
   getAllUserGroups: `/api/${version}/chatService/getAllUserGroups`,
   addMembers: `/api/${version}/chatService/group/addMembers`,
   makeAdmin: `/api/${version}/chatService/group/makeAdmin`,
+  UploadFile: `/api/${version}/uploadFile`,
 }

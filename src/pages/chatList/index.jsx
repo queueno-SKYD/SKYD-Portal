@@ -1,16 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import ChatMessage from "../../components/chatMessage";
-import Card from "../../components/Card";
 import moment from "moment";
-import { useLogin } from "../../context/login.context";
 import "./index.css";
-import GroupList from "../home";
-import ChatHeader from "../../components/chatHeader";
-import ChatSearch from "../../components/chatSearch";
-import GroupChatUser from "../../components/groupListItem";
 import { Button } from "@mui/material";
 import { SendRounded } from "@mui/icons-material";
 import GroupHeader from "../../components/GroupHead";
+import GroupInfo from "./groupInfo/groupInfo";
 
 const messages = [
   {
@@ -307,57 +302,67 @@ const ChatList = ({selectedGroup}) => {
 
   return (
     <div>
-      <GroupHeader selectedGroup={selectedGroup} chat={
-        <div id="chat-container" className="h-100 d-flex flex-column">
-          <div className="inner overflow-auto custom-scroll" id="top" ref={messagesEndRef}>
-          {messagesList?.length > 0 &&
-            messagesList?.map((item, index) => {
-              return (
-                <ChatMessage
-                  key={index}
-                  message={item?.message}
-                  isMine={25 === item?.senderId}
-                  time={getTimeDifferenceForChat(item?.sendAt)}
-                  senderName={`${item?.firstName} ${item?.lastName}`}
-                  senderImage={item?.imageUrl}
-                  firstName={item?.firstName}
-                  lastName={item?.lastName}
-                />
-              );
-            })}
-        </div>
-        <div id="inputBox" className="w-100 h-100">
-          <form
-            className="w-100 h-100 form d-flex justify-space-between justify-content-between gap-2 align-items-end inputArea"
-            onSubmit={sendMessage}
-          >
-            <textarea
-              className={`w-100 custom-scroll`}
-              id="inputMessage"
-              spellCheck
-              placeholder="Type your message"
-              rows={1}
-              style={{ height: height }}
-              onChange={autoResize}
-              onScroll={autoResize}
-              onKeyDown={checkKeyPress}
-              value={msg}
-            ></textarea>
-            <div className="button-container">
-              <Button
-                variant="text"
-                id="msg-send"
-                disabled={!msg}
-                type="submit"
-                value={msg}
-              >
-                <SendRounded />
-              </Button>
+      <GroupHeader
+        selectedGroup={selectedGroup}
+        chat={
+          <div id="chat-container" className="h-100 d-flex flex-column">
+            <div className="inner overflow-auto custom-scroll" id="top" ref={messagesEndRef}>
+              {messagesList?.length > 0 &&
+                messagesList?.map((item, index) => {
+                  return (
+                    <ChatMessage
+                      key={index}
+                      message={item?.message}
+                      isMine={25 === item?.senderId}
+                      time={getTimeDifferenceForChat(item?.sendAt)}
+                      senderName={`${item?.firstName} ${item?.lastName}`}
+                      senderImage={item?.imageUrl}
+                      firstName={item?.firstName}
+                      lastName={item?.lastName}
+                    />
+                  );
+                })}
             </div>
-          </form>
-        </div>
-        </div>
-      }/>
+            <div id="inputBox" className="w-100 h-100">
+              <form
+                className="w-100 h-100 form d-flex justify-space-between justify-content-between gap-2 align-items-end inputArea"
+                onSubmit={sendMessage}
+              >
+                <textarea
+                  className={`w-100 custom-scroll`}
+                  id="inputMessage"
+                  spellCheck
+                  placeholder="Type your message"
+                  rows={1}
+                  style={{ height: height }}
+                  onChange={autoResize}
+                  onScroll={autoResize}
+                  onKeyDown={checkKeyPress}
+                  value={msg}
+                ></textarea>
+                <div className="button-container">
+                  <Button
+                    variant="text"
+                    id="msg-send"
+                    disabled={!msg}
+                    type="submit"
+                    value={msg}
+                  >
+                    <SendRounded />
+                  </Button>
+                </div>
+              </form>
+            </div>  
+          </div>
+        }
+        info={
+          <div id="chat-container" className="h-100 d-flex flex-column">
+            <div className="inner overflow-auto custom-scroll" ref={messagesEndRef}>
+              <GroupInfo groupDetails={selectedGroup} />
+            </div>
+          </div>
+        }
+      />
       {/*  */}
     </div>
   );

@@ -1,8 +1,8 @@
 import React from "react";
-import { Badge, Image } from "react-bootstrap";
+import { Badge } from "react-bootstrap";
 import "./index.css";
 import { CustomAvatar } from "../Avatar";
-import { ButtonBase } from "@mui/material";
+import { ButtonBase, Chip } from "@mui/material";
 function GroupChatUser({
   userImage,
   seenStatus,
@@ -12,6 +12,11 @@ function GroupChatUser({
   onClick,
   messageCount,
   selected,
+  imageSize=50,
+  lastSeen,
+  done,
+  isMe,
+  isAdmin,
 }) {
   return (
     <>
@@ -21,20 +26,20 @@ function GroupChatUser({
       >
         <div className="d-flex align-items-center justify-content-center">
           {/* <Image width={40} height={40} src={userImage} roundedCircle style={{objectFit:'cover'}} /> */}
-          <CustomAvatar src={userImage} alt="User Avatar" firstName={userName} lastName={"lastName"} size={50} />
-        <div className="d-flex flex-column justify-content-center ph-10">
+        <CustomAvatar src={userImage} alt="User Avatar" firstName={userName} lastName={"lastName"} size={imageSize} />
+        <div className="d-flex flex-column justify-content-center px-3">
           <div>
             <p className="text-bold text-start">{userName}</p>
           </div>
           <div className="d-flex flex-row mt-2" >
             <div>
-              <i class="material-symbols-outlined text-primary fs-5">
+              {lastSeen && <i class="material-symbols-outlined text-primary fs-5">
                 done_all
-              </i>
-              {/* <span class="material-symbols-outlined">done</span> */}
-              {/* <span className="text-status">You</span> */}
+              </i>}
+              {done && <span class="material-symbols-outlined">done</span>}
+              {isMe && <span className="text-status">You</span>}
             </div>
-            <div className="ph-5 text-message-wrapper text-message" >
+            <div className="text-message-wrapper text-message" >
               {lastMessage}
             </div>
           </div>
@@ -42,7 +47,8 @@ function GroupChatUser({
         </div>
         <div className="d-flex flex-column align-items-end justify-content-end">
           <div>
-            <p className="text-time">{lastMessageTime}</p>
+            {lastMessageTime && <p className="text-time">{lastMessageTime}</p>}
+            {isAdmin && <Chip label="Admin" />}
           </div>
           <div>
             {messageCount > 0 ? (

@@ -21,18 +21,18 @@ function stringToColor(string="initials") {
   return color;
 }
 
-function stringAvatar(name="initials name", size=30) {
+function stringAvatar(name="initials name", size) {
   return {
     sx: {
       bgcolor: stringToColor(name),
-      height: size,
-      width: size
+      height: size || '100%',
+      width: size || '100%'
     },
     children: `${name.split(' ')?.[0]?.[0]?.toLocaleUpperCase()}`,
   };
 }
 
-export function CustomAvatar({ src, firstName, lastName, alt, size=30 }) {
+export function CustomAvatar({ src, firstName, lastName, alt, size }) {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleImageLoaded = () => {
@@ -50,7 +50,7 @@ export function CustomAvatar({ src, firstName, lastName, alt, size=30 }) {
           src={src}
           alt="Sender"
           className="rounded-circle"
-          style={{ width: `${size}px`, height: `${size}px` }}
+          style={{ width: size ? `${size}px` : '100%', height: size ? `${size}px` : '100%' }}
         />
       ) : (
         <Avatar  {...stringAvatar([firstName, lastName].filter(a => a).join(" "), size)} />
