@@ -6,14 +6,12 @@ import ChatSearch from "../../components/chatSearch";
 import GroupChatUser from "../../components/groupListItem/index.jsx";
 import "./index.css";
 import MyModal from "../../components/Model";
-import { Autocomplete, Avatar, Button, TextField } from "@mui/material";
-import InputImageUpload from "../../components/inputImageUpload";
+import { Autocomplete, Button, TextField } from "@mui/material";
 import useAxios from "../../api/restClient";
 import url from "../../api/url.ts";
 import { dangerToast, successToast } from "../../components/customToast/index.js";
 import Loader from "../../components/Loder/index.jsx";
-
-const userImg = "https://media.istockphoto.com/id/1212800014/photo/young-man-in-black-shirt-at-the-studio-with-gray-background-concept-with-face-close-up-and.webp?s=170667a&w=0&k=20&c=K7GLkFQciFmLi8IMTK7-DpzqaLo-hoQl-Yxr8Xz2BN8="
+import CustomImagePicker from "../../components/ImagePicker/index.jsx";
 
 function Home() {
   const axios = useAxios()
@@ -24,9 +22,6 @@ function Home() {
 
   //#region set selected group
   const [selectedGroup, setSelectedGroup] = useState(null);
-  console.debug("🚀 ------------------------------------------🚀")
-  console.debug("🚀 ~ Home ~ selectedGroup:", selectedGroup)
-  console.debug("🚀 ------------------------------------------🚀")
 
   //#endregion
 
@@ -37,6 +32,11 @@ function Home() {
     description: "",
   });
 
+  const setUploadedImage = (data) => {
+    if (data) {
+      setGroupData(groupData => {return { ...groupData, profileImageUrl: data?.path }})
+    }
+  }
   const [userList, setUserList] = useState([])
 
   const onHandleChange = (e)=>{
@@ -54,6 +54,7 @@ function Home() {
       if(response.statusCode === 200){
         const output = response?.data;
         setGroups(output.data ?? [])
+        setSelectedGroup(output.data?.[0])
       }
     } catch (error) {
       console.debug(error)
@@ -65,14 +66,14 @@ function Home() {
     }
   }
 
-  const shareFileWithUsers = async (groupData) => {
+  const createGroup = async (groupData) => {
     try {
       setCreateGroupLoading(true);
       const response  = await axios.post(url.createGroup, groupData)
       if(response.statusCode === 200){
         const output = response?.data;
         if (output) {
-          successToast("Shared document successfully")
+          successToast(response?.message)
           getGroups()
           setShowCreateGroupModal(false)
         } else {
@@ -130,32 +131,22 @@ function Home() {
         closeOnBackdropClick={true}
         isCenter={true}
         onSave={(e) => {
-          shareFileWithUsers(groupData);
+          createGroup(groupData);
         }}
         modalWidth={300}
         isLoading={false}
         saveButtonTitle={"Create Group"}
         customFooter={
           <div className="w-100 d-flex justify-content-center">
-            <Button variant="contained" size="small" onClick={() => shareFileWithUsers(groupData)}>
+            <Button variant="contained" size="small" onClick={() => createGroup(groupData)}>
               Create Group
             </Button>
           </div>
         }
       >
-        <div className="rounded-circle d-flex justify-content-center">
-          <Avatar
-            alt="Remy Sharp"
-            src={userImg}
-            sx={{ width: 80, height: 80 }}
-          />
+        <div className="d-flex flex-column align-items-center">
+        <CustomImagePicker imageUrl={"http://localhost:3001/uploads/image-1708818796436-557390326"} size={150} />
         </div>
-        <br />
-
-        <div className="d-flex justify-content-center">
-          <TextField value={groupData.profileImageUrl} onChange={onHandleChange} name="profileImageUrl"/>
-        </div>
-
         <br />
         <TextField
           fullWidth
