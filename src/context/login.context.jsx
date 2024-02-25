@@ -20,7 +20,6 @@ import NotFound from "../pages/notFound";
 import Navbar from "../navigation/navbar";
 import { Logo } from '../components/Icons';
 import Home from '../pages/home';
-import { AxiosProvider } from '../api/restClient.jsx';
 import ForgotPassword from '../pages/forgotPassword';
 import Welcome from '../pages/welcome/index.jsx';
 
