@@ -17,7 +17,7 @@ const UserSearch = ({multiSelections, setMultiSelections, placeHolder="Search fo
       const response = await axios.post(url.searchUsers, {
         query
       });
-      if(response.statusCode === 200){
+      if(response?.statusCode === 200){
         const output = response?.data;
         setOptions(output)
       }

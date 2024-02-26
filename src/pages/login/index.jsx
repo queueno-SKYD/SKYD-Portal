@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
-import { useLogin } from "../../context/login.context";
+import { useAppContext } from "../../context/app.context.jsx";
 import { PathName } from "../../helper/constants/pathNames.ts";
 import url from "../../api/url.ts";
 import { dangerToast } from "../../components/customToast";
@@ -11,7 +11,7 @@ import { TextField } from "@mui/material";
 function Login() {
   const axios = useAxios();
   const [isLoading, setIsLoading] = useState(false);
-  const loginStore = useLogin();
+  const loginStore = useAppContext();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -32,7 +32,7 @@ function Login() {
     try {
       setIsLoading(true);
       const response = await axios.post(url.Login, formData);
-      if (response.statusCode === 200) {
+      if (response?.statusCode === 200) {
         const output = response?.data;
         const status = response?.httpStatus;
         if (output && status === "OK") {

@@ -18,7 +18,7 @@ const useImageUpload = (groupDetails) => {
     setLoading(true)
     try {
       const response = axios.uploadFile(selectedFile, 'image');
-      if(response.statusCode === 200){
+      if(response?.statusCode === 200){
         const output = response?.data;
         return output;
       }

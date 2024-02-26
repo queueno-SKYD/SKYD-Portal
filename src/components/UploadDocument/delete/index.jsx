@@ -26,7 +26,7 @@ const DeleteDocument = ({openModel, closeModal, callAfterUpload, fileId}) => {
     try {
       setIsLoading(true);
       const response = await axios.post(url.deleteDocument, formData);
-      if(response.statusCode === 200){
+      if(response?.statusCode === 200){
         const output = response?.data;
         if(output){
           callAfterUpload();

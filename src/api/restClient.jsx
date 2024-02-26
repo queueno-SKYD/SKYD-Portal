@@ -1,8 +1,8 @@
 import axios from "axios"
 
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { useLogin } from "../context/login.context";
-import { dangerToast } from "../components/customToast";
+import { useAppContext } from "../context/app.context.jsx";
+import { dangerToast, warningToast } from "../components/customToast";
 import url from "./url.ts";
 
 export const getHeaders = (token, file=false)=>{
@@ -36,7 +36,7 @@ const endPoint = 'http://localhost:3001';
 
 // Provider component
 export const AxiosProvider = ({ children }) => {
-  const { token } = useLogin();
+  const { token } = useAppContext();
   const [error, setError] = useState(null);
 
   // Axios instance with default configuration
@@ -65,27 +65,41 @@ export const AxiosProvider = ({ children }) => {
   const post = async (url, body, showGlobalMsg = true, file=false) => {
     const headers = getHeaders(token, file)
     try {
+      if (!navigator.onLine) {
+        return
+      }
       const response = await axiosInstance.post(url, body, {headers});
-      return response.data;
+      return response?.data;
     } catch (error) {
+      console.debug("🚀 --------------------------🚀")
+      console.debug("🚀 ~ post ~ error:", error)
+      console.debug("🚀 --------------------------🚀")
       if (showGlobalMsg) {
         handleError(error);
+        if (error.code === "ERR_NETWORK") {
+          warningToast("Sorry for inconveniance our server is down")
+        }
       }
-      return error.response.data;
+      return error?.response?.data ? error?.response?.data : undefined;
     }
   };
 
   const get = async (url, showGlobalMsg = true) => {
     const headers = getHeaders(token)
     try {
+      if (!navigator.onLine) {
+        return
+      }
       const response = await axiosInstance.get(url, {headers});
-      return response.data;
+      return response?.data;
     } catch (error) {
       if (showGlobalMsg) {
         handleError(error);
-        dangerToast(error);
+        if (error.code === "ERR_NETWORK") {
+          warningToast("Sorry for inconveniance our server is down")
+        }
       }
-      throw error;
+      return error?.response?.data ? error?.response?.data : undefined;
     }
   };
 
@@ -95,13 +109,19 @@ export const AxiosProvider = ({ children }) => {
 
     const headers = getHeaders(token, true)
     try {
+      if (!navigator.onLine) {
+        return
+      }
       const response = await axiosInstance.post(url.UploadFile, formData, {headers});
-      return response.data;
+      return response?.data;
     } catch (error) {
       if (showGlobalMsg) {
         handleError(error);
+        if (error.code === "ERR_NETWORK") {
+          warningToast("Sorry for inconveniance our server is down")
+        }
       }
-      return error.response.data;
+      return error?.response?.data ? error?.response?.data : undefined;
     }
   };
 

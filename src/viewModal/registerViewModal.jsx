@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { PASSWORD_REGEX } from '../helper/constants/constant.ts';
-import { useLogin } from '../context/login.context.jsx';
+import { useAppContext } from '../context/app.context.jsx';
 import URL from '../api/url.ts'
 import { PathName } from '../helper/constants/pathNames.ts';
 import { useNavigate } from "react-router-dom";
@@ -19,7 +19,7 @@ function RegisterViewModal() {
   const [showToast, setShowToast] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showToastMessage, setshowToastMessage] = useState('');
-  const loginStore = useLogin();
+  const loginStore = useAppContext();
    /** Function to handle form field changes */
    const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -40,7 +40,7 @@ function RegisterViewModal() {
     }
     try {
       const response = await axios.post(URL.Register, formData);
-      if(response.statusCode===200){
+      if(response?.statusCode===200){
         const output = response;
         const status = response?.httpStatus;
         if(output && status === "OK"){

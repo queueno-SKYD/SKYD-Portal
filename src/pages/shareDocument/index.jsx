@@ -26,7 +26,7 @@ const ShareDocument = () => {
         fileId
       })
       console.log("response --->", JSON.stringify(response));
-      if(response.statusCode === 200){
+      if(response?.statusCode === 200){
         const output = response?.data;
         if(output){
           setFileDetails(output)
@@ -47,7 +47,7 @@ const ShareDocument = () => {
         page: 1,
         pageSize: 50,
       })
-      if(response.statusCode === 200){
+      if(response?.statusCode === 200){
         const output = response?.data;
         setShareDetailsList(output.data ?? [])
       }
@@ -69,7 +69,7 @@ const ShareDocument = () => {
         sharedUserIds
       })
       console.log("response --->", JSON.stringify(response));
-      if(response.statusCode === 200){
+      if(response?.statusCode === 200){
         const output = response?.data;
         if (output) {
           successToast("Shared document successfully")
@@ -103,7 +103,7 @@ const ShareDocument = () => {
         sharedUserId,
       });
       console.log("response --->", JSON.stringify(response));
-      if(response.statusCode === 200){
+      if(response?.statusCode === 200){
         const output = response?.data;
         if(output){
           getShareDetailsList(fileId);

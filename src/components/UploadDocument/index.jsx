@@ -29,7 +29,7 @@ const UploadDocument = ({openModel, closeModal, callAfterUpload, fileData, title
       if (fileData && fileData?.fileId) {
         const response = await axios.post(url.editDocument, {...formData, fileId: fileData?.fileId});
         console.log("response --->", JSON.stringify(response));
-        if(response.statusCode === 200){
+        if(response?.statusCode === 200){
           const output = response?.data;
           if(output){
             callAfterUpload();
@@ -41,7 +41,7 @@ const UploadDocument = ({openModel, closeModal, callAfterUpload, fileData, title
       }
       const response = await axios.post(url.uploadDocument, formData);
       console.log("response --->", JSON.stringify(response));
-      if(response.statusCode === 200){
+      if(response?.statusCode === 200){
         const output = response?.data;
         if(output){
           callAfterUpload();

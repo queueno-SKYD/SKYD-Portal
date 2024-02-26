@@ -50,7 +50,7 @@ function DocumentList() {
         page: 1,
         pageSize: 50,
       })
-      if(response.statusCode === 200){
+      if(response?.statusCode === 200){
         const output = response?.data;
         setDocumentList(output.data ?? [])
       }
@@ -71,7 +71,7 @@ function DocumentList() {
         page: 1,
         pageSize: 50,
       })
-      if(response.statusCode === 200){
+      if(response?.statusCode === 200){
         const output = response?.data;
         setSharedDocumentList(output.data ?? [])
       }
@@ -92,7 +92,7 @@ function DocumentList() {
         fileId: id
       });
       console.log("response --->", JSON.stringify(response));
-      if(response.statusCode === 200){
+      if(response?.statusCode === 200){
         const output = response?.data;
         if(output){
           getDocumentList();

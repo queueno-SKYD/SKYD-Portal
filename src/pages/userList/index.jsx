@@ -40,15 +40,15 @@ function UserList() {
       const response = await axios.post(url.AllUsers, {
         pIndex: 0,
       });
-      if (response.statusCode === 200) {
-        let output = response.data.data;
+      if (response?.statusCode === 200) {
+        let output = response?.data;
         if (output) {
           setAllUserData(output);
         } else {
           infoToast("Users not Found !");
         }
       } else {
-        dangerToast(response.data.message);
+        dangerToast(response?.message);
       }
     } catch (error) {
       dangerToast(error.message);
@@ -86,10 +86,9 @@ function UserList() {
       const response = await axios.post(url.DeleteUserByAdmin, {
         userIds: SelectedID,
       });
-      if (response.statusCode === 200) {
-        let output = response.data;
-        let message = output.message;
-        if (output.data) {
+      if (response?.statusCode === 200) {
+        let message = response?.message;
+        if (response) {
           setSelectedID([]);
           successToast(message);
           CallToAllUsers();
@@ -98,7 +97,7 @@ function UserList() {
           dangerToast(message);
         }
       } else {
-        let message = response.data.message;
+        let message = response?.message;
         dangerToast(message);
       }
     } catch (error) {
@@ -118,12 +117,11 @@ function UserList() {
     try {
       const response = await axios.post(url.EditUserByAdmin, {
         ...EditData,
-        userId: SelectedID[0],
+        userId: SelectedID?.[0],
       });
-      if (response.statusCode === 200) {
-        let output = response.data;
-        let message = output.message;
-        if (output.data) {
+      if (response?.statusCode === 200) {
+        let message = response?.message;
+        if (response) {
           setSelectedID([]);
           successToast(message);
           CallToAllUsers();

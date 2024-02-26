@@ -11,9 +11,12 @@ import url from "../../api/url.ts";
 import { dangerToast, successToast } from "../../components/customToast/index.js";
 import Loader from "../../components/Loder/index.jsx";
 import CustomImagePicker from "../../components/ImagePicker/index.jsx";
+import { useAppContext } from "../../context/app.context.jsx";
 
 function Home() {
   const axios = useAxios()
+  const { isMobile } = useAppContext();
+  const { setMobilenavHideen } = useAppContext();
   const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [createGroupLoading, setCreateGroupLoading] = useState(false);
@@ -50,10 +53,11 @@ function Home() {
         page: 1,
         pageSize: 50,
       })
-      if(response.statusCode === 200){
+      if(response?.statusCode === 200){
         const output = response?.data;
         setGroups(output.data ?? [])
         setSelectedGroup(output.data?.[0])
+        setMobilenavHideen(true)
       }
     } catch (error) {
       console.debug(error)
@@ -69,7 +73,7 @@ function Home() {
     try {
       setCreateGroupLoading(true);
       const response  = await axios.post(url.createGroup, groupData)
-      if(response.statusCode === 200){
+      if(response?.statusCode === 200){
         const output = response?.data;
         if (output) {
           successToast(response?.message)
@@ -86,14 +90,30 @@ function Home() {
     }
   }
 
+  useEffect(() => {
+    if (!isMobile) {
+      setSelectedGroup(groups?.[0])
+    }
+  }, [isMobile, groups])
+
+  const onBack = () => {
+    setMobilenavHideen(false)
+    setSelectedGroup(null)
+  }
+
+  const onSelectGroup = (group) => {
+    setMobilenavHideen(true)
+    setSelectedGroup(group)
+  }
+
   useEffect(()=> {
     getGroups()
   }, [])
 
   return (
     <>
-      <div className='w-100 h-100 d-flex flex-row' style={{borderWidth: "10px"}} id="home-room">
-        <div className="col-4" id="groupsSection">
+      <div className={`w-100 h-100 d-flex flex-row`} style={{borderWidth: "10px"}} id="home-room">
+        <div className={`col-4 ${selectedGroup ? "active-selected-group-hide-group-list" : "active-selected-group-visible-group-list"} `} id="groupsSection">
           <ChatHeader onClickAddGroup={() => setShowCreateGroupModal(true)} />
 
           <ChatSearch headerColor={"#E8E8E8E"} />
@@ -111,15 +131,15 @@ function Home() {
               lastMessage={"Hello mote !"}
               lastMessageTime={"12:10 PM"}
               messageCount={2}
-              onClick={() => setSelectedGroup(group)}
+              onClick={() => onSelectGroup(group)}
               selected={selectedGroup?.groupId === group?.groupId}
              />}
            )}
           </div>
 
         </div>
-        <div className="w-100 position-relative">
-          <ChatList selectedGroup={selectedGroup} />
+        <div className={`w-100 position-relative ${selectedGroup ? "active-selected-group-show-chat" : "active-selected-group-hide-chat"}`} id="messagesAndDetailsSection">
+          <ChatList selectedGroup={selectedGroup} onBack={onBack} />
         </div>
       </div>
 

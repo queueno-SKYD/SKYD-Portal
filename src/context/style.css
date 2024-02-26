@@ -1,0 +1,50 @@
+.normal-t {
+  width: 100%;
+  height: 0px;
+  animation-name: vanish;
+  animation-duration: 300ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in;
+  background-color: #fff;
+  color: #000;
+  font-size: 10px;
+  overflow: none;
+}
+
+.online-t {
+  animation-name: grow;
+  animation-duration: 300ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in;
+  background-color: #5d2;
+  color: #fff;
+}
+
+.offline-t {
+  animation-name: grow;
+  animation-duration: 300ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in;
+  background-color: #d24;
+  color: #fff;
+}
+
+@keyframes grow {
+  from {
+    visibility: 0;
+    height: 0;
+  } to {
+    visibility: 1;
+    height: 16px;
+  }
+}
+
+@keyframes vanish {
+  from {
+    height: 16px;
+    visibility: 1;
+  } to {
+    height: 0px;
+    visibility: 0;
+  }
+}

@@ -3,18 +3,18 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter } from "react-router-dom";
 import "./theme/style.css";
-import { LoginProvider } from "./context/login.context";
+import { AppContextProvider } from "./context/app.context";
 import "./global.css";
 
 function App() {
   return (
     <section
-      className="vh-100"
+      className="vh-100 d-flex flex-column"
     >
       <BrowserRouter>
-        <LoginProvider>
+        <AppContextProvider>
           <ToastContainer />
-        </LoginProvider>
+        </AppContextProvider>
       </BrowserRouter>
     </section>
   );

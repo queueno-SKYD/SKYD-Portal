@@ -221,8 +221,8 @@ function getTimeDifferenceForChat(sendAt) {
   }
 }
 
-const ChatList = ({selectedGroup}) => {
-  // const { user } = useLogin();
+const ChatList = ({selectedGroup, onBack}) => {
+  // const { user } = useAppContext();
   const messagesEndRef = useRef(null);
 
   const [messagesList, setMessagesList] = useState(messages);
@@ -304,6 +304,7 @@ const ChatList = ({selectedGroup}) => {
     <div>
       <GroupHeader
         selectedGroup={selectedGroup}
+        onBack={onBack}
         chat={
           <div id="chat-container" className="h-100 d-flex flex-column">
             <div className="inner overflow-auto custom-scroll" id="top" ref={messagesEndRef}>

@@ -21,3 +21,34 @@
 .active-color {
   color: var(--light-mode-primary-color) !important;
 }
+
+.slide-down-mobile-nav {
+  animation-name: slideBottomOut;
+}
+.slide-up-mobile-nav {
+  display: flex;
+  animation-name: slideBottomIn;
+}
+
+@keyframes slideBottomOut {
+  0% {
+   transform: translateY(0);
+   opacity:  1;
+ }
+  100% {
+   transform: translateY(100%);
+   opacity:  0;
+   display: none !important;
+ }
+}
+
+@keyframes slideBottomIn {
+  0% {
+    transform: translateY(100%);
+    opacity:  0;
+  }
+   100% {
+    transform: translateY(0);
+    opacity:  1;
+  }
+}

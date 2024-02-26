@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
-import { useLogin } from "../../context/login.context.jsx";
+import { useAppContext } from "../../context/app.context.jsx";
 import MyModal from "../../components/Model";
 import MobileNav from "./mobileNav";
 import SideBar from "./sideBar.jsx";
@@ -8,7 +8,7 @@ import SideBar from "./sideBar.jsx";
 function Navbar() {
   const {
     logout
-  } = useLogin();
+  } = useAppContext();
   const onLogout = () => {
     logout();
     setOpenLogoutModel(false)
@@ -18,7 +18,7 @@ function Navbar() {
   return (
     <>
       {/* All outlets */}
-      <div className="h-100" id="main">
+      <div id="main">
         <SideBar setOpenLogoutModel={setOpenLogoutModel} isOpneLogoutModel={isOpneLogoutModel} />
         <main className="inner overflow-auto" id="main-area">
           <Outlet />

@@ -31,7 +31,7 @@ p{
 }
 .group-header-container {
   background-color: #fff;
-  height: calc(100vh - 120px);
+  height: calc(100vh - var(--headroom-size) - var(--chat-header-height));
 }
 .close-small-width {
     @media (max-width: 1300px) {
