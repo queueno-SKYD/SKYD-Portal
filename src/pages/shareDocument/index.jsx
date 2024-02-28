@@ -4,14 +4,13 @@ import Card from '../../components/Card';
 import UserSearch from '../../components/Search/searchuser';
 import MyModal from '../../components/Model';
 import Loader from '../../components/Loder';
-import { POST, getHeaders } from '../../api/restClient.ts';
 import api from "../../api/url.ts";
-import { useLogin } from '../../context/login.context';
 import {dangerToast, successToast } from '../../components/customToast';
+import useAxios from '../../api/restClient.jsx';
 
 const ShareDocument = () => {
   const { id } = useParams();
-  const { token } = useLogin();
+  const axios = useAxios();
   const [fileDetails, setFileDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isShareDetailsLoading, setIsShareDetailsLoading] = useState(false);
@@ -23,12 +22,12 @@ const ShareDocument = () => {
   const getDocumentById = async (fileId) => {
     try {
       setIsLoading(true);
-      const response  = await POST(api.getDocument, getHeaders(token), {
+      const response  = await axios.post(api.getDocument, {
         fileId
       })
       console.log("response --->", JSON.stringify(response));
-      if(response.data.statusCode === 200){
-        const output = response?.data?.data;
+      if(response?.statusCode === 200){
+        const output = response?.data;
         if(output){
           setFileDetails(output)
         }
@@ -43,16 +42,17 @@ const ShareDocument = () => {
   const getShareDetailsList = async (fileId) => {
     try {
       setIsShareDetailsLoading(true);
-      const response = await POST(api.getShareDetails, getHeaders(token), {
+      const response = await axios.post(api.getShareDetails, {
         fileId,
         page: 1,
         pageSize: 50,
       })
-      if(response.data.statusCode === 200){
-        const output = response?.data?.data;
+      if(response?.statusCode === 200){
+        const output = response?.data;
         setShareDetailsList(output.data ?? [])
       }
     } catch (error) {
+      dangerToast(error.message)
       console.debug(error)
     } finally {
       setTimeout(() => {
@@ -64,13 +64,13 @@ const ShareDocument = () => {
   const shareFileWithUsers = async (fileId, sharedUserIds) => {
     try {
       setIsShareLoading(true);
-      const response  = await POST(api.shareWithMultipleUsers, getHeaders(token), {
+      const response  = await axios.post(api.shareWithMultipleUsers, {
         fileId,
         sharedUserIds
       })
       console.log("response --->", JSON.stringify(response));
-      if(response.data.statusCode === 200){
-        const output = response?.data?.data;
+      if(response?.statusCode === 200){
+        const output = response?.data;
         if (output) {
           successToast("Shared document successfully")
           getShareDetailsList(fileId)
@@ -98,13 +98,13 @@ const ShareDocument = () => {
   const onDelete = async (sharedUserId, fileId) => {
     try {
       setDeleting(true);
-      const response = await POST(api.revokeShare, getHeaders(token), {
+      const response = await axios.post(api.revokeShare, {
         fileId,
         sharedUserId,
       });
       console.log("response --->", JSON.stringify(response));
-      if(response.data.statusCode === 200){
-        const output = response?.data?.data;
+      if(response?.statusCode === 200){
+        const output = response?.data;
         if(output){
           getShareDetailsList(fileId);
           successToast("Removed access successsfully this user will not be able to access this file now")

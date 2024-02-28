@@ -5,12 +5,14 @@ import {
   warningToast,
 } from "../components/customToast";
 import { PASSWORD_REGEX } from "../helper/constants/constant.ts";
-import { POST, getHeaders } from "../api/restClient.ts";
+
 import url from "../api/url.ts";
 import { PathName } from "../helper/constants/pathNames.ts";
 import { useNavigate } from "react-router-dom";
+import useAxios from "../api/restClient.jsx";
 
 function ForgetPasswordViewModal() {
+  const axios = useAxios();
   const [IsOtpScreen, setIsOtpScreen] = useState(false);
   const [otpCode, setotpCode] = useState("");
   const [loading, setloading] = useState(false);
@@ -55,7 +57,7 @@ function ForgetPasswordViewModal() {
     }
     try {
       setloading(true);
-      const response = await POST(url.forgotPassword, getHeaders(null), {
+      const response = await axios.post(url.forgotPassword, {
         email,
       });
       const output = response.data;
@@ -101,7 +103,7 @@ function ForgetPasswordViewModal() {
 
     try {
       setloading(true);
-      const response = await POST(url.verifyOtp, getHeaders(null), {
+      const response = await axios.post(url.verifyOtp, {
         ...otpData,
         otp: Number(otpCode),
       });
@@ -133,7 +135,7 @@ function ForgetPasswordViewModal() {
     try {
       setreLoading(true);
       const { email } = otpData;
-      const response = await POST(url.forgotPassword, getHeaders(null), {
+      const response = await axios.post(url.forgotPassword, {
         email,
       });
       const output = response.data;

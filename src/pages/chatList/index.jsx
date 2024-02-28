@@ -1,13 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import ChatMessage from "../../components/chatMessage";
-import Card from "../../components/Card";
 import moment from "moment";
-import { useLogin } from "../../context/login.context";
 import "./index.css";
-import GroupList from "../home";
-import ChatHeader from "../../components/chatHeader";
-import ChatSearch from "../../components/chatSearch";
-import GroupChatUser from "../../components/groupChatUser";
+import { Button } from "@mui/material";
+import { SendRounded } from "@mui/icons-material";
+import GroupHeader from "../../components/GroupHead";
+import GroupInfo from "./groupInfo/groupInfo";
 
 const messages = [
   {
@@ -223,45 +221,51 @@ function getTimeDifferenceForChat(sendAt) {
   }
 }
 
-function ChatList() {
-  const { user } = useLogin();
+const ChatList = ({selectedGroup, onBack}) => {
+  // const { user } = useAppContext();
   const messagesEndRef = useRef(null);
-  console.debug(user?.userId, user);
+
   const [messagesList, setMessagesList] = useState(messages);
   const [msg, setMsg] = useState("");
-  const inputDivRef = useRef(null);
+  const divRef = useRef(null);
+  const [height, setHeight] = useState('auto');
 
-  // Function to read the content of the div
-  const readContent = () => {
-    if (inputDivRef.current) {
-      const content = inputDivRef.current.innerText;
-      const placeholder = inputDivRef.current.getAttribute("data-placeholder");
-      inputDivRef.current.innerText = "";
-      return content === placeholder ? "" : content;
-    }
-    return "";
-  };
-
-  // Function to add placeholder content if the div is empty
-  const addPlaceholder = () => {
-    if (inputDivRef.current) {
-      if (inputDivRef.current.textContent.trim() === "") {
-        inputDivRef.current.textContent =
-          inputDivRef.current.getAttribute("data-placeholder");
-      }
+  const autoResize = (event) => {
+    const textarea = event.target;
+    setMsg(event.target.value)
+    textarea.style.height = 'auto';
+    if (textarea.scrollHeight < 300) {
+      textarea.style.height = `${textarea.scrollHeight}px`;
+      setHeight(`${textarea.scrollHeight}px`);
+    } else {
+      textarea.style.height = `${300}px`;
+      setHeight('300px')
     }
   };
 
+  const checkKeyPress = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      autoResize(event);
+    }
+  };
+
+  useEffect(() => {
+    // Set initial content of the div
+    if (divRef.current)
+      divRef.current.textContent = msg;
+  }, [msg]);
+
+
+  // const handleContentChange = (event) => {
+  //   setMsg(event.target.textContent);
+  //   // Do whatever you need with the new content
+  // };
   // Call addPlaceholder when component mounts to add placeholder initially
-  React.useEffect(() => {
-    addPlaceholder();
-  }, []);
+
   const sendMessage = (e) => {
+    console.debug("form submit", e)
     e.preventDefault();
-    const msg = readContent();
-    console.debug("🚀 -----------------------------🚀");
-    console.debug("🚀 ~ sendMessage ~ msg:", msg);
-    console.debug("🚀 -----------------------------🚀");
     if (msg) {
       setMessagesList((item) => {
         return [
@@ -277,73 +281,91 @@ function ChatList() {
           },
         ];
       });
+      setMsg("");
+      setHeight("auto")
       scrollToBottom();
     }
   };
   const scrollToBottom = () => {
     if (messagesEndRef?.current) {
+      console.debug("sdssds")
       messagesEndRef.current.scrollIntoView({
         behavior: "smooth",
-        block: "end",
+        block: "start",
       });
     }
   };
-  const clearPlaceholder = () => {
-    if (inputDivRef.current) {
-      const placeholder = inputDivRef.current.getAttribute("data-placeholder");
-      if (inputDivRef.current.textContent.trim() === placeholder) {
-        inputDivRef.current.textContent = "";
-      }
-    }
-  };
+
   useEffect(() => {
     scrollToBottom();
   }, [messagesList]);
 
   return (
-    <>
-      <div className="inner overflow-auto" id="messages" ref={messagesEndRef}>
-        {messagesList?.length > 0 &&
-          messagesList?.map((item, index) => {
-            return (
-              <ChatMessage
-                key={index}
-                message={item?.message}
-                isMine={25 === item?.senderId}
-                time={getTimeDifferenceForChat(item?.sendAt)}
-                senderName={`${item?.firstName} ${item?.lastName}`}
-                senderImage={item?.imageUrl}
-                firstName={item?.firstName}
-                lastName={item?.lastName}
-              />
-            );
-          })}
-      </div>
-      <div id="inputBox">
-        <di className="w-100 h-100 d-flex flex-column align-self-center inputArea mb-1">
-          {/* <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias neque accusantium culpa libero quaerat amet, est tempora itaque aspernatur rem necessitatibus quasi consequuntur voluptatem illo quae voluptatibus pariatur ab molestias suscipit sit facilis deleniti recusandae. Impedit odio alias ex veniam neque expedita architecto sint quam ratione incidunt voluptatibus nesciunt fuga excepturi laboriosam cum iure autem ipsam exercitationem numquam tempora, vel dolor id natus! Impedit, ipsam labore! Ex odit animi vero architecto neque, voluptas excepturi placeat commodi, eveniet, eius repellendus optio ullam omnis cum eaque rem iure incidunt unde repudiandae aliquid quaerat ipsa a numquam sequi. Sapiente tempora nisi eligendi eum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis quisquam repellat mollitia quae, totam non, est aliquam iusto similique cupiditate nesciunt nemo recusandae maiores. Quod distinctio, ab eligendi expedita natus tenetur magni? Nulla quisquam excepturi at. Ducimus consequatur corrupti nostrum praesentium! Maxime libero voluptates eligendi quas sequi? Consectetur aliquid quibusdam, ut laudantium accusantium ab nam ea ex voluptate sapiente animi hic voluptatum necessitatibus dignissimos quam dolore enim temporibus architecto quidem, est adipisci tempore officia! Aperiam odit maxime architecto quo aliquam hic, porro, praesentium aspernatur fugit earum, quaerat dolores impedit enim. Mollitia, tempora asperiores eaque harum placeat deleniti quidem dignissimos nam corporis facere facilis consequuntur. Aspernatur ex cumque dignissimos ratione quos perspiciatis fugiat alias, ipsam assumenda nobis, eaque amet dicta. Dignissimos ea alias recusandae repudiandae saepe harum nemo, laboriosam reprehenderit earum aspernatur, eum commodi numquam sit atque et quas optio natus tempora neque error. Accusantium beatae voluptas neque culpa consequuntur eligendi aperiam labore, sunt unde explicabo minima cumque eveniet optio fugiat porro harum placeat animi cupiditate facilis autem perferendis non hic, omnis eaque! Quis, ullam. Illum earum est delectus voluptatibus eaque quam sunt explicabo, quidem libero at nihil doloremque sequi, iure debitis qui! Rem dolores tenetur, ad odio iure laudantium neque.
-          </p> */}
-          <form className="form w-100 h-100 d-flex justify-space-between justify-content-between gap-2 align-items-end">
-            <div
-              className="w-100 h-100"
-              id="inputMessage"
-              contentEditable
-              ref={inputDivRef}
-              data-placeholder="Enter text here..." // Set the placeholder using data-* attribute
-              onBlur={addPlaceholder}
-              onFocus={clearPlaceholder}
-            ></div>
-            <button
-              type="button"
-              className=" btn btn-outline bg-secondary text-white send"
-              onClick={(e) => sendMessage(e)}
-            >
-              <i class="fas fa-paper-plane"></i>
-            </button>
-          </form>
-        </di>
-      </div>
-    </>
+    <div>
+      <GroupHeader
+        selectedGroup={selectedGroup}
+        onBack={onBack}
+        chat={
+          <div id="chat-container" className="h-100 d-flex flex-column">
+            <div className="inner overflow-auto custom-scroll" id="top" ref={messagesEndRef}>
+              {messagesList?.length > 0 &&
+                messagesList?.map((item, index) => {
+                  return (
+                    <ChatMessage
+                      key={index}
+                      message={item?.message}
+                      isMine={25 === item?.senderId}
+                      time={getTimeDifferenceForChat(item?.sendAt)}
+                      senderName={`${item?.firstName} ${item?.lastName}`}
+                      senderImage={item?.imageUrl}
+                      firstName={item?.firstName}
+                      lastName={item?.lastName}
+                    />
+                  );
+                })}
+            </div>
+            <div id="inputBox" className="w-100 h-100">
+              <form
+                className="w-100 h-100 form d-flex justify-space-between justify-content-between gap-2 align-items-end inputArea"
+                onSubmit={sendMessage}
+              >
+                <textarea
+                  className={`w-100 custom-scroll`}
+                  id="inputMessage"
+                  spellCheck
+                  placeholder="Type your message"
+                  rows={1}
+                  style={{ height: height }}
+                  onChange={autoResize}
+                  onScroll={autoResize}
+                  onKeyDown={checkKeyPress}
+                  value={msg}
+                ></textarea>
+                <div className="button-container">
+                  <Button
+                    variant="text"
+                    id="msg-send"
+                    disabled={!msg}
+                    type="submit"
+                    value={msg}
+                  >
+                    <SendRounded />
+                  </Button>
+                </div>
+              </form>
+            </div>  
+          </div>
+        }
+        info={
+          <div id="chat-container" className="h-100 d-flex flex-column">
+            <div className="inner overflow-auto custom-scroll" ref={messagesEndRef}>
+              <GroupInfo groupDetails={selectedGroup} />
+            </div>
+          </div>
+        }
+      />
+      {/*  */}
+    </div>
   );
 }
 

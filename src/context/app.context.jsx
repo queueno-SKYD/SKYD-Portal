@@ -6,21 +6,23 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
+import { AxiosProvider } from '../api/restClient.jsx';
 
-import Login from "../pages/login";
-import ChatList from "../pages/chatList";
-import DocumentList from "../pages/documentList";
-import UserList from "../pages/userList";
-import RegisterSuccessFully from "../pages/registerSuccessFully";
-import Register from "../pages/register";
-import LoginSuccessFully from "../pages/loginSuccessFully";
-import ShareDocument from "../pages/shareDocument";
-import NotFound from "../pages/notFound";
-import Navbar from "../navigation/navbar";
-import { Logo } from '../components/Icons';
-import Home from '../pages/home';
-import ForgotPassword from '../pages/forgotPassword';
+import Login from "../pages/login/index.jsx";
+import ChatList from "../pages/chatList/index.jsx";
+import DocumentList from "../pages/documentList/index.jsx";
+import UserList from "../pages/userList/index.jsx";
+import RegisterSuccessFully from "../pages/registerSuccessFully/index.jsx";
+import Register from "../pages/register/index.jsx";
+import LoginSuccessFully from "../pages/loginSuccessFully/index.jsx";
+import ShareDocument from "../pages/shareDocument/index.jsx";
+import NotFound from "../pages/notFound/index.jsx";
+import Navbar from "../navigation/navbar/index.jsx";
+import { Logo } from '../components/Icons/index.js';
+import Home from '../pages/home/index.jsx';
+import ForgotPassword from '../pages/forgotPassword/index.jsx';
 import Welcome from '../pages/welcome/index.jsx';
+import NetworkStatusIndicator from './networkProvider.jsx';
 
 function UnauthenticatedRoutes() {
   return (
@@ -69,15 +71,39 @@ const LoginContext = createContext({
 });
 
 // Create a provider component that will wrap your app
-export const LoginProvider = ({ children }) => {
+export const AppContextProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const jwtToken = localStorage.getItem(ACCESS_TOKEN);
   const [token, setT] = useState(jwtToken || null)
+  const [isMobilenavHideen, setMobilenavHideenD] = useState(false)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 576);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 576);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup the event listener on unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   const setToken = (token) => {
     if (token) {
       setT(token)
       localStorage.setItem(ACCESS_TOKEN, token);
+    }
+  }
+  const setMobilenavHideen = (value) => {
+    if (value) {
+      setMobilenavHideenD(value)
+      document.documentElement.style.setProperty('--bottom-nav-size', '0px')
+    } else {
+      setMobilenavHideenD(value)
+      document.documentElement.style.setProperty('--bottom-nav-size', '50px')
     }
   }
   const publicPath = [PathName.loginPath, PathName.registerPath, PathName.forgotPassword];
@@ -112,22 +138,29 @@ export const LoginProvider = ({ children }) => {
     user,
     login,
     logout,
-    token, setToken
+    token,
+    setToken,
+    isMobilenavHideen,
+    setMobilenavHideen,
+    isMobile
   };
 
   return (
     <LoginContext.Provider value={contextValue}>
-      <div id='headroom' className='center'>
-        <hr />
-        <Logo />
-      </div>
-      {token ? <AuthenticatedRoutes /> : <UnauthenticatedRoutes />}
-      {children}
+      <AxiosProvider>
+        <NetworkStatusIndicator />
+        <div id='headroom' className='center'>
+          <hr />
+          <Logo />
+        </div>
+        {token ? <AuthenticatedRoutes /> : <UnauthenticatedRoutes />}
+        {children}
+      </AxiosProvider>
     </LoginContext.Provider>
   );
 };
 
 // Create a custom hook to access the context
-export const useLogin = () => {
+export const useAppContext = () => {
   return useContext(LoginContext);
 };

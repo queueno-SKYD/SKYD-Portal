@@ -7,13 +7,15 @@ import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
 import DifferenceRoundedIcon from '@mui/icons-material/DifferenceRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import "./index.css"
+import { useAppContext } from "../../context/app.context.jsx";
 const MobileNav = ({ setOpenLogoutModel, isOpneLogoutModel }) => {
   const currentPath = window.location.pathname;
   const compare = (path) => {
     return currentPath.split("/")?.[1] === path.split("/")?.[1];
   };
+  const { isMobilenavHideen } = useAppContext();
   return (
-    <nav className="nav nav-tabs nav-justified bg-light" id="mobile-nav">
+    <nav className={`nav nav-tabs nav-justified bg-light ${isMobilenavHideen ? "slide-down-mobile-nav" : "slide-up-mobile-nav"}`} id="mobile-nav">
       <div className={`sidebar-item nav-item nav-link ${!isOpneLogoutModel && compare(PathName.homePath) ? "active" : ""}`}>
         <Link
           className={`sidebar-icon-container link_text ${!isOpneLogoutModel && compare(PathName.homePath) ? "active-color" : ""}`}

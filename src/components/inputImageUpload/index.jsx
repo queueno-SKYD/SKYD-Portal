@@ -26,7 +26,7 @@ export default function InputImageUpload({value , onChange, name, ...otherProps}
       startIcon={<CloudUploadIcon />}
     >
       Image
-      <VisuallyHiddenInput type="file" value={value} name="image" onChange={onChange} />
+      <VisuallyHiddenInput type="file" value={value} name={name} onChange={onChange} />
     </Button>
   );
 }

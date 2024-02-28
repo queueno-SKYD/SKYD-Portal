@@ -9,12 +9,9 @@ function ChatSearch({
   iconColor = "",
 }) {
   return (
-    <>
+    <div className="chat-head-search-container">
       <div
-        className={`d-flex flex-row w-100 col-12 align-item-center p-1 mt-2 px-2`}
-        style={{
-          backgroundColor: headerColor,
-        }}
+        className={`d-flex flex-row align-item-center p-1 px-2 chat-head-search`}
       >
         <input
           className={`col-11 border-0  search-input outline-none ${iconColor}`}
@@ -30,7 +27,7 @@ function ChatSearch({
           <SearchRoundedIcon />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
