@@ -6,8 +6,14 @@ import { IconButton, List, ListItem, ListItemButton, ListItemText, Typography } 
 
 import "./index.css"
 import GroupChatUser from '../../../components/groupListItem';
+import url from "../../../api/url.ts"
+import useAxios from '../../../api/restClient';
+import { dangerToast } from '../../../components/customToast';
 
 const GroupInfo = ({groupDetails}) => {
+  const axios = useAxios();
+  const [loadingMembers, setLoadingMembers] = useState(false);
+  const [membersList, setMembersList] = useState([]);
   const [edit, setEdit] = useState(false);
   const { 
     onUploadImage,
@@ -16,7 +22,7 @@ const GroupInfo = ({groupDetails}) => {
     selectedFile,
     setSelectedFile,
     loading
-   } = useImageUpload(groupDetails);
+   } = useImageUpload();
   useEffect(() => {
     setEdit(false)
   }, [groupDetails])
@@ -35,6 +41,32 @@ const GroupInfo = ({groupDetails}) => {
 
     setChecked(newChecked);
   };
+
+  const getGroupMembers = async (groupId) => {
+    if (!groupId) return;
+    setLoadingMembers(true)
+    try {
+      const response = await axios.post(url.getAllMembers, {groupId, page: 1})
+      const output = response?.data;
+      console.debug("🚀 ---------------------------------------🚀")
+      console.debug("🚀 ~ getGroupMembers ~ output:", output)
+      console.debug("🚀 ---------------------------------------🚀")
+      if (output) {
+        setMembersList(output?.data || [])
+      } else {
+        dangerToast(response.message)
+      }
+    } catch (error) {
+      dangerToast(error?.message)
+    } finally {
+      setLoadingMembers(false)
+    }
+  }
+
+  useEffect(() => {
+    getGroupMembers(groupDetails?.groupId)
+  }, [groupDetails])
+
   return (
     <div className='d-flex flex-column gap-2'>
       <div className='d-flex flex-column justify-content-center gap-4 align-items-center py-3 info-section image-section'>
@@ -47,6 +79,7 @@ const GroupInfo = ({groupDetails}) => {
           groupName={groupDetails?.name}
           onEdit={() => setEdit(true)}
           editing={edit}
+          id={"groupInfoUpdate" + groupDetails?.groupId}
         />
         <div className='d-flex flex-column justify-content-center gap-2 align-items-center info-inner-section'>
           <Typography variant="h4" align="center"> 
@@ -75,18 +108,18 @@ const GroupInfo = ({groupDetails}) => {
               <ListItemText id={2} primary={`Add new members`} />
             </ListItemButton>
           </ListItem>
-          {[0, 1, 2, 3, 4, 5].map((value) => {
-            const labelId = `checkbox-list-label-${value}`;
+          {membersList.map((member) => {
+            const labelId = `checkbox-list-label-${member?.memberId}`;
 
             return (
               <GroupChatUser
                 key={labelId}
-                userImage={
-                  "group?.profileImageUrl"
-                }
-                userName={"group?.name"}
+                userImage={member?.imageURL}
+                userName={[member?.firstName, member?.lastName].filter(a => a).join(" ")}
+                memberUser={member}
                 imageSize={48}
-                isAdmin
+                isAdmin={member?.isAdmin ? true : false}
+                item={member}
              />
             );
           })}

@@ -3,6 +3,7 @@ import { Badge } from "react-bootstrap";
 import "./index.css";
 import { CustomAvatar } from "../Avatar";
 import { ButtonBase, Chip } from "@mui/material";
+import { useAppContext } from "../../context/app.context";
 function GroupChatUser({
   userImage,
   seenStatus,
@@ -17,7 +18,10 @@ function GroupChatUser({
   done,
   isMe,
   isAdmin,
+  item,
+  memberUser,
 }) {
+  const { user } = useAppContext();
   return (
     <>
       <ButtonBase className={`d-flex flex-row w-100 justify-content-between pointer py-2 px-3 group-container-list ${selected ? "selected" : ""}`
@@ -26,10 +30,10 @@ function GroupChatUser({
       >
         <div className="d-flex align-items-center justify-content-center">
           {/* <Image width={40} height={40} src={userImage} roundedCircle style={{objectFit:'cover'}} /> */}
-        <CustomAvatar src={userImage} alt="User Avatar" firstName={userName} lastName={"lastName"} size={imageSize} />
+        <CustomAvatar src={userImage} alt="User Avatar" firstName={memberUser?.firstName || userName} lastName={memberUser?.lastName || "lastname"} size={imageSize} />
         <div className="d-flex flex-column justify-content-center px-3">
           <div>
-            <p className="text-bold text-start">{userName}</p>
+            <p className="text-bold text-start">{user?.userId === item?.userId ? "You" : userName}</p>
           </div>
           <div className="d-flex flex-row mt-2" >
             <div>

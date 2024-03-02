@@ -5,6 +5,7 @@ const version = "v1";
 export default{
   Login: `/api/${version}/login`,
   Register: `/api/${version}/register`,
+  Me: `/api/${version}/me`,
   AllUsers: `/api/${version}/manageUsers/getAllUsers`,
   uploadDocument: `/api/${version}/manageDocs/uploadDocument`,
   deleteDocument: `/api/${version}/manageDocs/deleteDocument`,
@@ -26,4 +27,5 @@ export default{
   UploadFile: `/api/${version}/uploadFile`,
   forgotPassword: `/api/${version}/users/forgotPassword`,
   verifyOtp: `/api/${version}/users/verifyOtp`,
+  getAllMembers: `/api/${version}/chatService/group/getAllMembers`,
 }

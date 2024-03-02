@@ -4,8 +4,9 @@ import { useAppContext } from "../../context/app.context.jsx";
 import MyModal from "../../components/Model";
 import MobileNav from "./mobileNav";
 import SideBar from "./sideBar.jsx";
+import Loader from "../../components/Loder/index.jsx";
 
-function Navbar() {
+function Navbar({loading}) {
   const {
     logout
   } = useAppContext();
@@ -38,6 +39,7 @@ function Navbar() {
       >
         <p >Are you sure, you want to logout!</p>
       </MyModal>
+      <Loader isLoading={loading} />
     </>
   );
 }
