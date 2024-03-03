@@ -40,25 +40,17 @@ function Home() {
 
   const [groupData, setGroupData] = useState({
     name: "",
-<<<<<<< Updated upstream
-=======
     profileImageUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
->>>>>>> Stashed changes
     members: [],
     description: "",
   });
 
-<<<<<<< Updated upstream
   const [userList, setUserList] = useState([])
-=======
   const setUploadedImage = (data) => {
     if (data) {
       setGroupData(groupData => {return { ...groupData, profileImageUrl: data?.path }})
     }
   }
-  const [userList, setUserList] = useState([]);
->>>>>>> Stashed changes
-
   const onHandleChange = (e)=>{
     const { name, value } = e.target;
     setGroupData({ ...groupData, [name]: value });
@@ -141,14 +133,13 @@ function Home() {
     getGroups()
   }, [])
 
-<<<<<<< Updated upstream
+
   const searchOnBlurHandler = () => {
     if (!searchString) {
       getGroups();
     }
   }
-=======
->>>>>>> Stashed changes
+
 
   return (
     <>
@@ -216,7 +207,6 @@ function Home() {
         }
       >
         <div className="d-flex flex-column align-items-center">
-<<<<<<< Updated upstream
         <CustomImagePicker
           size={150}
           selectedImage={selectedImage}
@@ -230,9 +220,7 @@ function Home() {
           showDelete={false}
           showSave={false}
         />
-=======
         <CustomImagePicker imageUrl={"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} size={150} />
->>>>>>> Stashed changes
         </div>
         <br />
         <TextField
