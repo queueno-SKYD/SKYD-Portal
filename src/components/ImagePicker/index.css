@@ -1,3 +1,7 @@
+.image-picker-label {
+  border: 2px dashed #386157;
+  outline: 3px dotted #284937;
+}
 .image-picker-label:hover {
   .image-picker-label-hover {
     display: flex;
@@ -33,4 +37,9 @@
 .right:hover {
   background-color: #397450aa;
   color: #91f199;
+}
+
+.center-1 {
+  border-radius: 0;
+  padding: 0;
 }

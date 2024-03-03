@@ -31,8 +31,8 @@ export const getHeaders = (token, file=false)=>{
 }
 
 // Create the context
-const AxiosContext = createContext({get: async (url="", showGlobalMsg = true) => {}, post: async (url="", body={}, showGlobalMsg = true) => {}, uploadFile: (selectedFile, fileType) => {}});
-const endPoint = 'http://localhost:3001';
+const AxiosContext = createContext({get: async (url="", showGlobalMsg = true) => {}, post: async (url="", body={}, showGlobalMsg = true) => {}, uploadFile: async (selectedFile, fileType) => {}});
+export const endPoint = 'http://localhost:3001';
 
 // Provider component
 export const AxiosProvider = ({ children }) => {

@@ -19,7 +19,7 @@ body {
   overflow: hidden;
   height: calc(100vh - var(--headroom-size)) !important ;
   align-items: center;
-  background-color: var(--light-mode-bg-color);
+  background-color: var(--light-mode-headroom-bg-color);
   padding-top: 20px;
   display: flex;
   justify-content: space-between;

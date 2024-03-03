@@ -12,15 +12,26 @@ import { dangerToast, successToast } from "../../components/customToast/index.js
 import Loader from "../../components/Loder/index.jsx";
 import CustomImagePicker from "../../components/ImagePicker/index.jsx";
 import { useAppContext } from "../../context/app.context.jsx";
+import useImageUpload from "../../hooks/useImageUpload.js";
 
 function Home() {
   const axios = useAxios()
+  const { user } = useAppContext()
   const { isMobile } = useAppContext();
   const { setMobilenavHideen } = useAppContext();
   const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [createGroupLoading, setCreateGroupLoading] = useState(false);
   const [groups, setGroups] = useState([])
+  const [searchString, setSearchString] = useState("");
+
+  const { 
+    onUploadImage,
+    selectedImage,
+    setSelectedImage,
+    setSelectedFile,
+    loading
+   } = useImageUpload();
 
   //#region set selected group
   const [selectedGroup, setSelectedGroup] = useState(null);
@@ -29,16 +40,10 @@ function Home() {
 
   const [groupData, setGroupData] = useState({
     name: "",
-    profileImageUrl: "",
     members: [],
     description: "",
   });
 
-  const setUploadedImage = (data) => {
-    if (data) {
-      setGroupData(groupData => {return { ...groupData, profileImageUrl: data?.path }})
-    }
-  }
   const [userList, setUserList] = useState([])
 
   const onHandleChange = (e)=>{
@@ -50,6 +55,7 @@ function Home() {
     try {
       setIsLoading(true);
       const response = await axios.post(url.getAllUserGroups, {
+        query: searchString,
         page: 1,
         pageSize: 50,
       })
@@ -69,16 +75,28 @@ function Home() {
     }
   }
 
+  const clearState = () => {
+    setGroupData({
+      name: "",
+      members: [],
+      description: "",
+    });
+    setSelectedImage(null);
+    setSelectedFile(null);
+  }
+
   const createGroup = async (groupData) => {
     try {
       setCreateGroupLoading(true);
-      const response  = await axios.post(url.createGroup, groupData)
+      const uploadedUrl = await onUploadImage()
+      const response  = await axios.post(url.createGroup, {...groupData, profileImageUrl: uploadedUrl})
       if(response?.statusCode === 200){
         const output = response?.data;
         if (output) {
           successToast(response?.message)
           getGroups()
           setShowCreateGroupModal(false)
+          clearState();
         } else {
           dangerToast(response.message)
         }
@@ -110,13 +128,29 @@ function Home() {
     getGroups()
   }, [])
 
+  const searchOnBlurHandler = () => {
+    if (!searchString) {
+      getGroups();
+    }
+  }
+
   return (
     <>
       <div className={`w-100 h-100 d-flex flex-row`} style={{borderWidth: "10px"}} id="home-room">
         <div className={`col-4 ${selectedGroup ? "active-selected-group-hide-group-list" : "active-selected-group-visible-group-list"} `} id="groupsSection">
-          <ChatHeader onClickAddGroup={() => setShowCreateGroupModal(true)} />
+          <ChatHeader
+            user={user}
+            headerImage={user?.imageURL}
+            onClickAddGroup={() => setShowCreateGroupModal(true)} 
+          />
 
-          <ChatSearch headerColor={"#E8E8E8E"} />
+          <ChatSearch
+            searchValue={searchString}
+            onHandleChange={(e) => setSearchString(e?.target?.value)}
+            onClickSearch={getGroups}
+            headerColor={"#E8E8E8E"}
+            onBlurHandler={searchOnBlurHandler}
+          />
 
 
           <div className="inner overflow-auto" id="groups-list">
@@ -133,6 +167,8 @@ function Home() {
               messageCount={2}
               onClick={() => onSelectGroup(group)}
               selected={selectedGroup?.groupId === group?.groupId}
+              showDelete={false}
+              showSave={false}
              />}
            )}
           </div>
@@ -164,7 +200,19 @@ function Home() {
         }
       >
         <div className="d-flex flex-column align-items-center">
-        <CustomImagePicker imageUrl={"http://localhost:3001/uploads/image-1708818796436-557390326"} size={150} />
+        <CustomImagePicker
+          size={150}
+          selectedImage={selectedImage}
+          setSelectedImage={setSelectedImage}
+          setSelectedFile={setSelectedFile}
+          imageUrl={null}
+          groupName={groupData.name}
+          onEdit={null}
+          editing={true}
+          id={"newGroupImage"}
+          showDelete={false}
+          showSave={false}
+        />
         </div>
         <br />
         <TextField
@@ -205,7 +253,7 @@ function Home() {
           )}
         />
       </MyModal>
-      <Loader isLoading={isLoading || createGroupLoading} />
+      <Loader isLoading={isLoading || createGroupLoading || loading} />
     </>
   );
 }

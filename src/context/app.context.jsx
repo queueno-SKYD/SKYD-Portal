@@ -6,7 +6,8 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import { AxiosProvider } from '../api/restClient.jsx';
+import useAxios, { AxiosProvider } from '../api/restClient.jsx';
+import url from "../api/url.ts"
 
 import Login from "../pages/login/index.jsx";
 import ChatList from "../pages/chatList/index.jsx";
@@ -23,6 +24,7 @@ import Home from '../pages/home/index.jsx';
 import ForgotPassword from '../pages/forgotPassword/index.jsx';
 import Welcome from '../pages/welcome/index.jsx';
 import NetworkStatusIndicator from './networkProvider.jsx';
+import { dangerToast } from '../components/customToast/index.js';
 
 function UnauthenticatedRoutes() {
   return (
@@ -41,9 +43,32 @@ function UnauthenticatedRoutes() {
 }
 
 function AuthenticatedRoutes() {
+  const [loading, setLoading] = useState(false);
+  const axios = useAxios();
+  const { setUser, token } = useAppContext();
+  const getMyDetails = async () => {
+    try {
+      setLoading(true)
+      const response = await axios.get(url.Me)
+      if (response.data) {
+        setUser(response.data);
+      } else {
+        dangerToast(response?.message || "not found user")
+      }
+    } catch (error) {
+      dangerToast(error?.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    getMyDetails();
+  }, [token]);
+
   return (
     <Routes>
-      <Route element={<Navbar />}>
+      <Route element={<Navbar loading={loading} />}>
         <Route path={PathName.homePath} element={<Home />} />
         <Route path={PathName.documentListPath} element={<DocumentList />} />
         <Route path={PathName.userListPath} element={<UserList />} />
@@ -142,7 +167,8 @@ export const AppContextProvider = ({ children }) => {
     setToken,
     isMobilenavHideen,
     setMobilenavHideen,
-    isMobile
+    isMobile,
+    setUser
   };
 
   return (

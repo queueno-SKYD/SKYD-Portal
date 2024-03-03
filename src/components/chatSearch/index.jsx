@@ -1,12 +1,14 @@
 import React from "react";
 import "./index.css";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import { IconButton } from "@mui/material";
 function ChatSearch({
   onHandleChange,
   searchValue,
   onClickSearch,
   headerColor = "bg-light",
   iconColor = "",
+  onBlurHandler,
 }) {
   return (
     <div className="chat-head-search-container">
@@ -20,12 +22,15 @@ function ChatSearch({
           style={{ backgroundColor: headerColor }}
           value={searchValue}
           placeholder="Search....."
+          onBlur={onBlurHandler}
         />
-        <div
-          className={`col-1 ${headerColor} d-flex justify-content-center align-item-center`}
+        <IconButton
+          sx={{width: "30px", height: "30px"}}
+          onClick={onClickSearch}
+          disabled={!searchValue}
         >
           <SearchRoundedIcon />
-        </div>
+        </IconButton>
       </div>
     </div>
   );
