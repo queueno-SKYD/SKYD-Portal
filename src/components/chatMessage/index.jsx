@@ -2,7 +2,7 @@ import React , { useState } from "react";
 import "./index.css"
 import { CustomAvatar } from "../Avatar";
 
-const ChatMessage = ({ message, isMine, time, senderName, senderImage, firstName, lastName }) => {
+const ChatMessage = React.memo(({ message, isMine, time, senderName, senderImage, firstName, lastName }) => {
   return (
     <div
       className={`d-flex ${
@@ -32,6 +32,6 @@ const ChatMessage = ({ message, isMine, time, senderName, senderImage, firstName
         )} */}
     </div>
   );
-};
+});
 
 export default ChatMessage;

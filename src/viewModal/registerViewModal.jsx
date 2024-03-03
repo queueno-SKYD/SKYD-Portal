@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import {useState } from 'react'
 import { PASSWORD_REGEX } from '../helper/constants/constant.ts';
 import { useAppContext } from '../context/app.context.jsx';
 import URL from '../api/url.ts'
@@ -15,6 +15,7 @@ function RegisterViewModal() {
   "email": "",
   "password": "",
   "passwordConfirm": "",
+  "userType": 0
   });
   const [showToast, setShowToast] = useState(false);
   const [loading, setLoading] = useState(false);

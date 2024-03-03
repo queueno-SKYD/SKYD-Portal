@@ -26,6 +26,8 @@ export default{
   makeAdmin: `/api/${version}/chatService/group/makeAdmin`,
   UploadFile: `/api/${version}/uploadFile`,
   forgotPassword: `/api/${version}/users/forgotPassword`,
+  sendMessgae: `/api/${version}/chatService/group/sendMessage`,
+  getGroupChats: `/api/${version}/chatService/group/getGroupChats`,
   verifyOtp: `/api/${version}/users/verifyOtp`,
   getAllMembers: `/api/${version}/chatService/group/getAllMembers`,
 }

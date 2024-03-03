@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import "./index.css";
 import RegisterViewModal from "../../viewModal/registerViewModal";
 import { Link } from "react-router-dom";
 import { PathName } from "../../helper/constants/pathNames.ts";
 import { TextMessage } from "../../helper/constants/textMessage.ts";
-import { TextField } from "@mui/material";
+import { FormControl, FormControlLabel,Radio, RadioGroup, TextField } from "@mui/material";
 
 function Register() {
   const { formData, handleInputChange, handleSubmit, loading } =
@@ -88,6 +88,12 @@ function Register() {
                     value={formData.passwordConfirm}
                     onChange={handleInputChange}
                   />
+                  <FormControl fullWidth>
+                      <RadioGroup row aria-label="user-type" name="userType" value={formData.userType} onChange={handleInputChange}>
+                        <FormControlLabel value={0} control={<Radio />} label="Normal User" />
+                        <FormControlLabel value={1} control={<Radio />} label="Admin" />
+                      </RadioGroup>
+                    </FormControl>
                   <button
                     onClick={(e) => handleSubmit(e)}
                     // href={PathName.registerSuccessPath}
