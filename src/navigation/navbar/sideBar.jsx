@@ -6,6 +6,7 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
 import DifferenceRoundedIcon from '@mui/icons-material/DifferenceRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
 
 const SideBar = ({setOpenLogoutModel, isOpneLogoutModel}) => {
 
@@ -34,6 +35,15 @@ const SideBar = ({setOpenLogoutModel, isOpneLogoutModel}) => {
         </div>
       </div>
       <div id="desk-nav-bottom">
+        <div className='sidebar-item'>
+          <Link className={` sidebar-icon-container ${!isOpneLogoutModel && compare(PathName.manageProfile) ? "active" : ""}`}
+            to={PathName.manageProfile}
+            tabIndex="-1"
+            aria-disabled="true"
+          >
+            <ManageAccountsRoundedIcon />
+          </Link>
+        </div>
         <div className='sidebar-item sidebar-item-last'>
           <Link className={` sidebar-icon-container ${isOpneLogoutModel ? "active" : ""}`}
             tabIndex="-1"

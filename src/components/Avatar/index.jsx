@@ -29,7 +29,7 @@ function stringAvatar(name="initials name", size) {
       height: size || '100%',
       width: size || '100%',
       fontSize: size/1.7 +"px",
-      paddingTop: size/6 + "px"
+      // paddingTop: size/6 + "px"
     },
     children: `${name.split(' ')?.[0]?.[0]?.toLocaleUpperCase()}`,
   };

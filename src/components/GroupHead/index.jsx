@@ -23,8 +23,8 @@ const GroupHeaderItem = ({selectedGroup, children, openInfo, setOpenInfo, onBack
           <small className="group-description">{selectedGroup?.description}</small>
         </div>
         <div className="text-center last">
-          <IconButton >
-            <MoreVertRoundedIcon onClick={() => console.log("")} />
+          <IconButton onClick={() => console.log("")}>
+            <MoreVertRoundedIcon />
           </IconButton>
         </div>
       </div>

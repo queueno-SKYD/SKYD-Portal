@@ -13,7 +13,25 @@ const useImageUpload = () => {
    * Click to upload image
    * @returns response with uploaded file details or errors
    */
-  const onUploadImage = () => {
+  const onUploadImage = async (label="img-hai", groupId=0) => {
+    console.debug("I reach")
+    try {
+      setLoading(true)
+      const response = await axios.uploadFile(selectedFile, {label, groupId});
+      if(response?.statusCode === 200){
+        const output = response?.data?.fileURL;
+        return output; // Resolve the promise with the URL
+      } else {
+        dangerToast(response?.message);
+      }
+    } catch (error) {
+      dangerToast(error?.message);
+    } finally {
+      setLoading(false)
+    }
+  };
+
+  const onUploadImage2 = () => {
     return new Promise(async (resolve, reject) => {
        try {
          const reader = new FileReader();
@@ -48,7 +66,7 @@ const useImageUpload = () => {
          reject(error); // Reject the promise with the error
        }
     });
-   };
+  };
 
   return {
     onUploadImage,

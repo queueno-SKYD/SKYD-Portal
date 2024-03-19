@@ -3,7 +3,7 @@ body {
   overflow: hidden;
 }
 #main {
-  height: 100%;
+  height: calc(100% - var(--headroom-size)) !important ;
   display: flex;
   flex: 1;
   @media (max-width: 576px) {
@@ -29,14 +29,14 @@ body {
 }
 
 #mobile-nav {
-  @media (min-width: 576px) {
-    display: none;
-  }
-  height: var(--bottom-nav-size) !important;
+  max-height: var(--bottom-nav-size) !important;
   flex: 1;
   animation-duration: 200ms;
   animation-fill-mode: forwards;
   animation-timing-function: ease-in;
+  @media (min-width: 576px) {
+    display: none;
+  };
 }
 
 .sidebar-icon-container {
@@ -54,7 +54,19 @@ body {
 .sidebar-item-last {
   display: flex;
   align-items: flex-end;
+  flex-direction: column;
 }
+
+.sidebar-item-last::before {
+  content: "";
+  border-top: 2px solid #ddd;
+  background-color: red;
+  position: relative;
+  width: 100%;
+  margin: 5px 0 20px;
+  height: 2px;
+}
+
 .active::after {
   content: "";
   position: absolute;
@@ -91,9 +103,9 @@ body {
   padding: 5px 0;
   padding-left: 60px;
   flex: 1;
+  max-height: var(--headroom-size);
   @media (max-width: 576px) {
     padding-left: 12px;
-    
   }
 }
 
@@ -117,6 +129,10 @@ body {
   to {
     opacity: 100%;
   }
+}
+
+* {
+  font-family: "Inter", sans-serif;
 }
 
 :root {

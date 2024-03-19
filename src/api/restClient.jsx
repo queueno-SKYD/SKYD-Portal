@@ -31,7 +31,7 @@ export const getHeaders = (token, file=false)=>{
 }
 
 // Create the context
-const AxiosContext = createContext({get: async (url="", showGlobalMsg = true) => {}, post: async (url="", body={}, showGlobalMsg = true) => {}, uploadFile: async (selectedFile, fileType) => {}});
+const AxiosContext = createContext({get: async (url="", showGlobalMsg = true) => {}, post: async (url="", body={}, showGlobalMsg = true) => {}, uploadFile: async (selectedFile, body, fileType, showGlobalMsg) => {}});
 export const endPoint = 'http://localhost:3001';
 
 // Provider component
@@ -103,16 +103,18 @@ export const AxiosProvider = ({ children }) => {
     }
   };
 
-  const uploadFile = async (selectedFile, fileType='image', showGlobalMsg=true) => {
+  const uploadFile = async (selectedFile, body, fileType='files[]', showGlobalMsg=true) => {
     const formData = new FormData();
+    const headers = getHeaders(token, true)
     formData.append(fileType, selectedFile);
 
-    const headers = getHeaders(token, true)
+    formData.append('params', JSON.stringify(body));
+
     try {
       if (!navigator.onLine) {
         return
       }
-      const response = await axiosInstance.post(url.UploadFile, formData, {headers});
+      const response = await axiosInstance.post(url.UploadFile, formData, { headers });
       return response?.data;
     } catch (error) {
       if (showGlobalMsg) {

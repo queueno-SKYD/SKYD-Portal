@@ -51,6 +51,7 @@
 
 .active-selected-group-hide-group-list {
   animation-name: slideLeftOut;
+  display: none;
 }
 .active-selected-group-show-chat {
   display: block;
@@ -58,6 +59,7 @@
 }
 .active-selected-group-hide-chat {
   animation-name: slideRightOut;
+  display: none;
 }
 .active-selected-group-visible-group-list {
   animation-name: slideLeftIn;
@@ -108,6 +110,3 @@
    opacity:  1;
  }
 }
-
-
-

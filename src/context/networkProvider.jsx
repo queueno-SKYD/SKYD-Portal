@@ -31,7 +31,7 @@ const NetworkStatusIndicator = () => {
   }, [isConnected]);
 
   return (
-    <div className={`text-center normal-t ${isConnected === 3 ? "online-t" : isConnected === 2 ? "offline-t" : ""}`}>
+    <div className={`text-center normal-t ${isConnected === 3 ? "online-t" : isConnected === 2 ? "offline-t" : ""}`} aria-describedby='network info' >
       {isConnected === 3 ? "You are back online!" : isConnected === 2 && "You are currently offline"}
     </div>
   );

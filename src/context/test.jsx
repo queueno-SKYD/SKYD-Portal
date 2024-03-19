@@ -1,15 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
-import ChatMessage from "../../components/chatMessage";
-import moment from "moment";
-import "./index.css";
-import { Button } from "@mui/material";
-import { SendRounded } from "@mui/icons-material";
-import GroupHeader from "../../components/GroupHead";
-import GroupInfo from "./groupInfo/groupInfo";
-import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
-import Fab from '@mui/material/Fab';
+import React, { useRef } from "react";
+import ChatMessage from "../components/chatMessage";
 
-const messages = [
+const messagesList = [
   {
     imageUrl:
       "https://images.unsplash.com/photo-1533167649158-6d508895b680?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c3BsYXNofGVufDB8fDB8fHww",
@@ -203,188 +195,45 @@ const messages = [
   },
 ];
 
-function getTimeDifferenceForChat(sendAt) {
-  const messageTime = moment(sendAt);
-  const currentTime = moment();
-  const diffInMinutes = currentTime.diff(messageTime, "minutes");
-
-  if (diffInMinutes < 1) {
-    return "Just now";
-  } else if (diffInMinutes < 60) {
-    return `${diffInMinutes} minute${diffInMinutes > 1 ? "s" : ""} ago`;
-  } else if (diffInMinutes < 24 * 60) {
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    return `${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`;
-  } else if (diffInMinutes < 7 * 24 * 60) {
-    const diffInDays = Math.floor(diffInMinutes / (24 * 60));
-    return `${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`;
-  } else {
-    return messageTime.format("MMM D, YYYY");
-  }
-}
-
-const ChatList = ({selectedGroup, onBack}) => {
-  // const { user } = useAppContext();
+const Test = () => {
   const messagesEndRef = useRef(null);
-
-  const [messagesList, setMessagesList] = useState(messages);
-  const [msg, setMsg] = useState("");
-  const divRef = useRef(null);
-  const [height, setHeight] = useState('auto');
-
-  const autoResize = (event) => {
-    const textarea = event.target;
-    setMsg(event.target.value)
-    textarea.style.height = 'auto';
-    if (textarea.scrollHeight < 300) {
-      textarea.style.height = `${textarea.scrollHeight}px`;
-      setHeight(`${textarea.scrollHeight}px`);
-    } else {
-      textarea.style.height = `${300}px`;
-      setHeight('300px')
-    }
-  };
-
-  const checkKeyPress = (event) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
-      console.debug("In this")
-      event.preventDefault();
-      autoResize(event);
-    }
-  };
-
-  useEffect(() => {
-    // Set initial content of the div
-    if (divRef.current)
-      divRef.current.textContent = msg;
-  }, [msg]);
-
-
-  // const handleContentChange = (event) => {
-  //   setMsg(event.target.textContent);
-  //   // Do whatever you need with the new content
-  // };
-  // Call addPlaceholder when component mounts to add placeholder initially
-
-  const sendMessage = (e) => {
-    console.debug("form submit", e)
-    e.preventDefault();
-    if (msg) {
-      setMessagesList((item) => {
-        return [
-          ...item,
-          {
-            imageUrl:
-              "https://images.unsplash.com/photo-1519363814881-9f4b382ca005?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3BsYXNofGVufDB8fDB8fHww",
-            firstName: "Dheeraj",
-            lastName: "Shrivastva",
-            sendAt: new Date().toUTCString(),
-            senderId: 25,
-            message: msg,
-          },
-        ];
-      });
-      setMsg("");
-      setHeight("auto")
-      setTimeout(() => {
-        scrollToBottom();
-      }, 150)
-    }
-  };
-
-  const [isNotAtBottom, setIsNotAtBottom] = useState(false);
-
-  const handleScroll = () => {
-    const { scrollTop, scrollHeight, clientHeight } = messagesEndRef?.current;
-
-    // Check if the scroll position is not at the bottom
-    setIsNotAtBottom(scrollTop + clientHeight < scrollHeight);
-  };
-
   const scrollToBottom = () => {
-    // setIsNotAtBottom(false);
-    // messagesEndRef.current.scrollIntoView({
-    //   behavior: "smooth",
-    //   block: "end",
-    // });
-    messagesEndRef.current.scrollTop = messagesEndRef?.current?.scrollHeight;
-    setIsNotAtBottom(false); 
-  }
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messagesList]);
-
+    console.debug("cdscdc", "clicked", messagesEndRef?.current)
+    if (messagesEndRef?.current) {
+      console.debug("sdssds")
+      messagesEndRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  };
   return (
-    <div>
-      <GroupHeader
-        selectedGroup={selectedGroup}
-        onBack={onBack}
-        chat={
-          <div id="chat-container" className="h-100 d-flex flex-column">
-            <div ref={messagesEndRef} className="inner overflow-auto custom-scroll" id="top" onScroll={handleScroll}>
-            {messagesList?.length > 0 &&
-                messagesList?.map((item, index) => {
-                  return (
-                    <ChatMessage
-                      key={index}
-                      message={item?.message}
-                      isMine={25 === item?.senderId}
-                      time={getTimeDifferenceForChat(item?.sendAt)}
-                      senderName={`${item?.firstName} ${item?.lastName}`}
-                      senderImage={item?.imageUrl}
-                      firstName={item?.firstName}
-                      lastName={item?.lastName}
-                    />
-                  );
-                })}
-            </div>
-            <div id="inputBox" className="w-100 h-100">
-              <form
-                className="w-100 h-100 form d-flex justify-space-between justify-content-between gap-2 align-items-end inputArea"
-                onSubmit={sendMessage}
-              >
-                <textarea
-                  className={`w-100 custom-scroll`}
-                  id="inputMessage"
-                  spellCheck
-                  placeholder="Type your message"
-                  rows={1}
-                  style={{ height: height }}
-                  onChange={autoResize}
-                  onScroll={autoResize}
-                  onKeyDown={checkKeyPress}
-                  value={msg}
-                ></textarea>
-                <div className="button-container">
-                  <Button
-                    variant="text"
-                    id="msg-send"
-                    disabled={!msg}
-                    type="submit"
-                    value={msg}
-                  >
-                    <SendRounded />
-                  </Button>
-                </div>
-              </form>
-              {isNotAtBottom && <Fab size="medium" color="secondary" aria-label="go to end" onClick={scrollToBottom} id="scroll-to-bottom-cta">
-                  <ExpandMoreRoundedIcon/>
-                </Fab>}
-            </div>  
-          </div>
-        }
-        info={
-          <div id="chat-container" className="h-100 d-flex flex-column">
-            <div className="inner overflow-auto custom-scroll">
-              <GroupInfo groupDetails={selectedGroup} />
-            </div>
-          </div>
-        }
-      />
-      {/*  */}
+    <>
+    <button onClick={scrollToBottom}>
+      click to bottom
+    </button>
+    <div style={{overflowY: "auto"}}>
+      {/* <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio recusandae aut aliquam, voluptatibus exercitationem architecto excepturi impedit. Eaque et debitis expedita facilis sint, enim maiores in, repudiandae, ipsa cum suscipit! Aut quaerat deleniti, necessitatibus velit voluptatibus aspernatur reprehenderit optio consectetur tempora recusandae. Repudiandae magni a veniam, laudantium itaque dignissimos aliquam! Eaque doloremque optio porro velit placeat, reprehenderit quae repellat. Aspernatur deserunt quo consectetur quisquam ducimus harum consequuntur numquam nemo assumenda voluptatem earum repudiandae odit dicta accusantium sit culpa illo aperiam ad quis, inventore vitae possimus repellendus placeat? Illum, nostrum culpa placeat quasi voluptatibus nihil cupiditate unde nesciunt, hic et, laborum ut enim temporibus voluptatum maxime? Corrupti atque quod tenetur ea, minus dolorem molestiae rem aliquid illum, sequi repudiandae nisi suscipit optio voluptas in. Expedita incidunt omnis earum commodi laborum ipsa quidem sequi fugiat voluptatibus nostrum. Facilis quod officiis debitis impedit quasi neque commodi rem obcaecati dicta nostrum ad porro excepturi, optio minus. Fuga earum animi nisi quos sequi eveniet, maiores numquam quibusdam dolores ipsa sed eos voluptate odit! Quam alias vel harum sunt dicta molestias, cumque, sint maiores numquam aspernatur ad, consequuntur sed ut quaerat saepe placeat beatae expedita odit ratione. Labore ducimus ut neque nostrum dolorem facere architecto deserunt, ullam nulla at minus nam velit quos quidem iusto eos sapiente omnis iure impedit odit odio id assumenda nisi? Eius, rerum ab autem, tempore voluptate pariatur cum nisi, minus sit in qui! Voluptatum, enim. Necessitatibus molestiae saepe excepturi neque sapiente! Aperiam odit magnam quas hic possimus nostrum, ab quisquam neque, vel similique harum laborum eaque aut debitis porro praesentium inventore ducimus esse ratione accusantium consequuntur blanditiis modi veritatis omnis. Veritatis consequuntur cupiditate ipsum voluptatem maxime perferendis facere. Perferendis, totam iure. Recusandae deserunt, blanditiis quam quae molestias a praesentium nemo consequatur ex nihil veritatis ullam optio asperiores illo aut animi eaque vitae fuga officiis quisquam cum quia perferendis earum quasi? Magni mollitia recusandae fugit minima fuga vero beatae nesciunt iusto voluptatem itaque, architecto tempore deleniti sed est cupiditate voluptas commodi aspernatur eaque saepe molestias excepturi quo? Voluptate, doloribus! Minus, laboriosam. Rerum dignissimos quisquam tempora incidunt explicabo cum possimus saepe est nisi aut excepturi assumenda animi, quaerat asperiores quidem rem inventore officiis delectus atque repellendus iure. Vero consequatur nulla qui nesciunt aliquam ut, quod et error ipsam facere doloremque, quaerat placeat fugiat sunt a provident dolor. Cum at excepturi culpa fuga incidunt nam tenetur? Mollitia rem repudiandae, doloribus necessitatibus officia ab assumenda fugiat eius et doloremque esse cumque cum nemo? Repellendus dolorem iure voluptatibus accusamus nulla fuga mollitia quas illum quos? Minima error necessitatibus praesentium amet magnam modi quis deleniti fuga eveniet dolor dignissimos blanditiis incidunt nisi expedita cumque asperiores dolorum perferendis, ullam consequuntur cum assumenda ea? Magni corrupti harum consequuntur illum ipsa nemo ea. Maiores numquam quod nisi a, modi voluptates odio ex quis distinctio sint iure repellat commodi quasi totam. Nulla nisi, doloremque nemo labore itaque quam neque aut quas assumenda, ipsam enim? Pariatur vitae corrupti velit aperiam tenetur commodi officiis, dolore cupiditate incidunt explicabo, doloremque eius ullam autem ad.</p> */}
+      <div ref={messagesEndRef}>
+      {messagesList?.length > 0 &&
+        messagesList?.map((item, index) => {
+          return (
+            <ChatMessage
+              key={index}
+              message={item?.message}
+              isMine={25 === item?.senderId}
+              time={item?.sendAt}
+              senderName={`${item?.firstName} ${item?.lastName}`}
+              senderImage={item?.imageUrl}
+              firstName={item?.firstName}
+              lastName={item?.lastName}
+            />
+          );
+        })}
+      </div>
     </div>
-  );
+    </>
+  )
 }
 
-export default ChatList;
+export default Test;

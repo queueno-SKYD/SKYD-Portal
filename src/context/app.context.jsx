@@ -25,6 +25,8 @@ import ForgotPassword from '../pages/forgotPassword/index.jsx';
 import Welcome from '../pages/welcome/index.jsx';
 import NetworkStatusIndicator from './networkProvider.jsx';
 import { dangerToast } from '../components/customToast/index.js';
+import ProfileSettings from '../pages/profile/index.jsx';
+import Test from './test.jsx';
 
 function UnauthenticatedRoutes() {
   return (
@@ -34,6 +36,7 @@ function UnauthenticatedRoutes() {
       <Route path={PathName.forgotPassword} element={<ForgotPassword />} />
       <Route path={PathName.notFoundPath} element={<NotFound />} />
       <Route path={PathName.homePath} element={<Welcome />} />
+      <Route path={"/test"} element={<Test />} />
       {/* <Route
         path={PathName.registerSuccessPath}
         element={<RegisterSuccessFully />}
@@ -80,6 +83,8 @@ function AuthenticatedRoutes() {
         <Route path={PathName.loginSuccessPath} element={<LoginSuccessFully />} />
         <Route path={PathName.shareDoc} element={<ShareDocument />} />
         <Route path={PathName.notFoundPath} element={<NotFound isAuthenticated={true}/>} />
+        <Route path={PathName.manageProfile} element={<ProfileSettings/>} />
+        <Route path={"/test"} element={<Test />} />
       </Route>
     </Routes>
   );
@@ -92,7 +97,10 @@ const LoginContext = createContext({
   logout: () => {},
   token : '',
   setToken : (token)=>{},
-
+  isMobilenavHideen: false,
+  setMobilenavHideen: () => {},
+  isMobile: false,
+  setUser: () => {}
 });
 
 // Create a provider component that will wrap your app
@@ -131,7 +139,7 @@ export const AppContextProvider = ({ children }) => {
       document.documentElement.style.setProperty('--bottom-nav-size', '50px')
     }
   }
-  const publicPath = [PathName.loginPath, PathName.registerPath, PathName.forgotPassword];
+  const publicPath = [PathName.loginPath, PathName.registerPath, PathName.forgotPassword, "/test"];
 
   useEffect( ()=> {
     console.log("token change2", token)

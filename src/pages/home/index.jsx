@@ -137,7 +137,7 @@ function Home() {
   return (
     <>
       <div className={`w-100 h-100 d-flex flex-row`} style={{borderWidth: "10px"}} id="home-room">
-        <div className={`col-4 ${selectedGroup ? "active-selected-group-hide-group-list" : "active-selected-group-visible-group-list"} `} id="groupsSection">
+        <div className={`col-4 ${selectedGroup && isMobile ? "active-selected-group-hide-group-list" : "active-selected-group-visible-group-list"} `} id="groupsSection">
           <ChatHeader
             user={user}
             headerImage={user?.imageURL}
