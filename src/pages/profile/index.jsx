@@ -8,9 +8,9 @@ import useAxios from "../../api/restClient";
 import url from "../../api/url.ts"
 import { dangerToast, successToast } from "../../components/customToast";
 
-const SectionHeader = ({title}) => {
+export const SectionHeader = ({title, noBorder, styles}) => {
   return (
-    <div className="w-100 section-hearder mt-2 mb-5">
+    <div className={`w-100 section-hearder ${styles || "mt-2 mb-5"}`} style={{borderBottom: noBorder ? "none" : "1px solid"}}>
       <span>{title}</span>
     </div>
   )
