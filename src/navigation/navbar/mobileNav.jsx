@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { TextMessage } from "../../helper/constants/textMessage.ts";
 import { PathName } from "../../helper/constants/pathNames.ts";
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
 import DifferenceRoundedIcon from '@mui/icons-material/DifferenceRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
 import "./index.css"
 import { useAppContext } from "../../context/app.context.jsx";
 const MobileNav = ({ setOpenLogoutModel, isOpneLogoutModel }) => {
@@ -44,6 +44,16 @@ const MobileNav = ({ setOpenLogoutModel, isOpneLogoutModel }) => {
           to={PathName.documentListPath}
         >
           <DifferenceRoundedIcon />
+        </Link>
+      </div>
+      <div className={`sidebar-item nav-item nav-link ${
+            !isOpneLogoutModel && compare(PathName.documentListPath) ? "active" : ""
+          }`}>
+        <Link
+          className={`sidebar-icon-container link_text ${!isOpneLogoutModel && compare(PathName.manageProfile) ? "active-color" : ""}`}
+          to={PathName.manageProfile}
+        >
+          <ManageAccountsRoundedIcon />
         </Link>
       </div>
       <div className={`sidebar-item nav-item nav-link ${isOpneLogoutModel ? "active" : ""}`}>

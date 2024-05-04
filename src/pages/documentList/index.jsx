@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Card from "../../components/Card";
 import UploadDocument from "../../components/UploadDocument";
 
@@ -8,11 +8,37 @@ import MyModal from "../../components/Model/index.jsx";
 import {dangerToast, successToast } from "../../components/customToast/index.js";
 import { useNavigate } from 'react-router-dom';
 import "./index.css"
-import useAxios from "../../api/restClient.jsx";
+import useAxios, { endPoint } from "../../api/restClient.jsx";
+import PortalComponent from "../../components/Overlays/index.jsx";
+import { Modal } from "react-bootstrap";
+import Uppy from '@uppy/core';
+import Dashboard from '@uppy/dashboard';
+import RemoteSources from "@uppy/remote-sources";
+import Webcam from "@uppy/webcam";
+
+import XHRUpload from "@uppy/xhr-upload";
+import ImageEditor from "@uppy/image-editor";
+import DropTarget from "@uppy/drop-target";
+import Audio from "@uppy/audio";
+import Compressor from "@uppy/compressor";
+
+import "@uppy/audio/dist/style.css";
+import "@uppy/image-editor/dist/style.css";
+
+import '@uppy/core/dist/style.min.css';
+import '@uppy/dashboard/dist/style.min.css';
+import { useAppContext } from "../../context/app.context.jsx";
+
+const COMPANION_URL = "http://companion.uppy.io";
+const companionAllowedHosts = [];
+const XHR_ENDPOINT = `${endPoint}${url.UploadFile}`;
+
 
 function DocumentList() {
+  const uppyRef = useRef(null);
   const axios = useAxios();
   const navigate = useNavigate();
+  const {token} = useAppContext();
   const [openDeleteModel, setOpenDeleteModel] = useState(null);
   const [deleting, setDeleting] = useState(false);
   const [documentList, setDocumentList] = useState([]);
@@ -21,6 +47,67 @@ function DocumentList() {
   const [openEditModel, setOpenEditModel] = useState(null);
   const [sharedDocumentList, setSharedDocumentList] = useState([]);
   const [isSharedDocumentLoading, setSharedDocumentIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (uppyRef.current) {
+      uppyRef.current = new Uppy({
+        autoProceed: false,
+        restrictions: {
+          maxFileSize: 10000000, // 10MB
+        },
+      });
+  
+      if (uppyRef.current) {
+        uppyRef.current.use(Dashboard, {
+          inline: true,
+          target: "#uppy-dashboard",
+          showProgressDetails: true,
+          proudlyDisplayPoweredByUppy: true,
+        })
+        .use(RemoteSources, {
+          companionUrl: COMPANION_URL,
+          sources: [
+            "Box",
+            "Dropbox",
+            "Facebook",
+            "GoogleDrive",
+            "Instagram",
+            "OneDrive",
+            "Unsplash",
+            "Url",
+          ],
+          companionAllowedHosts,
+        })
+        .use(Webcam, {
+          target: Dashboard,
+          showVideoSourceDropdown: true,
+          showRecordingLength: true,
+        })
+        .use(Audio, {
+          target: Dashboard,
+          showRecordingLength: true,
+        })
+        .use(ImageEditor, { target: Dashboard })
+        .use(DropTarget, {
+          target: document.body,
+        })
+        .use(Compressor)
+        .use(XHRUpload, {
+          endpoint: XHR_ENDPOINT,
+          limit: 1,
+          bundle: true,
+          headers: {
+            'Authorization': token
+         }
+        });
+      }
+    }
+
+
+    return () => {
+      uppyRef?.current?.close?.();
+    };
+ }, [uppyRef, openModel]);
 
   const openUploadModal = () => setOpenModel(true);
 
@@ -194,13 +281,21 @@ function DocumentList() {
         </table>
       </Card>
       {uploadNewDocumentSection}
-      
-      <UploadDocument
+      <Modal  show={openModel} onHide={() => setOpenModel(false)} backdropClassName="custom-backdrop" dialogClassName={true ? "modal-dialog-centered" : null }>
+        <Modal.Header>
+          <Modal.Title>{"Upoad"}</Modal.Title>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => setOpenModel(false)}></button>
+        </Modal.Header>
+        <Modal.Body>
+          <div id="uppy-dashboard" class="uppy-holder" ref={uppyRef}></div>
+        </Modal.Body>
+      </Modal>
+      {/* <UploadDocument
         openModel={openModel}
         closeModal={() => setOpenModel(false)}
         title={"Upload document"}
         callAfterUpload={getDocumentList}
-      />
+      /> */}
        <Loader isLoading={isLoading || isSharedDocumentLoading} />
       
     </>

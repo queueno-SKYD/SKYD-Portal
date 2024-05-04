@@ -24,14 +24,14 @@ function ChatHeader({
         <p className={`title-header ${iconColor}`}>{[user?.firstName, user?.lastName].filter(a => a).join(" ")}</p>
       </div>
       <div className="text-center last">
-        <IconButton>
-          <MessageRoundedIcon onClick={onClickComment} />
+        <IconButton onClick={onClickComment}>
+          <MessageRoundedIcon/>
         </IconButton >
-        <IconButton>
-          <GroupAddRoundedIcon onClick={onClickAddGroup} />
+        <IconButton onClick={onClickAddGroup}>
+          <GroupAddRoundedIcon />
         </IconButton>
-        <IconButton>
-          <MoreVertRoundedIcon onClick={onClickMore} />
+        <IconButton onClick={onClickMore}>
+          <MoreVertRoundedIcon />
         </IconButton>
       </div>
     </div>

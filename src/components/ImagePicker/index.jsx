@@ -19,6 +19,8 @@ const CustomImagePicker = (
     id,
     showDelete=true,
     showSave=true,
+    firstName,
+    lastname,
   }) => {
 
   const handleImageChange = (event) => {
@@ -106,7 +108,7 @@ const CustomImagePicker = (
         </div>
       </div>
       {(selectedImage || imageUrl) ? (
-        <CustomAvatar src={editing && selectedImage ? selectedImage : imageUrl} alt="User Avatar" firstName={groupName} lastName={"lastName"} size={size} />
+        <CustomAvatar src={editing && selectedImage ? selectedImage : imageUrl} alt="User Avatar" firstName={firstName || groupName} lastName={lastname || "lastName"} size={size} />
       ) : (
         <AccountCircle sx={{ fontSize:  size + 40, color: 'grey.500' }} />
       )}

@@ -6,6 +6,8 @@ import { Button } from "@mui/material";
 import { SendRounded } from "@mui/icons-material";
 import GroupHeader from "../../components/GroupHead";
 import GroupInfo from "./groupInfo/groupInfo";
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
+import Fab from '@mui/material/Fab';
 
 const messages = [
   {
@@ -245,6 +247,7 @@ const ChatList = ({selectedGroup, onBack}) => {
 
   const checkKeyPress = (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
+      console.debug("In this")
       event.preventDefault();
       autoResize(event);
     }
@@ -283,18 +286,30 @@ const ChatList = ({selectedGroup, onBack}) => {
       });
       setMsg("");
       setHeight("auto")
-      scrollToBottom();
+      setTimeout(() => {
+        scrollToBottom();
+      }, 150)
     }
   };
+
+  const [isNotAtBottom, setIsNotAtBottom] = useState(false);
+
+  const handleScroll = () => {
+    const { scrollTop, scrollHeight, clientHeight } = messagesEndRef?.current;
+
+    // Check if the scroll position is not at the bottom
+    setIsNotAtBottom(scrollTop + clientHeight < scrollHeight);
+  };
+
   const scrollToBottom = () => {
-    if (messagesEndRef?.current) {
-      console.debug("sdssds")
-      messagesEndRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-  };
+    // setIsNotAtBottom(false);
+    // messagesEndRef.current.scrollIntoView({
+    //   behavior: "smooth",
+    //   block: "end",
+    // });
+    messagesEndRef.current.scrollTop = messagesEndRef?.current?.scrollHeight;
+    setIsNotAtBottom(false); 
+  }
 
   useEffect(() => {
     scrollToBottom();
@@ -307,8 +322,8 @@ const ChatList = ({selectedGroup, onBack}) => {
         onBack={onBack}
         chat={
           <div id="chat-container" className="h-100 d-flex flex-column">
-            <div className="inner overflow-auto custom-scroll" id="top" ref={messagesEndRef}>
-              {messagesList?.length > 0 &&
+            <div ref={messagesEndRef} className="inner overflow-auto custom-scroll" id="top" onScroll={handleScroll}>
+            {messagesList?.length > 0 &&
                 messagesList?.map((item, index) => {
                   return (
                     <ChatMessage
@@ -353,12 +368,15 @@ const ChatList = ({selectedGroup, onBack}) => {
                   </Button>
                 </div>
               </form>
+              {isNotAtBottom && <Fab size="medium" color="secondary" aria-label="go to end" onClick={scrollToBottom} id="scroll-to-bottom-cta">
+                  <ExpandMoreRoundedIcon/>
+                </Fab>}
             </div>  
           </div>
         }
         info={
           <div id="chat-container" className="h-100 d-flex flex-column">
-            <div className="inner overflow-auto custom-scroll" ref={messagesEndRef}>
+            <div className="inner overflow-auto custom-scroll">
               <GroupInfo groupDetails={selectedGroup} />
             </div>
           </div>

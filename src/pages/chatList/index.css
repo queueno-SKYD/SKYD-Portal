@@ -8,6 +8,12 @@
   padding: 10px;
   padding-right: 20px;
 }
+
+#scroll-to-bottom-cta {
+  position: absolute;
+  bottom: 70px;
+  right: 20px;
+}
 /* messages container style  */
 
 .custom-scroll {
@@ -48,6 +54,7 @@
   padding: 10px;
   align-self: flex-start;
   flex: 1;
+  position: relative;
 }
 .inputArea {
   background-color: #ffffff;
