@@ -28,6 +28,8 @@ import "@uppy/image-editor/dist/style.css";
 import '@uppy/core/dist/style.min.css';
 import '@uppy/dashboard/dist/style.min.css';
 import { useAppContext } from "../../context/app.context.jsx";
+import FilePreview from "../../components/filePreview/filePreview.jsx";
+import useDocumentList from "./useDocumentList.jsx";
 
 const COMPANION_URL = "http://companion.uppy.io";
 const companionAllowedHosts = [];
@@ -41,12 +43,19 @@ function DocumentList() {
   const {token} = useAppContext();
   const [openDeleteModel, setOpenDeleteModel] = useState(null);
   const [deleting, setDeleting] = useState(false);
-  const [documentList, setDocumentList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [mediaList, setMediaList] = useState([]);
+
   const [openModel, setOpenModel] = useState(false);
   const [openEditModel, setOpenEditModel] = useState(null);
   const [sharedDocumentList, setSharedDocumentList] = useState([]);
   const [isSharedDocumentLoading, setSharedDocumentIsLoading] = useState(false);
+
+  // doc
+  const { isLoading: docLoading, docList: documentList, getDocList: getDocumentList } = useDocumentList({fileType: "doc"})
+  // image
+  const { isLoading: imgLoading, docList: imageList, getDocList: getImageList } = useDocumentList({fileType: "img"})
+  // media
+  const { isLoading: videoLoading, docList: videoList, getDocList: getVideoList } = useDocumentList({fileType: "video"})
 
   useEffect(() => {
     if (uppyRef.current) {
@@ -102,8 +111,6 @@ function DocumentList() {
         });
       }
     }
-
-
     return () => {
       uppyRef?.current?.close?.();
     };
@@ -125,31 +132,13 @@ function DocumentList() {
       </button>
     </div>
   )
+
   useEffect(() => {
-    getDocumentList();
+    getDocumentList(url.getDocuments);
+    getImageList(url.getDocuments);
+    getVideoList(url.getDocuments);
     getSharedDocumentByOthers();
   }, [])
-
-  const getDocumentList = async () => {
-    try {
-      setIsLoading(true);
-      const response = await axios.post(url.getDocuments, {
-        page: 1,
-        pageSize: 50,
-      })
-      if(response?.statusCode === 200){
-        const output = response?.data;
-        setDocumentList(output.data ?? [])
-      }
-    } catch (error) {
-      console.debug(error)
-      dangerToast(error.message)
-    } finally {
-      setTimeout(() => {
-        setIsLoading(false)
-      }, 1000)
-    }
-  }
 
   const getSharedDocumentByOthers = async () => {
     try {
@@ -196,7 +185,7 @@ function DocumentList() {
   }
   return (
     <>
-      <Card title={"My Uploads"}>
+      {/* <Card title={"My Uploads"}>
         <table className="table table-striped">
           <thead>
             <tr>
@@ -279,7 +268,7 @@ function DocumentList() {
             })}
           </tbody>
         </table>
-      </Card>
+      </Card> */}
       {uploadNewDocumentSection}
       <Modal  show={openModel} onHide={() => setOpenModel(false)} backdropClassName="custom-backdrop" dialogClassName={true ? "modal-dialog-centered" : null }>
         <Modal.Header>
@@ -296,7 +285,11 @@ function DocumentList() {
         title={"Upload document"}
         callAfterUpload={getDocumentList}
       /> */}
-       <Loader isLoading={isLoading || isSharedDocumentLoading} />
+      <FilePreview files={documentList}/>
+      <FilePreview files={imageList} heading={"Uploaded images!"}/>
+      <FilePreview files={videoList} heading={"Uploaded video!"}/>
+      <FilePreview files={sharedDocumentList} heading={"Shared files"} />
+      <Loader isLoading={docLoading || imgLoading || videoLoading || isSharedDocumentLoading} />
       
     </>
   );

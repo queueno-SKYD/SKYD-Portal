@@ -26,7 +26,6 @@ import Welcome from '../pages/welcome/index.jsx';
 import NetworkStatusIndicator from './networkProvider.jsx';
 import { dangerToast } from '../components/customToast/index.js';
 import ProfileSettings from '../pages/profile/index.jsx';
-import Test from './test.jsx';
 
 function UnauthenticatedRoutes() {
   return (
@@ -36,7 +35,6 @@ function UnauthenticatedRoutes() {
       <Route path={PathName.forgotPassword} element={<ForgotPassword />} />
       <Route path={PathName.notFoundPath} element={<NotFound />} />
       <Route path={PathName.homePath} element={<Welcome />} />
-      <Route path={"/test"} element={<Test />} />
       {/* <Route
         path={PathName.registerSuccessPath}
         element={<RegisterSuccessFully />}
@@ -84,7 +82,6 @@ function AuthenticatedRoutes() {
         <Route path={PathName.shareDoc} element={<ShareDocument />} />
         <Route path={PathName.notFoundPath} element={<NotFound isAuthenticated={true}/>} />
         <Route path={PathName.manageProfile} element={<ProfileSettings/>} />
-        <Route path={"/test"} element={<Test />} />
       </Route>
     </Routes>
   );
