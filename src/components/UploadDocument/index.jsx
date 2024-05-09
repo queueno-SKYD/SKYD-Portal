@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./style.css";
-import { POST, getHeaders } from "../../api/restClient.ts";
-import { useLogin } from "../../context/login.context";
 import url from "../../api/url.ts";
 import MyModal from "../Model/index.jsx";
-import { customToast } from "../customToast/index.js";
+import {dangerToast, successToast } from "../customToast/index.js";
+import useAxios from "../../api/restClient";
 
 const UploadDocument = ({openModel, closeModal, callAfterUpload, fileData, title}) => {
   const [isLoading, setIsLoading] = useState(false);
-  const {token} = useLogin();
+  const axios = useAxios()
   const [formData, setFormData] = useState({
     label: fileData?.label || "",
     fileURL: fileData?.fileURL || ""
@@ -28,29 +27,30 @@ const UploadDocument = ({openModel, closeModal, callAfterUpload, fileData, title
     try {
       setIsLoading(true);
       if (fileData && fileData?.fileId) {
-        const response = await POST(url.editDocument, getHeaders(token), {...formData, fileId: fileData?.fileId});
+        const response = await axios.post(url.editDocument, {...formData, fileId: fileData?.fileId});
         console.log("response --->", JSON.stringify(response));
-        if(response.data.statusCode === 200){
-          const output = response?.data?.data;
+        if(response?.statusCode === 200){
+          const output = response?.data;
           if(output){
-            callAfterUpload()
-            customToast("success", "Document successfully deleted")
-            closeModal()
+            callAfterUpload();
+            successToast("Document successfully deleted");
+            closeModal();
           }
         }
         return;
       }
-      const response = await POST(url.uploadDocument, getHeaders(token), formData);
+      const response = await axios.post(url.uploadDocument, formData);
       console.log("response --->", JSON.stringify(response));
-      if(response.data.statusCode === 200){
-        const output = response?.data?.data;
+      if(response?.statusCode === 200){
+        const output = response?.data;
         if(output){
-          callAfterUpload()
-          customToast("success", "Document successfully uploaded")
-          closeModal()
+          callAfterUpload();
+          successToast("Document successfully uploaded");
+          closeModal();
         }
       }
     } catch (error) {
+      dangerToast(error.message)
     } finally {
       setIsLoading(false)
       setFormData({

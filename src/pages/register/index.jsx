@@ -1,117 +1,125 @@
 import React, { useState } from "react";
 import "./index.css";
 import RegisterViewModal from "../../viewModal/registerViewModal";
+import { Link } from "react-router-dom";
+import { PathName } from "../../helper/constants/pathNames.ts";
+import { TextMessage } from "../../helper/constants/textMessage.ts";
+import { TextField } from "@mui/material";
 
 function Register() {
-  const {
-    formData,
-    handleInputChange,
-    handleSubmit,
-    showToast,
-    showToastMessage,
-  } = RegisterViewModal();
+  const { formData, handleInputChange, handleSubmit, loading } =
+    RegisterViewModal();
   return (
-    <div className="login-container">
-      <h1>Register </h1>
-
-      <form>
-        <div className="row mb-3">
-          <label htmlFor="inputEmail13" className="col-sm-10 col-form-label">
-            Full Name
-          </label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className="form-control"
-              id="inputEmail13"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
-            />
+    <section className="vh-100">
+      <div className="container h-100">
+        <div className="row d-flex justify-content-center align-items-center h-100">
+          <div className="col-md-5">
+            <div className="card shadow-lg border-0 rounded-lg mt-5">
+              <div className="card-header">
+                <h3 className="text-center font-weight-light">Register</h3>
+              </div>
+              <div className="card-body">
+                <form>
+                  <TextField
+                    fullWidth
+                    style={{
+                      marginTop: 15,
+                    }}
+                    label="First Name"
+                    id="outlined-size-small"
+                    size="small"
+                    name="firstName"
+                    placeholder="Enter your first name"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                  />
+                  <TextField
+                    style={{
+                      marginTop: 15,
+                    }}
+                    fullWidth
+                    label="Last Name"
+                    id="outlined-size-small"
+                    size="small"
+                    name="lastName"
+                    placeholder="Enter your last name"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                  />
+                  <TextField
+                    fullWidth
+                    style={{
+                      marginTop: 15,
+                    }}
+                    type="email"
+                    label="Email Address"
+                    id="outlined-size-small"
+                    size="small"
+                    name="email"
+                    placeholder="Enter your email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                  />
+                  <TextField
+                    type="password"
+                    style={{
+                      marginTop: 15,
+                    }}
+                    fullWidth
+                    label="Password"
+                    id="outlined-size-small"
+                    size="small"
+                    name="password"
+                    placeholder="Enter your password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                  />
+                  <TextField
+                    type="password"
+                    style={{
+                      marginTop: 15,
+                    }}
+                    fullWidth
+                    label="Confirm Password"
+                    id="outlined-size-small"
+                    size="small"
+                    name="passwordConfirm"
+                    placeholder="Confirm your password"
+                    value={formData.passwordConfirm}
+                    onChange={handleInputChange}
+                  />
+                  <button
+                    onClick={(e) => handleSubmit(e)}
+                    // href={PathName.registerSuccessPath}
+                    className="btn btn-primary align-middle mt-3"
+                    disabled={loading}
+                  >
+                    {loading && (
+                      <span
+                        className="spinner-border spinner-border-sm mr-4"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    )}
+                    Register
+                  </button>
+                </form>
+              </div>
+              <div className="card-footer text-center">
+                <div className="small mb-1">
+                  <Link
+                    className="nav-link text-primary pb-2"
+                    to={PathName.loginPath}
+                  >
+                    {TextMessage.ALREADYHAVEACCOUNT}
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="row mb-3">
-          <label htmlFor="inputEmail113" className="col-sm-10 col-form-label">
-            Full Name
-          </label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className="form-control"
-              id="inputEmail113"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-            />
-          </div>
-        </div>
-        <div className="row mb-3">
-          <label htmlFor="inputEmail23" className="col-sm-10 col-form-label">
-            Email
-          </label>
-          <div className="col-sm-10">
-            <input
-              type="email"
-              className="form-control"
-              id="inputEmail23"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-            />
-          </div>
-        </div>
-        <div className="row mb-3">
-          <label htmlFor="inputEmail33" className="col-sm-10 col-form-label">
-            Password
-          </label>
-          <div className="col-sm-10">
-            <input
-              type="password"
-              className="form-control"
-              id="inputEmail33"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-            />
-          </div>
-        </div>
-        <div className="row mb-3">
-          <label htmlFor="inputPassword43" className="col-sm-10 col-form-label">
-            Confirm Password
-          </label>
-          <div className="col-sm-10">
-            <input
-              type="password"
-              className="form-control"
-              id="inputPassword43"
-              name="passwordConfirm"
-              value={formData.passwordConfirm}
-              onChange={handleInputChange}
-            />
-          </div>
-        </div>
-        <button
-          onClick={(e) => handleSubmit(e)}
-          // href={PathName.registerSuccessPath}
-          className="btn btn-primary align-middle"
-        >
-          Register
-        </button>
-      </form>
-
-      {/* <CustomToast message={"Registration Success"} /> */}
-      <div
-        className={`toast ${showToast ? "show" : ""} bg-success`}
-        role="alert"
-        aria-live="assertive"
-        aria-atomic="true"
-        style={{ position: "absolute", bottom: 20, right: 20 }}
-      >
-        <div className="toast-body text-white">
-          {showToastMessage}
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

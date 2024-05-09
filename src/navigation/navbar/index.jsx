@@ -1,33 +1,45 @@
-import React, { useEffect } from "react";
-import { Link, Outlet } from "react-router-dom";
-import { TextMessage } from "../../helper/constants/textMessage.ts";
-import { PathName } from "../../helper/constants/pathNames.ts";
-import { useNavigate } from "react-router-dom";
-import { useLogin } from "../../context/login.context.jsx";
+import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
+import { useAppContext } from "../../context/app.context.jsx";
+import MyModal from "../../components/Model";
+import MobileNav from "./mobileNav";
+import SideBar from "./sideBar.jsx";
+import Loader from "../../components/Loder/index.jsx";
 
-function Navbar() {
-  const navigate = useNavigate();
+function Navbar({loading}) {
   const {
-    logout,
-    token
-  } = useLogin();
+    logout
+  } = useAppContext();
+  const onLogout = () => {
+    logout();
+    setOpenLogoutModel(false)
+  }
+
+  const [isOpneLogoutModel, setOpenLogoutModel] = useState(false)
   return (
     <>
-      {!!token && <nav className="nav nav-pills nav-justified bg-light">
-        <Link className="nav-link" aria-current="page" to={PathName.homePath}>{TextMessage.GROUP_CHAT}</Link>
-        <Link className="nav-link" to={PathName.userListPath}>{TextMessage.MANAGE_USER}</Link>
-        <Link className="nav-link" to={PathName.documentListPath}>{TextMessage.MANAGEMENT_DOCUMENTS}</Link>
-        <Link
-          className="nav-link"
-          to={PathName.loginPath}
-          tabIndex="-1"
-          aria-disabled="true"
-          onClick={logout}
-        >{TextMessage.LOGOUT}</Link>
-      </nav>}
-      
       {/* All outlets */}
-      <Outlet />
+      <div id="main">
+        <SideBar setOpenLogoutModel={setOpenLogoutModel} isOpneLogoutModel={isOpneLogoutModel} />
+        <main className="inner overflow-auto" id="main-area">
+          <Outlet />
+        </main>
+      </div>
+      <MobileNav setOpenLogoutModel={setOpenLogoutModel} isOpneLogoutModel={isOpneLogoutModel}/>
+      <MyModal
+        openModal={isOpneLogoutModel}
+        closeModal={() => setOpenLogoutModel(false)}
+        title={"Logout confirmation"}
+        closeOnBackdropClick={true}
+        isCenter={true}
+        onSave={onLogout}
+        saveButtonTitle={"Logout"}
+        cancelButtonTitle={"Cancel"}
+        type="danger"
+      >
+        <p >Are you sure, you want to logout!</p>
+      </MyModal>
+      <Loader isLoading={loading} />
     </>
   );
 }

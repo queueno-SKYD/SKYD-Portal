@@ -1,34 +1,35 @@
-import React from "react";
+import React , { useState } from "react";
+import "./index.css"
+import { CustomAvatar } from "../Avatar";
 
-const ChatMessage = ({ message, isMine, time, senderName, senderImage }) => {
+const ChatMessage = ({ message, isMine, time, senderName, senderImage, firstName, lastName }) => {
   return (
     <div
       className={`d-flex ${
         isMine ? "justify-content-end" : "justify-content-start"
-      } mb-2 mt-2`}
+      } mb-2 mt-2 gap-2`}
     >
-      <div
-        className={`p-2 d-flex ${
-          isMine ? "bg-primary text-white" : "bg-light"
-        }`}
-        style={{ borderRadius: "10px" }}
-      >
-        {senderImage && (
-          <img
-            src={senderImage}
-            alt="Sender"
-            className="rounded-circle mr-2"
-            style={{ width: "30px", height: "30px",marginRight:10 }}
-          />
+      {!isMine && senderImage && (
+          <CustomAvatar src={senderImage} alt="User Avatar" firstName={firstName} lastName={lastName} size={30} />
         )}
-        <div className="ml-5">
-          <p className="mb-0">{message}</p>
+      <div
+        className={`px-2 py-0 d-flex arrorPointer ${isMine ? "arrorPointerRight" : "arrorPointerLeft"}`}
+        style={{ borderRadius: "2px", backgroundColor: isMine ? "#93baf8" : "#faa3a3", maxWidth: "700px", minWidth: "200px" }}
+      >
+        <div className="w-100 text-blck">
 
-          <small className="text-muted mt-1">
-            {senderName && <strong>{senderName}</strong>} {time}
+          <small className="text-white small">
+            {!isMine && senderName && <strong>{senderName}</strong>}
           </small>
+          <div className={`mb-0 ${isMine ? "mt-2" : ""} chat-msg-text`}>{message}</div>
+          <div className="small-right">
+          <small className="text-white small">{time}</small>
+          </div>
         </div>
       </div>
+      {/* {isMine && senderImage && (
+          <ImageWithFallback src={senderImage} alt="User Avatar" firstName={firstName} lastName={lastName} />
+        )} */}
     </div>
   );
 };

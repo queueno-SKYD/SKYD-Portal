@@ -1,25 +1,120 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Card from "../../components/Card";
 import UploadDocument from "../../components/UploadDocument";
-import { getHeaders, POST } from "../../api/restClient.ts";
+
 import url from "../../api/url.ts";
-import { useLogin } from "../../context/login.context";
 import Loader from "../../components/Loder/index.jsx";
 import MyModal from "../../components/Model/index.jsx";
-import { customToast } from "../../components/customToast/index.js";
+import {dangerToast, successToast } from "../../components/customToast/index.js";
 import { useNavigate } from 'react-router-dom';
+import "./index.css"
+import useAxios, { endPoint } from "../../api/restClient.jsx";
+import PortalComponent from "../../components/Overlays/index.jsx";
+import { Modal } from "react-bootstrap";
+import Uppy from '@uppy/core';
+import Dashboard from '@uppy/dashboard';
+import RemoteSources from "@uppy/remote-sources";
+import Webcam from "@uppy/webcam";
+
+import XHRUpload from "@uppy/xhr-upload";
+import ImageEditor from "@uppy/image-editor";
+import DropTarget from "@uppy/drop-target";
+import Audio from "@uppy/audio";
+import Compressor from "@uppy/compressor";
+
+import "@uppy/audio/dist/style.css";
+import "@uppy/image-editor/dist/style.css";
+
+import '@uppy/core/dist/style.min.css';
+import '@uppy/dashboard/dist/style.min.css';
+import { useAppContext } from "../../context/app.context.jsx";
+import FilePreview from "../../components/filePreview/filePreview.jsx";
+import useDocumentList from "./useDocumentList.jsx";
+
+const COMPANION_URL = "http://companion.uppy.io";
+const companionAllowedHosts = [];
+const XHR_ENDPOINT = `${endPoint}${url.UploadFile}`;
+
 
 function DocumentList() {
+  const uppyRef = useRef(null);
+  const axios = useAxios();
   const navigate = useNavigate();
+  const {token} = useAppContext();
   const [openDeleteModel, setOpenDeleteModel] = useState(null);
   const [deleting, setDeleting] = useState(false);
-  const [documentList, setDocumentList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const {token} = useLogin();
+  const [mediaList, setMediaList] = useState([]);
+
   const [openModel, setOpenModel] = useState(false);
   const [openEditModel, setOpenEditModel] = useState(null);
   const [sharedDocumentList, setSharedDocumentList] = useState([]);
   const [isSharedDocumentLoading, setSharedDocumentIsLoading] = useState(false);
+
+  // doc
+  const { isLoading: docLoading, docList: documentList, getDocList: getDocumentList } = useDocumentList({fileType: "doc"})
+  // image
+  const { isLoading: imgLoading, docList: imageList, getDocList: getImageList } = useDocumentList({fileType: "img"})
+  // media
+  const { isLoading: videoLoading, docList: videoList, getDocList: getVideoList } = useDocumentList({fileType: "video"})
+
+  useEffect(() => {
+    if (uppyRef.current) {
+      uppyRef.current = new Uppy({
+        autoProceed: false,
+        restrictions: {
+          maxFileSize: 10000000, // 10MB
+        },
+      });
+  
+      if (uppyRef.current) {
+        uppyRef.current.use(Dashboard, {
+          inline: true,
+          target: "#uppy-dashboard",
+          showProgressDetails: true,
+          proudlyDisplayPoweredByUppy: true,
+        })
+        .use(RemoteSources, {
+          companionUrl: COMPANION_URL,
+          sources: [
+            "Box",
+            "Dropbox",
+            "Facebook",
+            "GoogleDrive",
+            "Instagram",
+            "OneDrive",
+            "Unsplash",
+            "Url",
+          ],
+          companionAllowedHosts,
+        })
+        .use(Webcam, {
+          target: Dashboard,
+          showVideoSourceDropdown: true,
+          showRecordingLength: true,
+        })
+        .use(Audio, {
+          target: Dashboard,
+          showRecordingLength: true,
+        })
+        .use(ImageEditor, { target: Dashboard })
+        .use(DropTarget, {
+          target: document.body,
+        })
+        .use(Compressor)
+        .use(XHRUpload, {
+          endpoint: XHR_ENDPOINT,
+          limit: 1,
+          bundle: true,
+          headers: {
+            'Authorization': token
+         }
+        });
+      }
+    }
+    return () => {
+      uppyRef?.current?.close?.();
+    };
+ }, [uppyRef, openModel]);
 
   const openUploadModal = () => setOpenModel(true);
 
@@ -28,53 +123,37 @@ function DocumentList() {
   };
   
   const uploadNewDocumentSection = (
-    <div className="w-75 d-flex flex-column align-self-center mt-4">
+    <div className="col-12 mt-2 mb-2">
       <button
-        className="w-25 text-decoration-none btn btn-primary"
+        className="text-decoration-none btn btn-primary"
         onClick={openUploadModal}
       >
         + Add Uploads
       </button>
     </div>
   )
+
   useEffect(() => {
-    getDocumentList();
+    getDocumentList(url.getDocuments);
+    getImageList(url.getDocuments);
+    getVideoList(url.getDocuments);
     getSharedDocumentByOthers();
   }, [])
-
-  const getDocumentList = async () => {
-    try {
-      setIsLoading(true);
-      const response = await POST(url.getDocuments, getHeaders(token), {
-        page: 1,
-        pageSize: 50,
-      })
-      if(response.data.statusCode === 200){
-        const output = response?.data?.data;
-        setDocumentList(output.data ?? [])
-      }
-    } catch (error) {
-      console.debug(error)
-    } finally {
-      setTimeout(() => {
-        setIsLoading(false)
-      }, 1000)
-    }
-  }
 
   const getSharedDocumentByOthers = async () => {
     try {
       setSharedDocumentIsLoading(true);
-      const response = await POST(url.getSharedDocumentByOthers, getHeaders(token), {
+      const response = await axios.post(url.getSharedDocumentByOthers, {
         page: 1,
         pageSize: 50,
       })
-      if(response.data.statusCode === 200){
-        const output = response?.data?.data;
+      if(response?.statusCode === 200){
+        const output = response?.data;
         setSharedDocumentList(output.data ?? [])
       }
     } catch (error) {
       console.debug(error)
+      dangerToast(error.message)
     } finally {
       setTimeout(() => {
         setSharedDocumentIsLoading(false)
@@ -85,28 +164,29 @@ function DocumentList() {
   const onDelete = async (id) => {
     try {
       setDeleting(true);
-      const response = await POST(url.deleteDocument, getHeaders(token), {
+      const response = await axios.post(url.deleteDocument, {
         fileId: id
       });
       console.log("response --->", JSON.stringify(response));
-      if(response.data.statusCode === 200){
-        const output = response?.data?.data;
+      if(response?.statusCode === 200){
+        const output = response?.data;
         if(output){
           getDocumentList();
-          customToast("success", "Document successfully uploaded")
+          successToast("Document successfully uploaded")
           setOpenDeleteModel(false)
         }
       }
     } catch (error) {
-      customToast("error", error.message)
+      dangerToast(error.message);
+      dangerToast(error.message)
     } finally {
       setDeleting(false)
     }
   }
   return (
-    <div className="w-100 d-flex flex-column align-self-center">
-      <Card title={"My Uploads"}>
-        <table className="w-100 table table-striped">
+    <>
+      {/* <Card title={"My Uploads"}>
+        <table className="table table-striped">
           <thead>
             <tr>
               <th scope="col" className="col-3">
@@ -188,18 +268,30 @@ function DocumentList() {
             })}
           </tbody>
         </table>
-      </Card>
+      </Card> */}
       {uploadNewDocumentSection}
-      
-      <UploadDocument
+      <Modal  show={openModel} onHide={() => setOpenModel(false)} backdropClassName="custom-backdrop" dialogClassName={true ? "modal-dialog-centered" : null }>
+        <Modal.Header>
+          <Modal.Title>{"Upoad"}</Modal.Title>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => setOpenModel(false)}></button>
+        </Modal.Header>
+        <Modal.Body>
+          <div id="uppy-dashboard" class="uppy-holder" ref={uppyRef}></div>
+        </Modal.Body>
+      </Modal>
+      {/* <UploadDocument
         openModel={openModel}
         closeModal={() => setOpenModel(false)}
         title={"Upload document"}
         callAfterUpload={getDocumentList}
-      />
-       <Loader isLoading={isLoading || isSharedDocumentLoading} />
+      /> */}
+      <FilePreview files={documentList}/>
+      <FilePreview files={imageList} heading={"Uploaded images!"}/>
+      <FilePreview files={videoList} heading={"Uploaded video!"}/>
+      <FilePreview files={sharedDocumentList} heading={"Shared files"} />
+      <Loader isLoading={docLoading || imgLoading || videoLoading || isSharedDocumentLoading} />
       
-    </div>
+    </>
   );
 }
 

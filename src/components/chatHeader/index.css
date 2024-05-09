@@ -1,0 +1,25 @@
+
+
+p{
+    margin: 0;
+    padding: 0;
+}
+.title-header{
+    font-size: 18px;
+    color: 'black';
+}
+.padding-left-10{
+    padding-left: 10px;
+}
+.profile-chat-head {
+    box-sizing: border-box;
+    padding: 10px 2px;
+    background-color: #ebebeb;
+    margin-right: 1px;
+    display: flex;
+    justify-content: space-between;
+}
+.last {
+    display: flex;
+    gap: 20px;
+}

@@ -7,10 +7,12 @@ export const PathName={
   loginSuccessPath: "/loginSuccessPath",
   registerPath: "/registerPath",
   registerSuccessPath: "/registerSuccessPath",
-  notFoundPath: "/notFoundPath",
+  notFoundPath: "/*",
   chatListPath: "/chatListPath",
   documentListPath: "/documentListPath",
   userListPath: "/userListPath",
   logoutPath: "/logoutPath",
   shareDoc: "/documentManagement/share/:id",
+  forgotPassword :'/forgotPassword',
+  manageProfile :'/profile'
 }

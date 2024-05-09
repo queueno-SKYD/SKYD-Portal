@@ -1,0 +1,52 @@
+.text-message{
+    width: '80%';
+    font-size: 12px;
+   
+}
+.text-message-wrapper{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.text-name{
+    font-size: 12px;
+    font-weight: bold;
+}
+.text-time{
+    font-size: 10px;
+}
+.ph-10{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.ph-5{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.text-status{
+    font-size: 12px;
+}
+
+.bg-active{
+    background: 'white';
+}
+
+.bg-inactive{
+    background: 'linear-gradient(to right, rgba(50, 50, 50, 0.3), rgba(245, 245, 245, .8))';
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.group-container-list {
+    border-top: 0.2px solid #7774 !important;
+    &:hover {
+        transition: background-color 200ms ease-in;
+        background-color: #eaeaea !important;
+    }
+}
+.selected {
+    background-color: #dededeaa !important;
+}
