@@ -12,6 +12,7 @@ import {
 import Loader from "../../components/Loder/index.jsx";
 import Card from "../../components/Card";
 import useAxios from "../../api/restClient.jsx";
+// import UseWs from '../../api/ws';
 
 function UserList() {
   const axios = useAxios();
@@ -26,6 +27,44 @@ function UserList() {
     imageURL: "",
     userId: SelectedID[0],
   });
+
+  // const sendMessage = () => {
+  //   const data = {
+  //     message: `TEST message with random message: ${Math.floor(Math.random()*100000)}`,
+  //     receiverId: 30,
+  //     sendAt: new Date()
+  //   }
+  //   console.debug("🚀 -------------------------------🚀")
+  //   console.debug("🚀 ~ sendMessage ~ data:", data)
+  //   console.debug("🚀 -------------------------------🚀")
+  //   socket2.emit("sendMessage", data)
+  // }
+
+  // const [sockets, setSockets] = useState([])
+
+  // const socket = UseWs()
+
+  // const socket2 = UseWs("ws/v1/personal")
+
+  // useEffect(() => {
+
+  //   socket2.on("connect", (data) => {
+  //     console.debug("🚀 -----------------------------------🚀")
+  //     console.debug("🚀 ~ socket.on ~ console:", socket2.id, data)
+  //     console.debug("🚀 -----------------------------------🚀")
+  //     setSockets(data => data[1] = data)
+  //   })
+  // }, [])
+
+  // useEffect(() => {
+
+  //   socket.on("connect", (data) => {
+  //     console.debug("🚀 -----------------------------------🚀")
+  //     console.debug("🚀 ~ socket.on ~ console:", socket.id, data)
+  //     console.debug("🚀 -----------------------------------🚀")
+  //     setSockets(data => data[0] = data)
+  //   })
+  // }, [])
 
   useEffect(() => {
     CallToAllUsers();
@@ -144,6 +183,7 @@ function UserList() {
 
   return (
       <Card title={"Users"}>
+      {/* <button onClick={sendMessage}>CLICK to send</button> */}
         <table className="w-100 table table-striped">
           <TableHeader />
           <tbody>

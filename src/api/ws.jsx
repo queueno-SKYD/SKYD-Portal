@@ -1,8 +1,8 @@
 import { io } from "socket.io-client";
-import { useLogin } from '../context/login.context';
+import { useAppContext } from "../context/app.context";
 
 const UseWs = (path) => {
-  const { token } = useLogin();
+  const { token } = useAppContext();
   const myPath = path ? `http://localhost:3001/${path}` : "http://localhost:3001"
   const socket = io(myPath, {
     withCredentials: true,

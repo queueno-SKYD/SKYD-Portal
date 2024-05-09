@@ -8,6 +8,8 @@ import GroupHeader from "../../components/GroupHead";
 import GroupInfo from "./groupInfo/groupInfo";
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import Fab from '@mui/material/Fab';
+import UseWs from "../../api/ws";
+import { useAppContext } from "../../context/app.context";
 
 const messages = [
   {
@@ -226,6 +228,8 @@ function getTimeDifferenceForChat(sendAt) {
 const ChatList = ({selectedGroup, onBack}) => {
   // const { user } = useAppContext();
   const messagesEndRef = useRef(null);
+  const groupSocket = UseWs("ws/v1/group");
+  const { user } = useAppContext();
 
   const [messagesList, setMessagesList] = useState(messages);
   const [msg, setMsg] = useState("");
@@ -260,30 +264,51 @@ const ChatList = ({selectedGroup, onBack}) => {
   }, [msg]);
 
 
+  useEffect(() => {
+
+    groupSocket.on("connect", (data) => {
+    })
+
+  }, [])
+
+  useEffect(() => {
+    groupSocket.emit('joinGroup', selectedGroup?.groupId);
+
+  }, [selectedGroup])
+
+  groupSocket.on("recieavePrivate", (data) => {
+    console.log("Received private message:", data);
+    // Extract message details
+    setMessagesList((item) => {
+      return [
+        ...item,
+        {
+          ...data
+        },
+      ];
+    });
+    // Update the UI to display the message
+    // ... your UI update logic ...
+  });
+
   // const handleContentChange = (event) => {
   //   setMsg(event.target.textContent);
   //   // Do whatever you need with the new content
   // };
   // Call addPlaceholder when component mounts to add placeholder initially
-
+  const sendMessageWs = () => {
+    const data = {
+      message: msg,
+      receiverId: selectedGroup?.groupId,
+      sendAt: new Date()
+    }
+    groupSocket.emit("sendMessage", data)
+  }
   const sendMessage = (e) => {
     console.debug("form submit", e)
     e.preventDefault();
     if (msg) {
-      setMessagesList((item) => {
-        return [
-          ...item,
-          {
-            imageUrl:
-              "https://images.unsplash.com/photo-1519363814881-9f4b382ca005?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3BsYXNofGVufDB8fDB8fHww",
-            firstName: "Dheeraj",
-            lastName: "Shrivastva",
-            sendAt: new Date().toUTCString(),
-            senderId: 25,
-            message: msg,
-          },
-        ];
-      });
+      sendMessageWs();
       setMsg("");
       setHeight("auto")
       setTimeout(() => {
@@ -329,7 +354,7 @@ const ChatList = ({selectedGroup, onBack}) => {
                     <ChatMessage
                       key={index}
                       message={item?.message}
-                      isMine={25 === item?.senderId}
+                      isMine={user?.userId === item?.senderId}
                       time={getTimeDifferenceForChat(item?.sendAt)}
                       senderName={`${item?.firstName} ${item?.lastName}`}
                       senderImage={item?.imageUrl}

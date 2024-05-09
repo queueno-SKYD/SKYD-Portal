@@ -9,7 +9,7 @@ const ChatMessage = ({ message, isMine, time, senderName, senderImage, firstName
         isMine ? "justify-content-end" : "justify-content-start"
       } mb-2 mt-2 gap-2`}
     >
-      {!isMine && senderImage && (
+      {!isMine && (
           <CustomAvatar src={senderImage} alt="User Avatar" firstName={firstName} lastName={lastName} size={30} />
         )}
       <div
