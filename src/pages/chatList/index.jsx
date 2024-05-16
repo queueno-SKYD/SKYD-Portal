@@ -265,31 +265,22 @@ const ChatList = ({selectedGroup, onBack}) => {
 
 
   useEffect(() => {
+    if (!groupSocket || !selectedGroup?.groupId) return;
 
-    groupSocket.on("connect", (data) => {
-    })
-
-  }, [])
-
-  useEffect(() => {
-    groupSocket.emit('joinGroup', selectedGroup?.groupId);
-
-  }, [selectedGroup])
-
-  groupSocket.on("recieavePrivate", (data) => {
-    console.log("Received private message:", data);
-    // Extract message details
-    setMessagesList((item) => {
-      return [
-        ...item,
-        {
-          ...data
-        },
-      ];
+    groupSocket.on("connect", () => {
+      console.log("Connected to group socket");
+      groupSocket.emit('joinGroup', selectedGroup?.groupId);
     });
-    // Update the UI to display the message
-    // ... your UI update logic ...
-  });
+
+    groupSocket.on("onNewGroupMessage", (data) => {
+      console.log("Received group message:", data);
+      setMessagesList((prevMessages) => [...prevMessages, data]);
+    });
+
+    return () => {
+      groupSocket.off("onNewGroupMessage");
+    };
+  }, [groupSocket, selectedGroup]);
 
   // const handleContentChange = (event) => {
   //   setMsg(event.target.textContent);
@@ -299,10 +290,10 @@ const ChatList = ({selectedGroup, onBack}) => {
   const sendMessageWs = () => {
     const data = {
       message: msg,
-      receiverId: selectedGroup?.groupId,
-      sendAt: new Date()
+      recipientId: selectedGroup?.groupId,
+      sendAt: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
     }
-    groupSocket.emit("sendMessage", data)
+    groupSocket.emit("sendGroupMessage", data)
   }
   const sendMessage = (e) => {
     console.debug("form submit", e)
