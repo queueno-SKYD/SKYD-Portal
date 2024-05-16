@@ -10,200 +10,10 @@ import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import Fab from '@mui/material/Fab';
 import UseWs from "../../api/ws";
 import { useAppContext } from "../../context/app.context";
-
-const messages = [
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1533167649158-6d508895b680?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c3BsYXNofGVufDB8fDB8fHww",
-    firstName: "John",
-    lastName: "Doe",
-    sendAt: "Thu, 11 Jan 2024 13:56:18 GMT",
-    senderId: 23,
-    message: "How are you?",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c3BsYXNofGVufDB8fDB8fHww",
-    firstName: "Alice",
-    lastName: "Smith",
-    sendAt: "Fri, 12 Jan 2024 08:20:42 GMT",
-    senderId: 45,
-    message:
-      "I'm doing well, thank you! how about you? do you want to have some dinner with bob? he is smart guy",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1520697966256-358ab2b720f2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8c3BsYXNofGVufDB8fDB8fHww",
-    firstName: "Emily",
-    lastName: "Johnson",
-    sendAt: "Sat, 13 Jan 2024 15:30:05 GMT",
-    senderId: 67,
-    message: "Nice weather today!",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1519363814881-9f4b382ca005?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3BsYXNofGVufDB8fDB8fHww",
-    firstName: "Dheeraj",
-    lastName: "Shrivastva",
-    sendAt: "Sun, 14 Jan 2024 10:45:30 GMT",
-    senderId: 25,
-    message:
-      "Hello everyone! Please let me know if you have any issue on chat app",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1486842575568-b63e9f8ea1e3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHNwbGFzaHxlbnwwfHwwfHx8",
-    firstName: "Sophia",
-    lastName: "Wilson",
-    sendAt: "Mon, 15 Jan 2024 12:10:15 GMT",
-    senderId: 1011,
-    message: "Good morning!",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1512316806173-83cce75b4cc0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3BsYXNofGVufDB8fDB8fHww",
-    firstName: "Liam",
-    lastName: "Martinez",
-    sendAt: "Tue, 16 Jan 2024 09:55:20 GMT",
-    senderId: 1213,
-    message: "What's up?",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1519363814881-9f4b382ca005?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3BsYXNofGVufDB8fDB8fHww",
-    firstName: "Dheeraj",
-    lastName: "Shrivastva",
-    sendAt: "Sun, 14 Jan 2024 10:45:30 GMT",
-    senderId: 25,
-    message: "I'm excited for the weekend!",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1528901166006-7a93d63d2838?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c3BsYXNofGVufDB8fDB8fHww",
-    firstName: "Olivia",
-    lastName: "Garcia",
-    sendAt: "Wed, 17 Jan 2024 14:20:55 GMT",
-    senderId: 1415,
-    message: "Me to!",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1524989188314-62ea5fee6b2d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c3BsYXNofGVufDB8fDB8fHww",
-    firstName: "Ethan",
-    lastName: "Rodriguez",
-    sendAt: "Thu, 18 Jan 2024 11:35:40 GMT",
-    senderId: 1617,
-    message: "Let's catch up soon!",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1512626120414-a26aee18a8e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c3BsYXNofGVufDB8fDB8fHww",
-    firstName: "Ava",
-    lastName: "Hernandez",
-    sendAt: "Fri, 19 Jan 2024 08:45:25 GMT",
-    senderId: 1819,
-    message: "How was your day?",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1519363814881-9f4b382ca005?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3BsYXNofGVufDB8fDB8fHww",
-    firstName: "Dheeraj",
-    lastName: "Shrivastva",
-    sendAt: "Sun, 14 Jan 2024 10:45:30 GMT",
-    senderId: 25,
-    message: "fine",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1506405391164-9cf726a3e6c4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNwbGFzaHxlbnwwfHwwfHx8",
-    firstName: "Noah",
-    lastName: "Lopez",
-    sendAt: "Sat, 20 Jan 2024 16:30:50 GMT",
-    senderId: 2021,
-    message: "I'm looking forward to the party!",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1505238680356-667803448bb6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fHNwbGFzaHxlbnwwfHwwfHx8",
-    firstName: "Isabella",
-    lastName: "Young",
-    sendAt: "Sun, 21 Jan 2024 09:10:35 GMT",
-    senderId: 2223,
-    message: "Happy Sunday!",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1510936110437-01396c161fbb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjF8fHNwbGFzaHxlbnwwfHwwfHx8",
-    firstName: "Mason",
-    lastName: "Perez",
-    sendAt: "Mon, 22 Jan 2024 12:40:20 GMT",
-    senderId: 2425,
-    message: "Have a great day!",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1512455105856-d1577b2ebfbd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fHNwbGFzaHxlbnwwfHwwfHx8",
-    firstName: "Charlotte",
-    lastName: "Flores",
-    sendAt: "Tue, 23 Jan 2024 14:55:15 GMT",
-    senderId: 2627,
-    message: "Looking forward to seeing you!",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1517577644210-67241a3dbec3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjN8fHNwbGFzaHxlbnwwfHwwfHx8",
-    firstName: "Landon",
-    lastName: "Gonzalez",
-    sendAt: "Wed, 24 Jan 2024 11:20:30 GMT",
-    senderId: 2829,
-    message: "Have a wonderful day ahead!",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1535124644144-5953a4e9d786?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjV8fHNwbGFzaHxlbnwwfHwwfHx8",
-    firstName: "Lucas",
-    lastName: "Martinez",
-    sendAt: "Thu, 25 Jan 2024 09:45:10 GMT",
-    senderId: 3031,
-    message: "Let's meet up soon!",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1537634111690-27c47bf4d79d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjZ8fHNwbGFzaHxlbnwwfHwwfHx8",
-    firstName: "Harper",
-    lastName: "Lee",
-    sendAt: "Fri, 26 Jan 2024 13:10:25 GMT",
-    senderId: 3233,
-    message: "Have a fantastic weekend!",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1519178616873-39f10e56e057?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjd8fHNwbGFzaHxlbnwwfHwwfHx8",
-    firstName: "Evelyn",
-    lastName: "Harris",
-    sendAt: "Sat, 27 Jan 2024 10:25:40 GMT",
-    senderId: 3435,
-    message: "Enjoy your day!",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1515769859881-3f9e000c43d2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjh8fHNwbGFzaHxlbnwwfHwwfHx8",
-    firstName: "Alexander",
-    lastName: "Clark",
-    sendAt: "Sun, 28 Jan 2024 09:30:55 GMT",
-    senderId: 3637,
-    message: "Sending positive vibes your way!",
-  },
-  {
-    imageUrl:
-      "https://images.unsplash.com/photo-1517058619449-e2a39e1b423d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fHNwbGFzaHxlbnwwfHwwfHx8",
-    firstName: "William",
-    lastName: "Walker",
-    sendAt: "Mon, 29 Jan 2024 11:15:20 GMT",
-    senderId: 3839,
-    message: "Have a productive day!",
-  },
-];
+import useAxios from "../../api/restClient";
+import { PAGE_SIZE } from "../../helper/constants/constant.ts";
+import url from "../../api/url.ts";
+import { dangerToast } from "../../components/customToast/index.js";
 
 function getTimeDifferenceForChat(sendAt) {
   const messageTime = moment(sendAt);
@@ -227,12 +37,19 @@ function getTimeDifferenceForChat(sendAt) {
 
 const ChatList = ({selectedGroup, onBack}) => {
   // const { user } = useAppContext();
+  const axios = useAxios();
   const messagesEndRef = useRef(null);
   const groupSocket = UseWs("ws/v1/group");
   const { user } = useAppContext();
 
-  const [messagesList, setMessagesList] = useState(messages);
+  const [messages, setMessages] = useState([]);
+  const [hasMore, setHasMore] = useState(true); // Assume there's more data initially
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const [msg, setMsg] = useState("");
+
+  const [isNearTop, setIsNearTop] = useState(false);
+
   const divRef = useRef(null);
   const [height, setHeight] = useState('auto');
 
@@ -274,7 +91,8 @@ const ChatList = ({selectedGroup, onBack}) => {
 
     groupSocket.on("onNewGroupMessage", (data) => {
       console.log("Received group message:", data);
-      setMessagesList((prevMessages) => [...prevMessages, data]);
+      setMessages((prevMessages) => [...prevMessages, data]);
+      scrollToBottom("new msg event");
     });
 
     return () => {
@@ -282,11 +100,6 @@ const ChatList = ({selectedGroup, onBack}) => {
     };
   }, [groupSocket, selectedGroup]);
 
-  // const handleContentChange = (event) => {
-  //   setMsg(event.target.textContent);
-  //   // Do whatever you need with the new content
-  // };
-  // Call addPlaceholder when component mounts to add placeholder initially
   const sendMessageWs = () => {
     const data = {
       message: msg,
@@ -303,33 +116,87 @@ const ChatList = ({selectedGroup, onBack}) => {
       setMsg("");
       setHeight("auto")
       setTimeout(() => {
-        scrollToBottom();
+        scrollToBottom("send msg event");
       }, 150)
     }
   };
 
-  const [isNotAtBottom, setIsNotAtBottom] = useState(false);
+  const [isNotAtBottom, setIsNotAtBottom] = useState(undefined);
 
   const handleScroll = () => {
     const { scrollTop, scrollHeight, clientHeight } = messagesEndRef?.current;
 
     // Check if the scroll position is not at the bottom
-    setIsNotAtBottom(scrollTop + clientHeight < scrollHeight);
+    setIsNotAtBottom(scrollHeight > 100 ? (scrollTop + clientHeight) < scrollHeight : undefined);
+    // console.debug("scrollTop, scrollHeight, clientHeight, isNotAtBottom", scrollTop, scrollHeight, clientHeight, isNotAtBottom)
+    setIsNearTop(scrollTop < 350)
   };
 
-  const scrollToBottom = () => {
-    // setIsNotAtBottom(false);
-    // messagesEndRef.current.scrollIntoView({
-    //   behavior: "smooth",
-    //   block: "end",
-    // });
-    messagesEndRef.current.scrollTop = messagesEndRef?.current?.scrollHeight;
-    setIsNotAtBottom(false); 
-  }
+  const fetchMessages = async (groupId, isScrollToTop=false) => {
+    try {
+      setIsLoading(true);
+      if (groupId) {
+        const response = await axios.post(url.getGroupMessage, {
+          groupId,
+          page: currentPage,
+          pageSize: PAGE_SIZE,
+        });
+        if (response?.statusCode === 200) {
+          const output = response?.data;
+          console.debug("🚀 -------------------------------------🚀")
+          console.debug("🚀 ~ fetchMessages ~ output:", output)
+          console.debug("🚀 -------------------------------------🚀")
+          const newMessages = output?.data.reverse(); // Reverse to get oldest to newest order
+          setMessages((prevMessages) => [...newMessages, ...prevMessages]);
+          if (!isScrollToTop) {
+            setTimeout(() => {
+              scrollToBottom("API load");
+            }, 150)
+          }
+          if (output.data.length === PAGE_SIZE) {
+            setHasMore(true);
+            setCurrentPage((prevPage) => prevPage + 1);
+          } else {
+            setHasMore(false)
+          }
+        }
+      }
+    } catch (error) {
+      console.debug(error);
+      dangerToast(error.message);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    }
+  };
+
+  const fetchMoreData = (groupId) => {
+    fetchMessages(groupId, true);
+  };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messagesList]);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  useEffect(() => {
+    setMessages([])
+    setCurrentPage(1)
+    setHasMore(true)
+    fetchMessages(selectedGroup?.groupId);
+  }, [selectedGroup]);
+
+  useEffect(() => {
+    if (currentPage > 1 && isNearTop ) {
+      fetchMoreData(selectedGroup?.groupId);
+    }
+  }, [isNearTop, selectedGroup, currentPage])
+
+  const scrollToBottom = (log) => {
+    messagesEndRef.current.scrollTop = messagesEndRef?.current?.scrollHeight;
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    setIsNotAtBottom(false); 
+  }
 
   return (
     <div>
@@ -339,8 +206,8 @@ const ChatList = ({selectedGroup, onBack}) => {
         chat={
           <div id="chat-container" className="h-100 d-flex flex-column">
             <div ref={messagesEndRef} className="inner overflow-auto custom-scroll" id="top" onScroll={handleScroll}>
-            {messagesList?.length > 0 &&
-                messagesList?.map((item, index) => {
+            {messages?.length > 0 &&
+                messages?.map((item, index) => {
                   return (
                     <ChatMessage
                       key={index}

@@ -28,4 +28,6 @@ export default{
   forgotPassword: `/api/${version}/users/forgotPassword`,
   verifyOtp: `/api/${version}/users/verifyOtp`,
   getAllMembers: `/api/${version}/chatService/group/getAllMembers`,
+  getMessageById: `/api/${version}/chatService/getMessage`,
+  getGroupMessage: `/api/${version}/chatService/group/messages`,
 }
