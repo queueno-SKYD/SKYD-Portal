@@ -18,7 +18,7 @@ export const SectionHeader = ({title, noBorder, styles}) => {
 
 const ProfileSettings = () => {
   const axios = useAxios();
-  const size = 180;
+  const [size, setSize] = useState(180);
   const { user, isMobile, setUser } = useAppContext();
 
   const initialUser = {
@@ -77,6 +77,18 @@ const ProfileSettings = () => {
       imageURL: user?.imageURL || "",
     })
   }, [user])
+
+  useEffect(() => {
+    const handleResize = () => {
+      const resized = 180 * window.innerWidth / 1600
+      setSize(resized > 130 ? resized : 130);
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    }
+  })
 
   const formgridSpacing = isMobile ? 2 : 4;
 

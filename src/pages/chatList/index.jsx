@@ -14,6 +14,7 @@ import useAxios from "../../api/restClient";
 import { PAGE_SIZE } from "../../helper/constants/constant.ts";
 import url from "../../api/url.ts";
 import { dangerToast } from "../../components/customToast/index.js";
+import NoMessageComponent from "./noMessage.js";
 
 function getTimeDifferenceForChat(sendAt) {
   const messageTime = moment(sendAt);
@@ -86,7 +87,7 @@ const ChatList = ({selectedGroup, onBack}) => {
 
     groupSocket.on("connect", () => {
       console.log("Connected to group socket");
-      groupSocket.emit('joinGroup', selectedGroup?.groupId);
+      // groupSocket.emit('joinGroup', selectedGroup?.groupId);
     });
 
     groupSocket.on("onNewGroupMessage", (data) => {
@@ -149,6 +150,7 @@ const ChatList = ({selectedGroup, onBack}) => {
           const newMessages = output?.data.reverse(); // Reverse to get oldest to newest order
           setMessages((prevMessages) => [...newMessages, ...prevMessages]);
           if (!isScrollToTop) {
+            groupSocket.emit('joinGroup', selectedGroup?.groupId);
             setTimeout(() => {
               scrollToBottom("API load");
             }, 150)
@@ -206,7 +208,7 @@ const ChatList = ({selectedGroup, onBack}) => {
         chat={
           <div id="chat-container" className="h-100 d-flex flex-column">
             <div ref={messagesEndRef} className="inner overflow-auto custom-scroll" id="top" onScroll={handleScroll}>
-            {messages?.length > 0 &&
+            {messages?.length > 0 ?
                 messages?.map((item, index) => {
                   return (
                     <ChatMessage
@@ -220,7 +222,7 @@ const ChatList = ({selectedGroup, onBack}) => {
                       lastName={item?.lastName}
                     />
                   );
-                })}
+                }) : <NoMessageComponent/>}
             </div>
             <div id="inputBox" className="w-100 h-100">
               <form

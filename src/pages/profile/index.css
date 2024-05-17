@@ -4,15 +4,21 @@
 #profile-cover-image-area {
   position: relative;
   height: fit-content;
+  overflow: hidden;
+  padding: 16px;
 }
 
 #cover-image {
   display: block;
   object-fit: cover;
   width: 100%;
-  aspect-ratio: 21/3;
+  border-radius: 16px;
+  aspect-ratio: 29/3;
+  @media (max-width: 900px) {
+    aspect-ratio: 21/4;
+  }
   @media (max-width: 576px) {
-    aspect-ratio: 21/9;
+    aspect-ratio: 21/6;
   }
 }
 
@@ -39,8 +45,10 @@
   width: fit-content;
   /* border-radius: 1000px; */
   background-color: var(--light-mode-bg-color);
+  outline: 6px solid var(--light-mode-bg-color);
   border-radius: 50%;
   margin-right: 20px;
+  
 }
 
 .profile-user-name {
